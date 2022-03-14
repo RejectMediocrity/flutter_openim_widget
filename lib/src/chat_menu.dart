@@ -3,6 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+//edit by wang.haoran at 2022-01-07
+//控制弹出菜单样式
+
 class MenuInfo {
   Widget icon;
   String text;
@@ -89,12 +92,12 @@ class ChatLongPressMenu extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: subList
             .map((e) => _menuItem(
-                  icon: e.icon,
-                  label: e.text,
-                  onTap: e.onTap,
-                  style: e.textStyle ??
-                      TextStyle(fontSize: 10.sp, color: Color(0xFFFFFFFF)),
-                ))
+          icon: e.icon,
+          label: e.text,
+          onTap: e.onTap,
+          style: e.textStyle ??
+              TextStyle(fontSize: 10.sp, color: Color(0xFFFFFFFF)),
+        ))
             .toList(),
       ));
     }
@@ -114,46 +117,27 @@ class ChatLongPressMenu extends StatelessWidget {
         },
         behavior: HitTestBehavior.translucent,
         child: Container(
-          width: 35.w,
+          //edit by wang.haoran at 2022-01-07
+          width: 56.w,
           // constraints: BoxConstraints(maxWidth: 35.w, minWidth: 30.w),
           padding: EdgeInsets.symmetric(
             horizontal: menuStyle.crossAxisSpacing / 2,
-            vertical: menuStyle.mainAxisSpacing / 2,
+            //vertical: menuStyle.mainAxisSpacing / 2,
+            vertical: menuStyle.mainAxisSpacing / 2 + 10.h,
           ),
-          child: _ItemView(icon: icon, label: label, style: style),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icon,
+              SizedBox(height: 4.h),
+              Text(
+                label,
+                // maxLines: 1,
+                // overflow: TextOverflow.ellipsis,
+                style: style,
+              ),
+            ],
+          ),
         ),
       );
-}
-
-class _ItemView extends StatelessWidget {
-  const _ItemView({
-    Key? key,
-    required this.icon,
-    required this.label,
-    this.style,
-  }) : super(key: key);
-  final Widget icon;
-  final String label;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 20.w,
-            child: icon,
-          ),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ),
-        ],
-      ),
-    );
-  }
 }
