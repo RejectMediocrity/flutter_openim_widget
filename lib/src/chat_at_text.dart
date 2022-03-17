@@ -140,8 +140,8 @@ class ChatAtText extends StatelessWidget {
               recognizer: mapping.onTap == null
                   ? null
                   : (TapGestureRecognizer()
-                ..onTap = () => mapping.onTap!(
-                    _getUrl(value, mapping.type), mapping.type)),
+                    ..onTap = () => mapping.onTap!(
+                        _getUrl(value, mapping.type), mapping.type)),
             );
           }
         } else {
@@ -156,17 +156,11 @@ class ChatAtText extends StatelessWidget {
       },
     );
 
-    return Container(
-      //edit by wang.haoran at 2022-1-6
-      //聊天气泡的宽度，70% * Screen's width,
-      //constraints: BoxConstraints(maxWidth: 0.5.sw),
-      constraints: BoxConstraints(maxWidth: 0.7.sw),
-      child: RichText(
-        textAlign: textAlign,
-        overflow: overflow,
-        maxLines: maxLines,
-        text: TextSpan(children: children),
-      ),
+    return RichText(
+      textAlign: textAlign,
+      overflow: overflow,
+      maxLines: maxLines,
+      text: TextSpan(children: children),
     );
   }
 
@@ -179,8 +173,8 @@ class ChatAtText extends StatelessWidget {
       case PatternType.TEL:
       case PatternType.MOBILE:
         return text.substring(0, 4) == 'tel:' ? text : 'tel:$text';
-    // case PatternType.PHONE:
-    //   return text.substring(0, 4) == 'tel:' ? text : 'tel:$text';
+      // case PatternType.PHONE:
+      //   return text.substring(0, 4) == 'tel:' ? text : 'tel:$text';
       default:
         return text;
     }

@@ -168,7 +168,7 @@ class _ConversationView extends StatelessWidget {
       onTap: () => onTap?.call(),
       child: Container(
         color: backgroundColor,
-        height: height,
+        // height: height,
         padding: padding,
         child: Stack(
           alignment: Alignment.center,
@@ -182,7 +182,8 @@ class _ConversationView extends StatelessWidget {
                   borderRadius: avatarBorderRadius,
                 ),
                 SizedBox(width: 12.w),
-                Flexible(
+                Expanded(
+                  flex: 1,
                   child: Container(
                     decoration: underline
                         ? BoxDecoration(
@@ -198,7 +199,6 @@ class _ConversationView extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              width: contentWidth,
                               child: Text(
                                 title,
                                 style: titleStyle,
@@ -206,14 +206,16 @@ class _ConversationView extends StatelessWidget {
                                 maxLines: 1,
                               ),
                             ),
-                            Spacer(),
+                            Spacer(
+                              flex: 1,
+                            ),
                             Text(
                               timeStr,
                               style: timeStyle,
                             )
                           ],
                         ),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: 8.h),
                         Row(
                           children: [
                             Container(
@@ -256,7 +258,7 @@ class _ConversationView extends StatelessWidget {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: Colors.redAccent,
+                      color: Color(0xFFFF4A4A),
                       shape: BoxShape.circle,
                     ),
                   ),

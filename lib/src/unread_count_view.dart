@@ -13,7 +13,7 @@ class UnreadCountView extends StatelessWidget {
     Key? key,
     this.steam,
     this.color = const Color(0xFFF44038),
-    this.size = 13,
+    this.size = 18,
     this.count = 0,
     this.qqBadge = false,
   }) : super(key: key);
