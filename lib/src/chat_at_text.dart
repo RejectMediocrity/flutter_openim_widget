@@ -66,7 +66,16 @@ class ChatAtText extends StatelessWidget {
     final List<InlineSpan> children = <InlineSpan>[];
 
     if (prefixSpan != null) children.add(prefixSpan!);
-
+    if (prefixSpan.runtimeType == ImageSpan) {
+      children.add(
+        WidgetSpan(
+          child: SizedBox(
+            width: 4,
+            height: 1,
+          ),
+        ),
+      );
+    }
     var style = textStyle ?? _textStyle;
 
     final _mapping = Map<String, MatchPattern>();

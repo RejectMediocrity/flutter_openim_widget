@@ -230,11 +230,15 @@ class ImageUtil {
       );
 
   static Widget notDisturb() => assetImage(
-        'ic_not_disturb',
-        width: 20.h,
-        height: 20.h,
+        'maglist_icon_newmsg_gray',
+        width: 18.h,
+        height: 18.h,
       );
-
+  static Widget graterThan99() => assetImage(
+        'maglist_icon_newmsg_red',
+        width: 18.h,
+        height: 18.h,
+      );
   static Widget lowMemoryNetworkImage({
     required String url,
     double? width,
