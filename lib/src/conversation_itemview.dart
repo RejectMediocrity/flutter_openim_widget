@@ -1,3 +1,4 @@
+import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -162,6 +163,27 @@ class _ConversationView extends StatelessWidget {
   final Function()? onTap;
   final bool notDisturb;
 
+  InlineSpan? _buildImgSpan(String? prefixStr) {
+    if (null == contentPrefix) {
+      return null;
+    }
+    if (prefixStr?.startsWith(RegExp("img:"), 0) == true) {
+      return ImageSpan(
+        AssetImage(
+          "assets/images/${prefixStr?.substring(4)}.webp",
+          package: "flutter_openim_widget",
+        ),
+        imageWidth: 14,
+        imageHeight: 14,
+      );
+    } else {
+      return TextSpan(
+        text: contentPrefix,
+        style: contentPrefixStyle,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -226,12 +248,7 @@ class _ConversationView extends StatelessWidget {
                                 textStyle: contentStyle,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                prefixSpan: null == contentPrefix
-                                    ? null
-                                    : TextSpan(
-                                        text: contentPrefix,
-                                        style: contentPrefixStyle,
-                                      ),
+                                prefixSpan: _buildImgSpan(contentPrefix),
                                 patterns: patterns,
                               ),
                             ),
