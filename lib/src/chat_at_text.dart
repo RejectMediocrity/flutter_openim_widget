@@ -25,7 +25,7 @@ class ChatAtText extends StatelessWidget {
   /// value:username
   final Map<String, String> allAtMap;
   final List<MatchPattern> patterns;
-
+  final bool needToTpliceContent;
   // final TextAlign textAlign;
   const ChatAtText({
     Key? key,
@@ -38,6 +38,7 @@ class ChatAtText extends StatelessWidget {
     // this.textAlign = TextAlign.start,
     this.textStyle,
     this.maxLines,
+    this.needToTpliceContent = true,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -63,6 +64,14 @@ class ChatAtText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!needToTpliceContent) {
+      return RichText(
+        textAlign: textAlign,
+        overflow: overflow,
+        maxLines: maxLines,
+        text: prefixSpan!,
+      );
+    }
     final List<InlineSpan> children = <InlineSpan>[];
 
     if (prefixSpan != null) children.add(prefixSpan!);

@@ -33,7 +33,7 @@ class ConversationItemView extends StatelessWidget {
   final Function()? onTap;
   final bool notDisturb;
   final double extentRatio;
-
+  final bool needToTpliceContent;
   // final bool isPinned;
 
   ConversationItemView({
@@ -75,6 +75,7 @@ class ConversationItemView extends StatelessWidget {
       color: Color(0xFF999999),
       fontWeight: FontWeight.w600,
     ),
+    this.needToTpliceContent = true,
   }) : super(key: key);
 
   @override
@@ -103,6 +104,7 @@ class ConversationItemView extends StatelessWidget {
         timeStyle: timeStyle,
         onTap: onTap,
         notDisturb: notDisturb,
+        needToTpliceContent: needToTpliceContent,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -139,6 +141,7 @@ class _ConversationView extends StatelessWidget {
     this.contentPrefixStyle,
     this.onTap,
     this.notDisturb = false,
+    this.needToTpliceContent = true,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -162,6 +165,7 @@ class _ConversationView extends StatelessWidget {
   final List<MatchPattern> patterns;
   final Function()? onTap;
   final bool notDisturb;
+  final bool needToTpliceContent;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -250,6 +254,7 @@ class _ConversationView extends StatelessWidget {
                                 maxLines: 1,
                                 prefixSpan: _buildImgSpan(contentPrefix),
                                 patterns: patterns,
+                                needToTpliceContent: needToTpliceContent,
                               ),
                             ),
                             Spacer(),
