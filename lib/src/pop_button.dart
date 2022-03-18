@@ -146,7 +146,7 @@ class PopButton extends StatelessWidget {
             children: [
               if (null != info.icon)
                 Padding(
-                  padding: EdgeInsets.only(right: 10.w),
+                  padding: EdgeInsets.only(right: 6.w),
                   child: Image.asset(
                     info.icon!,
                     width: menuItemIconSize,
