@@ -2,7 +2,6 @@ import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatTextField extends StatelessWidget {
   final AtTextCallback? atCallback;
@@ -40,19 +39,24 @@ class ChatTextField extends StatelessWidget {
       keyboardType: TextInputType.multiline,
       autofocus: false,
       minLines: 1,
-      maxLines: 4,
-      textInputAction: TextInputAction.newline,
+      maxLines: 5,
+      textInputAction: TextInputAction.done,
+      showCursor: true,
       // onSubmitted: onSubmitted,
       decoration: InputDecoration(
         border: InputBorder.none,
         isDense: true,
-        // contentPadding: EdgeInsets.zero,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 4.w,
-          vertical: 8.h,
+        contentPadding: EdgeInsets.zero,
+        hintText: "发送给 NiKi",
+        hintStyle: TextStyle(
+          fontSize: 16,
+          color: Color(0xFF999999),
         ),
       ),
       inputFormatters: inputFormatters,
+      onTap: () {
+        FocusScope.of(context).requestFocus(focusNode);
+      },
     );
   }
 }
