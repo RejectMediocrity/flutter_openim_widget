@@ -24,7 +24,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: constraints,
+      constraints: BoxConstraints(minWidth: 0, maxWidth: 270.w),
       //edit by wang.haoran at 2022-01-07
       //调整气泡尺寸
       // margin: EdgeInsets.only(right: 10.w, left: 10.w, bottom: 2.h),
@@ -37,7 +37,7 @@ class ChatBubble extends StatelessWidget {
         horizontal: 12.w,
         vertical: 12.h,
       ),
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.only(
