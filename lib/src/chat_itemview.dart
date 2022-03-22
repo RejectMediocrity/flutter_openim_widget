@@ -17,17 +17,17 @@ class MsgStreamEv<T> {
 }
 
 typedef CustomItemBuilder = Widget? Function(
-    BuildContext context,
-    int index,
-    Message message,
-    );
+  BuildContext context,
+  int index,
+  Message message,
+);
 
 typedef ItemVisibilityChange = void Function(
-    BuildContext context,
-    int index,
-    Message message,
-    bool visible,
-    );
+  BuildContext context,
+  int index,
+  Message message,
+  bool visible,
+);
 
 ///  chat item
 ///
@@ -552,9 +552,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         isHintMsg: isHintMsg,
         quoteView: widget.message.contentType == MessageType.quote
             ? ChatQuoteView(
-          message: widget.message,
-          onTap: widget.onTapQuoteMsg,
-        )
+                message: widget.message,
+                onTap: widget.onTapQuoteMsg,
+              )
             : null,
         showRadio: widget.multiSelMode,
         checked: _checked,
@@ -564,94 +564,94 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(
-    controller: _popupCtrl,
-    menus: widget.menus ?? _menusItem(),
-    menuStyle: widget.menuStyle ??
-        MenuStyle(
-          crossAxisCount: 5,
-          mainAxisSpacing: 15.w,
-          crossAxisSpacing: 15.h,
-          radius: 4,
-          background: const Color(0xFF666666),
-        ),
-  );
+        controller: _popupCtrl,
+        menus: widget.menus ?? _menusItem(),
+        menuStyle: widget.menuStyle ??
+            MenuStyle(
+              crossAxisCount: 5,
+              mainAxisSpacing: 15.w,
+              crossAxisSpacing: 15.h,
+              radius: 4,
+              background: const Color(0xFF666666),
+            ),
+      );
 
   Widget? _customItemView() => widget.customItemBuilder?.call(
-    context,
-    widget.index,
-    widget.message,
-  );
+        context,
+        widget.index,
+        widget.message,
+      );
 
   Widget _buildTimeView() => Container(
-    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.h),
-    // height: 20.h,
-    // decoration: BoxDecoration(
-    //   borderRadius: BorderRadius.circular(4),
-    //   color: Colors.black.withOpacity(0.2),
-    // ),
-    child: Text(
-      widget.timeStr!,
-      style: widget.timeStyle ?? _hintTextStyle,
-    ),
-  );
+        padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.h),
+        // height: 20.h,
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(4),
+        //   color: Colors.black.withOpacity(0.2),
+        // ),
+        child: Text(
+          widget.timeStr!,
+          style: widget.timeStyle ?? _hintTextStyle,
+        ),
+      );
 
   List<MenuInfo> _menusItem() => [
-    MenuInfo(
-      icon: ImageUtil.menuCopy(),
-      text: UILocalizations.copy,
-      enabled: _showCopyMenu,
-      textStyle: menuTextStyle,
-      onTap: widget.onTapCopyMenu,
-    ),
-    MenuInfo(
-      icon: ImageUtil.menuDel(),
-      text: UILocalizations.delete,
-      enabled: _showDelMenu,
-      textStyle: menuTextStyle,
-      onTap: widget.onTapDelMenu,
-    ),
-    MenuInfo(
-      icon: ImageUtil.menuForward(),
-      text: UILocalizations.forward,
-      enabled: _showForwardMenu,
-      textStyle: menuTextStyle,
-      onTap: widget.onTapForwardMenu,
-    ),
-    MenuInfo(
-      icon: ImageUtil.menuReply(),
-      text: UILocalizations.reply,
-      enabled: _showReplyMenu,
-      textStyle: menuTextStyle,
-      onTap: widget.onTapReplyMenu,
-    ),
-    MenuInfo(
-        icon: ImageUtil.menuRevoke(),
-        text: UILocalizations.revoke,
-        enabled: _showRevokeMenu,
-        textStyle: menuTextStyle,
-        onTap: widget.onTapRevokeMenu),
-    MenuInfo(
-      icon: ImageUtil.menuMultiChoice(),
-      text: UILocalizations.multiChoice,
-      enabled: _showMultiChoiceMenu,
-      textStyle: menuTextStyle,
-      onTap: widget.onTapMultiMenu,
-    ),
-    MenuInfo(
-      icon: ImageUtil.menuTranslation(),
-      text: UILocalizations.translation,
-      enabled: _showTranslationMenu,
-      textStyle: menuTextStyle,
-      onTap: widget.onTapTranslationMenu,
-    ),
-    // MenuInfo(
-    //   icon: ImageUtil.menuDownload(),
-    //   text: widget.localizations.download,
-    //   enabled: true,
-    //   textStyle: menuTextStyle,
-    //   onTap: () {},
-    // ),
-  ];
+        MenuInfo(
+          icon: ImageUtil.menuCopy(),
+          text: UILocalizations.copy,
+          enabled: _showCopyMenu,
+          textStyle: menuTextStyle,
+          onTap: widget.onTapCopyMenu,
+        ),
+        MenuInfo(
+          icon: ImageUtil.menuDel(),
+          text: UILocalizations.delete,
+          enabled: _showDelMenu,
+          textStyle: menuTextStyle,
+          onTap: widget.onTapDelMenu,
+        ),
+        MenuInfo(
+          icon: ImageUtil.menuForward(),
+          text: UILocalizations.forward,
+          enabled: _showForwardMenu,
+          textStyle: menuTextStyle,
+          onTap: widget.onTapForwardMenu,
+        ),
+        MenuInfo(
+          icon: ImageUtil.menuReply(),
+          text: UILocalizations.reply,
+          enabled: _showReplyMenu,
+          textStyle: menuTextStyle,
+          onTap: widget.onTapReplyMenu,
+        ),
+        MenuInfo(
+            icon: ImageUtil.menuRevoke(),
+            text: UILocalizations.revoke,
+            enabled: _showRevokeMenu,
+            textStyle: menuTextStyle,
+            onTap: widget.onTapRevokeMenu),
+        MenuInfo(
+          icon: ImageUtil.menuMultiChoice(),
+          text: UILocalizations.multiChoice,
+          enabled: _showMultiChoiceMenu,
+          textStyle: menuTextStyle,
+          onTap: widget.onTapMultiMenu,
+        ),
+        MenuInfo(
+          icon: ImageUtil.menuTranslation(),
+          text: UILocalizations.translation,
+          enabled: _showTranslationMenu,
+          textStyle: menuTextStyle,
+          onTap: widget.onTapTranslationMenu,
+        ),
+        // MenuInfo(
+        //   icon: ImageUtil.menuDownload(),
+        //   text: widget.localizations.download,
+        //   enabled: true,
+        //   textStyle: menuTextStyle,
+        //   onTap: () {},
+        // ),
+      ];
 
   static var menuTextStyle = TextStyle(
     fontSize: 12.sp,
@@ -665,15 +665,15 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   bool get _showForwardMenu =>
       widget.enabledForwardMenu ??
-          widget.message.contentType != MessageType.voice;
+      widget.message.contentType != MessageType.voice;
 
   bool get _showReplyMenu =>
       widget.enabledReplyMenu ??
-          widget.message.contentType == MessageType.text ||
-              widget.message.contentType == MessageType.video ||
-              widget.message.contentType == MessageType.picture ||
-              widget.message.contentType == MessageType.location ||
-              widget.message.contentType == MessageType.quote;
+      widget.message.contentType == MessageType.text ||
+          widget.message.contentType == MessageType.video ||
+          widget.message.contentType == MessageType.picture ||
+          widget.message.contentType == MessageType.location ||
+          widget.message.contentType == MessageType.quote;
 
   bool get _showRevokeMenu =>
       widget.enabledRevokeMenu ?? widget.message.sendID == OpenIM.iMManager.uid;
@@ -682,5 +682,5 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   bool get _showTranslationMenu =>
       widget.enabledTranslationMenu ??
-          widget.message.contentType == MessageType.text;
+      widget.message.contentType == MessageType.text;
 }
