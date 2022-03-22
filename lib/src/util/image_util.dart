@@ -9,9 +9,9 @@ class ImageUtil {
   ImageUtil._();
 
   static String imageResStr(var name) => "assets/images/$name.webp";
-
+  static String faceResStr(var name) => "assets/faces/$name";
   static AssetImage emojiImage(String key) => AssetImage(
-        ImageUtil.imageResStr(emojiFaces[key]),
+        ImageUtil.faceResStr(emojiFaces[key]),
         package: 'flutter_openim_widget',
       );
 
@@ -27,6 +27,25 @@ class ImageUtil {
       width: width,
       height: height,
       color: color,
+      package: 'flutter_openim_widget',
+    );
+  }
+
+  static Widget faceImage(
+    String res, {
+    double? width,
+    double? height,
+    BoxFit? fit,
+    Color? color,
+  }) {
+    return Image.asset(
+      faceResStr(res),
+      width: width,
+      height: height,
+      fit: fit,
+      color: color,
+      // cacheHeight: height?.toInt(),
+      // cacheWidth: width?.toInt(),
       package: 'flutter_openim_widget',
     );
   }
