@@ -55,6 +55,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
     Widget? right,
     Widget? center,
     Color? shadowColor,
+    GestureTapCallback? backClick,
     Color backgroundColor = Colors.white,
   })  : result = result,
         height = height,
@@ -63,7 +64,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
         shadowColor = shadowColor,
         onBack = null,
         left = GestureDetector(
-          onTap: () => Navigator.pop(context, result),
+          onTap: backClick ?? () => Navigator.pop(context, result),
           behavior: HitTestBehavior.translucent,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 22),
