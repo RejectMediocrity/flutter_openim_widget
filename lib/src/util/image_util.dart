@@ -97,9 +97,9 @@ class ImageUtil {
       );
 
   static Widget sendFailed() => assetImage(
-        'ic_send_failed',
-        width: 16.h,
-        height: 16.h,
+        'msg_icon_error',
+        width: 20.h,
+        height: 20.h,
       );
 
   static Widget speak() => svg(
