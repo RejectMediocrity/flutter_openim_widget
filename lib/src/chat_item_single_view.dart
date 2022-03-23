@@ -169,71 +169,82 @@ class ChatSingleLayout extends StatelessWidget {
                 onTap: onTapRightAvatar,
                 onLongPress: onLongPressRightAvatar,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+              Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text("斌"),
-                  ),
-                  CopyCustomPopupMenu(
-                    controller: popupCtrl,
-                    barrierColor: Colors.transparent,
-                    arrowColor: Color(0xFF666666),
-                    verticalMargin: 0,
-                    // horizontalMargin: 0,
-                    child: isBubbleBg
-                        ? GestureDetector(
-                            onTap: () => _onItemClick?.add(index),
-                            child: ChatBubble(
-                              constraints:
-                                  BoxConstraints(minHeight: avatarSize),
-                              bubbleType: BubbleType.send,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (quoteView != null) _buildQuoteMsgView(),
-                                  child,
-                                ],
-                              ),
-                              backgroundColor: _bubbleColor(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text("斌"),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CopyCustomPopupMenu(
+                            controller: popupCtrl,
+                            barrierColor: Colors.transparent,
+                            arrowColor: Color(0xFF666666),
+                            verticalMargin: 0,
+                            // horizontalMargin: 0,
+                            child: isBubbleBg
+                                ? GestureDetector(
+                                    onTap: () => _onItemClick?.add(index),
+                                    child: ChatBubble(
+                                      constraints:
+                                          BoxConstraints(minHeight: avatarSize),
+                                      bubbleType: BubbleType.send,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (quoteView != null)
+                                            _buildQuoteMsgView(),
+                                          child,
+                                        ],
+                                      ),
+                                      backgroundColor: _bubbleColor(),
+                                    ),
+                                  )
+                                : _noBubbleBgView(),
+                            menuBuilder: menuBuilder,
+                            pressType: PressType.longPress,
+                          ),
+                          _buildDestroyAfterReadingView(),
+                          if (delaySendingStatus) _delayedStatusView(),
+                          if (!delaySendingStatus)
+                            Visibility(
+                              visible: isSending && !isSendFailed,
+                              child: CupertinoActivityIndicator(),
                             ),
-                          )
-                        : _noBubbleBgView(),
-                    menuBuilder: menuBuilder,
-                    pressType: PressType.longPress,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text("**人回复"),
+                          ChatSendFailedView(
+                            msgId: msgId,
+                            isReceived: isReceivedMsg,
+                            stream: sendStatusStream,
+                            isSendFailed: isSendFailed,
+                            onFailedResend: failedResend,
+                          ),
+                          if (isSingleChat &&
+                              !isSendFailed &&
+                              !isSending &&
+                              enabledReadStatus)
+                            _buildReadStatusView(),
+                          if (!isSingleChat &&
+                              !isSendFailed &&
+                              !isSending &&
+                              enabledReadStatus)
+                            _buildGroupReadStatusView(),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text("**人回复"),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              _buildDestroyAfterReadingView(),
-              if (delaySendingStatus) _delayedStatusView(),
-              if (!delaySendingStatus)
-                Visibility(
-                  visible: isSending && !isSendFailed,
-                  child: CupertinoActivityIndicator(),
-                ),
-              ChatSendFailedView(
-                msgId: msgId,
-                isReceived: isReceivedMsg,
-                stream: sendStatusStream,
-                isSendFailed: isSendFailed,
-                onFailedResend: failedResend,
-              ),
-              if (isSingleChat &&
-                  !isSendFailed &&
-                  !isSending &&
-                  enabledReadStatus)
-                _buildReadStatusView(),
-              if (!isSingleChat &&
-                  !isSendFailed &&
-                  !isSending &&
-                  enabledReadStatus)
-                _buildGroupReadStatusView(),
             ],
           );
   }
