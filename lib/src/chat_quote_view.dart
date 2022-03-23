@@ -52,25 +52,27 @@ class ChatQuoteView extends StatelessWidget {
         } else if (quoteMessage.contentType == MessageType.video) {
           var url = quoteMessage.videoElem?.snapshotUrl;
           var path = quoteMessage.videoElem?.snapshotPath;
-          if (url != null && url.isNotEmpty) {
-            child = _playIcon(
-              child: ImageUtil.networkImage(
-                url: url,
-                width: 42.h,
-                height: 42.h,
-                fit: BoxFit.fill,
-              ),
-            );
-          } else if (path != null && path.isNotEmpty) {
-            child = _playIcon(
-              child: Image(
-                image: FileImage(File(path)),
-                height: 42.h,
-                width: 42.h,
-                fit: BoxFit.fill,
-              ),
-            );
-          }
+          // if (url != null && url.isNotEmpty) {
+          //   child = _playIcon(
+          //     child: ImageUtil.networkImage(
+          //       url: url,
+          //       width: 42.h,
+          //       height: 42.h,
+          //       fit: BoxFit.fill,
+          //     ),
+          //   );
+          // } else if (path != null && path.isNotEmpty) {
+          //   child = _playIcon(
+          //     child: Image(
+          //       image: FileImage(File(path)),
+          //       height: 42.h,
+          //       width: 42.h,
+          //       fit: BoxFit.fill,
+          //     ),
+          //   );
+          // }
+          content =
+              "[${UILocalizations.video}]${quoteMessage.videoElem?.videoUUID}";
         } else if (quoteMessage.contentType == MessageType.location) {
           var location = quoteMessage.locationElem;
           if (null != location) {
@@ -86,7 +88,10 @@ class ChatQuoteView extends StatelessWidget {
               fit: BoxFit.fill,
             );
           }
-        } else if (quoteMessage.contentType == MessageType.file) {}
+        } else if (quoteMessage.contentType == MessageType.file) {
+          var file = quoteMessage.fileElem;
+          content = "[${UILocalizations.video}]${file?.fileName}";
+        }
       }
     }
 
@@ -96,16 +101,25 @@ class ChatQuoteView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(6),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              constraints: BoxConstraints(maxWidth: 150.w),
+              margin: EdgeInsets.only(right: 4.w),
+              color: Color(0xFF666666),
+              width: 1,
+              height: 14,
+            ),
+            Container(
+              constraints: BoxConstraints(maxWidth: 220.w),
               child: Text(
-                '$name：${content ?? ''}',
+                '${UILocalizations.reply} $name：${content ?? ''}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: 14.sp,
                   color: Color(0xFF666666),
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             Container(

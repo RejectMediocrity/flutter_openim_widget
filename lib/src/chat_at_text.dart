@@ -62,7 +62,7 @@ class ChatAtText extends StatelessWidget {
     }
 
     return Container(
-      constraints: BoxConstraints(maxWidth: 0.5.sw),
+      constraints: BoxConstraints(maxWidth: 240.w),
       child: RichText(
         textAlign: textAlign,
         overflow: overflow,

@@ -308,11 +308,6 @@ class ChatSingleLayout extends StatelessWidget {
   Widget _buildQuoteMsgView() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-      margin: EdgeInsets.only(
-        left: isReceivedMsg ? avatarSize + 10.w : 0,
-        right: isReceivedMsg ? 0 : avatarSize + 10.w,
-        // top: 2.h,
-      ),
       decoration: BoxDecoration(
         color: Color(0xFFF0F0F0),
         borderRadius: BorderRadius.circular(2),
