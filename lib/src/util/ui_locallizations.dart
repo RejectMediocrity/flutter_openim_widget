@@ -55,6 +55,7 @@ class UILocalizations {
       "send": 'Send',
       "unsupportedMessage": '[Message types not supported]',
       "add": 'Add',
+      "allRead": "allRead",
     },
     'zh': {
       'top': '置顶',
@@ -98,6 +99,7 @@ class UILocalizations {
       "send": '发送',
       "unsupportedMessage": '[暂不支持的消息类型]',
       "add": '添加',
+      "allRead": "全部已读"
     },
   };
 
@@ -186,4 +188,5 @@ class UILocalizations {
   static String get unsupportedMessage => _value(key: 'unsupportedMessage');
 
   static String get add => _value(key: 'add');
+  static String get allRead => _value(key: "allRead");
 }

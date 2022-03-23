@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/timing_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-//edit by wang.haoran at 2022-01-07
 
 class ChatSingleLayout extends StatelessWidget {
   final CustomPopupMenuController popupCtrl;
@@ -37,6 +36,12 @@ class ChatSingleLayout extends StatelessWidget {
   final Function(bool checked)? onRadioChanged;
   final bool delaySendingStatus;
   final bool enabledReadStatus;
+  final Function()? onStartDestroy;
+  final int readingDuration;
+  final int groupHaveReadCount;
+  final int groupMemberCount;
+  final Function()? viewMessageReadStatus;
+  final Function()? failedResend;
 
   const ChatSingleLayout({
     Key? key,
@@ -71,6 +76,12 @@ class ChatSingleLayout extends StatelessWidget {
     this.onRadioChanged,
     this.delaySendingStatus = false,
     this.enabledReadStatus = true,
+    this.readingDuration = 0,
+    this.onStartDestroy,
+    this.groupHaveReadCount = 0,
+    this.groupMemberCount = 0,
+    this.viewMessageReadStatus,
+    this.failedResend,
   }) : super(key: key);
 
   @override
@@ -80,25 +91,7 @@ class ChatSingleLayout extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: IgnorePointer(
         ignoring: showRadio,
-        child: Row(
-          // mainAxisAlignment: _layoutAlignment(),
-          children: [
-            if (!isHintMsg) ChatRadio(checked: checked, showRadio: showRadio),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (timeView != null) timeView!,
-                _buildContentView(),
-                if (quoteView != null)
-                  Row(
-                    //mainAxisAlignment: _layoutAlignment(),
-                    //edit by wang.haoran at 2022-1-5，所有信息靠左显示
-                    children: [_buildQuoteMsgView()],
-                  ),
-              ],
-            ),
-          ],
-        ),
+        child: _chatWidget(),
       ),
     );
   }
@@ -111,10 +104,8 @@ class ChatSingleLayout extends StatelessWidget {
   }
 
   Widget _isFromWidget() => Row(
-        //mainAxisAlignment: _layoutAlignment(),
-        //edit by wang.haoran at 2022-1-5，所有信息靠左显示
+        mainAxisAlignment: _layoutAlignment(),
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           _buildAvatar(
             leftAvatar,
@@ -163,21 +154,95 @@ class ChatSingleLayout extends StatelessWidget {
           ),
         ],
       );
+  Widget _chatWidget() {
+    return isHintMsg
+        ? child
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 多选框
+              if (!isHintMsg) ChatRadio(checked: checked, showRadio: showRadio),
+              _buildAvatar(
+                rightAvatar,
+                !isReceivedMsg,
+                onTap: onTapRightAvatar,
+                onLongPress: onLongPressRightAvatar,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text("斌"),
+                  ),
+                  CopyCustomPopupMenu(
+                    controller: popupCtrl,
+                    barrierColor: Colors.transparent,
+                    arrowColor: Color(0xFF666666),
+                    verticalMargin: 0,
+                    // horizontalMargin: 0,
+                    child: isBubbleBg
+                        ? GestureDetector(
+                            onTap: () => _onItemClick?.add(index),
+                            child: ChatBubble(
+                              constraints:
+                                  BoxConstraints(minHeight: avatarSize),
+                              bubbleType: BubbleType.send,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (quoteView != null) _buildQuoteMsgView(),
+                                  child,
+                                ],
+                              ),
+                              backgroundColor: _bubbleColor(),
+                            ),
+                          )
+                        : _noBubbleBgView(),
+                    menuBuilder: menuBuilder,
+                    pressType: PressType.longPress,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text("**人回复"),
+                  ),
+                ],
+              ),
+              _buildDestroyAfterReadingView(),
+              if (delaySendingStatus) _delayedStatusView(),
+              if (!delaySendingStatus)
+                Visibility(
+                  visible: isSending && !isSendFailed,
+                  child: CupertinoActivityIndicator(),
+                ),
+              ChatSendFailedView(
+                msgId: msgId,
+                isReceived: isReceivedMsg,
+                stream: sendStatusStream,
+                isSendFailed: isSendFailed,
+                onFailedResend: failedResend,
+              ),
+              if (isSingleChat &&
+                  !isSendFailed &&
+                  !isSending &&
+                  enabledReadStatus)
+                _buildReadStatusView(),
+              if (!isSingleChat &&
+                  !isSendFailed &&
+                  !isSending &&
+                  enabledReadStatus)
+                _buildGroupReadStatusView(),
+            ],
+          );
+  }
 
   Widget _isToWidget() => Row(
-        //mainAxisAlignment: _layoutAlignment(),
-        //edit by wang.haoran at 2022-1-5，所有信息靠左显示
+        mainAxisAlignment: _layoutAlignment(),
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!delaySendingStatus)
-            Visibility(
-              visible: isSending && !isSendFailed,
-              child: CupertinoActivityIndicator(),
-            ),
-          if (isSingleChat && !isSendFailed && !isSending && enabledReadStatus)
-            _buildReadStatusView(),
           _buildAvatar(
             rightAvatar,
             !isReceivedMsg,
@@ -194,8 +259,7 @@ class ChatSingleLayout extends StatelessWidget {
                 ? GestureDetector(
                     onTap: () => _onItemClick?.add(index),
                     child: ChatBubble(
-                      constraints: BoxConstraints(
-                          minHeight: avatarSize, minWidth: 0, maxWidth: 270.w),
+                      constraints: BoxConstraints(minHeight: avatarSize),
                       bubbleType: BubbleType.send,
                       child: child,
                       backgroundColor: _bubbleColor(),
@@ -205,27 +269,24 @@ class ChatSingleLayout extends StatelessWidget {
             menuBuilder: menuBuilder,
             pressType: PressType.longPress,
           ),
-          //edit by wang.haoran at 2022-01-11
-          //发送失败的时候，loading status 放在右侧
-          if (delaySendingStatus)
-            FutureBuilder(
-              future: Future.delayed(
-                Duration(seconds: (isSending && !isSendFailed) ? 1 : 0),
-                () => isSending && !isSendFailed,
-              ),
-              builder: (_, AsyncSnapshot<bool> hot) => Visibility(
-                visible: index == 0
-                    ? (hot.data == true)
-                    : (isSending && !isSendFailed),
-                child: CupertinoActivityIndicator(),
-              ),
+          _buildDestroyAfterReadingView(),
+          if (delaySendingStatus) _delayedStatusView(),
+          if (!delaySendingStatus)
+            Visibility(
+              visible: isSending && !isSendFailed,
+              child: CupertinoActivityIndicator(),
             ),
           ChatSendFailedView(
             msgId: msgId,
             isReceived: isReceivedMsg,
             stream: sendStatusStream,
             isSendFailed: isSendFailed,
+            onFailedResend: failedResend,
           ),
+          if (isSingleChat && !isSendFailed && !isSending && enabledReadStatus)
+            _buildReadStatusView(),
+          if (!isSingleChat && !isSendFailed && !isSending && enabledReadStatus)
+            _buildGroupReadStatusView(),
         ],
       );
 
@@ -258,8 +319,7 @@ class ChatSingleLayout extends StatelessWidget {
 
   Sink<int>? get _onItemClick => clickSink;
 
-  MainAxisAlignment _layoutAlignment() =>
-      isReceivedMsg ? MainAxisAlignment.start : MainAxisAlignment.end;
+  MainAxisAlignment _layoutAlignment() => MainAxisAlignment.start;
 
   // BubbleNip _nip() =>
   //     isReceivedMsg ? BubbleNip.leftCenter : BubbleNip.rightCenter;
@@ -280,6 +340,7 @@ class ChatSingleLayout extends StatelessWidget {
         size: avatarSize,
       );
 
+  /// 单聊
   Widget _buildReadStatusView() {
     bool read = !isUnread!;
     return Visibility(
@@ -296,18 +357,32 @@ class ChatSingleLayout extends StatelessWidget {
     );
   }
 
+  /// 群聊
+  Widget _buildGroupReadStatusView() {
+    int unreadCount = groupMemberCount - groupHaveReadCount;
+    bool isAllRead = unreadCount <= 0;
+    return Visibility(
+      visible: !isReceivedMsg,
+      child: GestureDetector(
+        onTap: viewMessageReadStatus,
+        behavior: HitTestBehavior.translucent,
+        child: Text(
+          isAllRead
+              ? UILocalizations.allRead
+              : "sprintf(UILocalizations.groupUnread, [unreadCount])",
+          style: haveRead,
+        ),
+      ),
+    );
+  }
+
   Widget _buildQuoteMsgView() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-      //edit by wang.haoran at 2022-1-5，所有信息靠左，被回复的也靠左
-      // margin: EdgeInsets.only(
-      //   left: isReceivedMsg ? avatarSize + 10.w : 0,
-      //   right: isReceivedMsg ? 0 : avatarSize + 10.w,
-      //   // top: 2.h,
-      // ),
       margin: EdgeInsets.only(
-        left: isReceivedMsg ? 0 : avatarSize + 10.w,
-        right: isReceivedMsg ? avatarSize + 10.w : 0,
+        left: isReceivedMsg ? avatarSize + 10.w : 0,
+        right: isReceivedMsg ? 0 : avatarSize + 10.w,
+        // top: 2.h,
       ),
       decoration: BoxDecoration(
         color: Color(0xFFF0F0F0),
@@ -325,4 +400,28 @@ class ChatSingleLayout extends StatelessWidget {
     fontSize: 12.sp,
     color: Color(0xFF999999),
   );
+
+  Widget _delayedStatusView() => FutureBuilder(
+        future: Future.delayed(
+          Duration(seconds: (isSending && !isSendFailed) ? 1 : 0),
+          () => isSending && !isSendFailed,
+        ),
+        builder: (_, AsyncSnapshot<bool> hot) => Visibility(
+          visible:
+              index == 0 ? (hot.data == true) : (isSending && !isSendFailed),
+          child: CupertinoActivityIndicator(),
+        ),
+      );
+
+  /// 阅后即焚
+  Widget _buildDestroyAfterReadingView() {
+    bool haveRead = !isUnread!;
+    return Visibility(
+      visible: haveRead && readingDuration > 0,
+      child: TimingView(
+        sec: readingDuration,
+        onFinished: onStartDestroy,
+      ),
+    );
+  }
 }

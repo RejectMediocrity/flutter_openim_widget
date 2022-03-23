@@ -13,6 +13,7 @@ class ChatSendFailedView extends StatefulWidget {
     required this.isReceived,
     this.isSendFailed = false,
     this.stream,
+    Function()? onFailedResend,
   }) : super(key: key);
 
   @override
