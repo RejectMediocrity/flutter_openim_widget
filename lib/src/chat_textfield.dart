@@ -11,6 +11,7 @@ class ChatTextField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final TextStyle? style;
   final TextStyle? atStyle;
+  final TextStyle? atMeStyle;
   final List<TextInputFormatter>? inputFormatters;
 
   const ChatTextField({
@@ -22,6 +23,7 @@ class ChatTextField extends StatelessWidget {
     this.onSubmitted,
     this.style,
     this.atStyle,
+    this.atMeStyle,
     this.inputFormatters,
   }) : super(key: key);
 
@@ -30,10 +32,10 @@ class ChatTextField extends StatelessWidget {
     return ExtendedTextField(
       style: style,
       specialTextSpanBuilder: AtSpecialTextSpanBuilder(
-        atCallback: atCallback,
-        allAtMap: allAtMap,
-        atStyle: atStyle,
-      ),
+          atCallback: atCallback,
+          allAtMap: allAtMap,
+          atStyle: atStyle,
+          atMeStyle: atMeStyle),
       focusNode: focusNode,
       controller: controller,
       keyboardType: TextInputType.multiline,

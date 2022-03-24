@@ -18,6 +18,7 @@ class ChatInputBoxView extends StatefulWidget {
     this.onSubmitted,
     this.style,
     this.atStyle,
+    this.atMeStyle,
     this.forceCloseToolboxSub,
     this.quoteContent,
     this.onClearQuote,
@@ -35,6 +36,7 @@ class ChatInputBoxView extends StatefulWidget {
   final Widget emojiView;
   final TextStyle? style;
   final TextStyle? atStyle;
+  final TextStyle? atMeStyle;
   final Subject? forceCloseToolboxSub;
   final String? quoteContent;
   final Function()? onClearQuote;
@@ -223,6 +225,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         child: ChatTextField(
           style: widget.style ?? textStyle,
           atStyle: widget.atStyle ?? atStyle,
+          atMeStyle: widget.atMeStyle ?? atMeStyle,
           atCallback: widget.atCallback,
           allAtMap: widget.allAtMap,
           focusNode: widget.focusNode,
@@ -290,6 +293,12 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   static var atStyle = TextStyle(
     fontSize: 16.sp,
     color: Color(0xFF006DFA),
+    height: 1.5,
+    textBaseline: TextBaseline.alphabetic,
+  );
+  static var atMeStyle = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 16.sp,
     height: 1.5,
     textBaseline: TextBaseline.alphabetic,
   );

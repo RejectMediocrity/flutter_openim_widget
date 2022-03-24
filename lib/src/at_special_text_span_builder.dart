@@ -15,10 +15,12 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
   /// value:username
   final Map<String, String> allAtMap;
   final TextStyle? atStyle;
+  final TextStyle? atMeStyle;
 
   AtSpecialTextSpanBuilder({
     this.atCallback,
     this.atStyle,
+    this.atMeStyle,
     this.allAtMap = const <String, String>{},
   });
 
@@ -43,9 +45,10 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
         .replaceAll('[', '\\[')
         .replaceAll(']', '\\]');
 
-    final list = [regexAt, regexEmoji];
+    final list = [regexAt, regexAtMe, regexEmoji];
     final pattern = '(${list.toList().join('|')})';
     final atReg = RegExp(regexAt);
+    final atMeReg = RegExp(regexAtMe);
     final emojiReg = RegExp(regexEmoji);
 
     data.splitMapJoin(
@@ -62,6 +65,33 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
               inlineSpan = ExtendedWidgetSpan(
                 child: Text('@$name ', style: atStyle),
                 style: atStyle,
+                actualText: '$value',
+                start: m.start,
+              );
+              buffer.write('@$name ');
+            } else {
+              inlineSpan = TextSpan(text: '$value', style: textStyle);
+              buffer.write('$value');
+            }
+          } else if (atMeReg.hasMatch(value)) {
+            String id = value.replaceFirst("@", "").trim();
+            if (allAtMap.containsKey(id)) {
+              var name = allAtMap[id]!;
+              inlineSpan = ExtendedWidgetSpan(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF006DFA),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    '@$name ',
+                    style: atMeStyle,
+                  ),
+                ),
+                style: atMeStyle,
                 actualText: '$value',
                 start: m.start,
               );

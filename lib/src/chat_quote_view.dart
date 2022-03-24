@@ -50,8 +50,8 @@ class ChatQuoteView extends StatelessWidget {
             );
           }
         } else if (quoteMessage.contentType == MessageType.video) {
-          var url = quoteMessage.videoElem?.snapshotUrl;
-          var path = quoteMessage.videoElem?.snapshotPath;
+          // var url = quoteMessage.videoElem?.snapshotUrl;
+          // var path = quoteMessage.videoElem?.snapshotPath;
           // if (url != null && url.isNotEmpty) {
           //   child = _playIcon(
           //     child: ImageUtil.networkImage(
@@ -90,7 +90,7 @@ class ChatQuoteView extends StatelessWidget {
           }
         } else if (quoteMessage.contentType == MessageType.file) {
           var file = quoteMessage.fileElem;
-          content = "[${UILocalizations.video}]${file?.fileName}";
+          content = "[${UILocalizations.file}]${file?.fileName}";
         }
       }
     }

@@ -86,6 +86,8 @@ class ChatAtText extends StatelessWidget {
     patterns.forEach((e) {
       if (e.type == PatternType.AT) {
         _mapping[regexAt] = e;
+      } else if (e.type == PatternType.ATME) {
+        _mapping[regexAtMe] = e;
       } else if (e.type == PatternType.EMAIL) {
         _mapping[regexEmail] = e;
       } else if (e.type == PatternType.MOBILE) {
@@ -137,7 +139,35 @@ class ChatAtText extends StatelessWidget {
               matchText = '@${allAtMap[uid]!} ';
             }
           }
-          if (mapping.type == PatternType.EMOJI) {
+          if (mapping.type == PatternType.ATME) {
+            String uid = matchText.replaceFirst("@", "").trim();
+            value = uid;
+            if (allAtMap.containsKey(uid)) {
+              matchText = '@${allAtMap[uid]!} ';
+              inlineSpan = ExtendedWidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 5, 2),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF006DFA),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(11.w),
+                      ),
+                    ),
+                    child: Text(
+                      '$matchText',
+                      style: _mapping[regexAtMe]?.style,
+                    ),
+                  ),
+                ),
+                style: _mapping[regexAtMe]?.style,
+                actualText: '$value',
+                start: match.start,
+              );
+            }
+          } else if (mapping.type == PatternType.EMOJI) {
             inlineSpan = ImageSpan(
               ImageUtil.emojiImage(matchText),
               imageWidth: 20.h,
@@ -157,7 +187,7 @@ class ChatAtText extends StatelessWidget {
         } else {
           inlineSpan = TextSpan(text: "$matchText", style: style);
         }
-        children.add(inlineSpan);
+        if (inlineSpan != null) children.add(inlineSpan);
         return '';
       },
       onNonMatch: (text) {
@@ -196,10 +226,13 @@ class MatchPattern {
   MatchPattern({required this.type, this.pattern, this.style, this.onTap});
 }
 
-enum PatternType { AT, EMAIL, MOBILE, TEL, URL, EMOJI, CUSTOM }
+enum PatternType { AT, EMAIL, MOBILE, TEL, URL, EMOJI, CUSTOM, ATME }
 
 /// 空格@uid空格
-const regexAt = r"(\s@\S+\s)";
+
+String uid = OpenIM.iMManager.uid;
+final regexAt = "\\s@(?!$uid)\\S+\\s";
+final regexAtMe = "\\s@(?=$uid)\\S+\\s";
 
 /// Email Regex - A predefined type for handling email matching
 const regexEmail = r"\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b";
