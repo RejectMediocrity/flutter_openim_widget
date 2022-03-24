@@ -583,12 +583,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
 
   Widget _buildTimeView() => Container(
-        padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.h),
-        // height: 20.h,
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(4),
-        //   color: Colors.black.withOpacity(0.2),
-        // ),
+        padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
         child: Text(
           widget.timeStr!,
           style: widget.timeStyle ?? _hintTextStyle,

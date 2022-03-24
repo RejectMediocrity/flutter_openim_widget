@@ -99,139 +99,146 @@ class ChatSingleLayout extends StatelessWidget {
   Widget _chatWidget() {
     return isHintMsg
         ? child
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        : Column(
             children: [
-              /// 多选框
-              if (!isHintMsg) ChatRadio(checked: checked, showRadio: showRadio),
-
-              /// 头像
-              _buildAvatar(
-                isReceivedMsg ? leftAvatar : rightAvatar,
-                true,
-                onTap: isReceivedMsg ? onTapLeftAvatar : onTapRightAvatar,
-                onLongPress: isReceivedMsg
-                    ? onLongPressLeftAvatar
-                    : onLongPressRightAvatar,
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
+              if (timeView != null) timeView!,
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  /// 多选框
+                  if (!isHintMsg)
+                    ChatRadio(checked: checked, showRadio: showRadio),
+
+                  /// 头像
+                  _buildAvatar(
+                    isReceivedMsg ? leftAvatar : rightAvatar,
+                    true,
+                    onTap: isReceivedMsg ? onTapLeftAvatar : onTapRightAvatar,
+                    onLongPress: isReceivedMsg
+                        ? onLongPressLeftAvatar
+                        : onLongPressRightAvatar,
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Row(
                     children: [
-                      /// 群聊并且收到的消息，显示对方昵称
-                      Visibility(
-                        visible: isReceivedMsg && !isSingleChat,
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 8.w, left: 8.w),
-                          child: Text(
-                            leftName ?? '',
-                            style: TextStyle(
-                              color: Color(0xFF666666),
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          /// 弹出框
-                          CopyCustomPopupMenu(
-                            controller: popupCtrl,
-                            barrierColor: Colors.transparent,
-                            arrowColor: Color(0xFF666666),
-                            verticalMargin: 0,
-                            // horizontalMargin: 0,
-                            /// 聊天气泡&tips
-                            child: isBubbleBg
-                                ? GestureDetector(
-                                    onTap: () => _onItemClick?.add(index),
-                                    child: ChatBubble(
-                                      constraints:
-                                          BoxConstraints(minHeight: avatarSize),
-                                      bubbleType: isReceivedMsg
-                                          ? BubbleType.receiver
-                                          : BubbleType.send,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          /// 引用（回复）消息
-                                          if (quoteView != null)
-                                            Padding(
-                                              child: quoteView!,
-                                              padding:
-                                                  EdgeInsets.only(bottom: 4.w),
-                                            ),
-
-                                          /// 消息体
-                                          child,
-                                        ],
-                                      ),
-                                      backgroundColor: _bubbleColor(),
-                                    ),
-                                  )
-                                : _noBubbleBgView(),
-                            menuBuilder: menuBuilder,
-                            pressType: PressType.longPress,
-                          ),
-                          SizedBox(
-                            width: 8.w,
-                          ),
-
-                          /// 阅后即焚
-                          _buildDestroyAfterReadingView(),
-
-                          /// 发送中、发送成功、发送失败
-                          if (delaySendingStatus) _delayedStatusView(),
-                          if (!delaySendingStatus)
-                            Visibility(
-                              visible: isSending && !isSendFailed,
-                              child: CupertinoActivityIndicator(),
+                          /// 群聊并且收到的消息，显示对方昵称
+                          Visibility(
+                            visible: isReceivedMsg && !isSingleChat,
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 8.w, left: 8.w),
+                              child: Text(
+                                leftName ?? '',
+                                style: TextStyle(
+                                  color: Color(0xFF666666),
+                                  fontSize: 10.sp,
+                                ),
+                              ),
                             ),
-                          ChatSendFailedView(
-                            msgId: msgId,
-                            isReceived: isReceivedMsg,
-                            stream: sendStatusStream,
-                            isSendFailed: isSendFailed,
-                            onFailedResend: failedResend,
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              /// 弹出框
+                              CopyCustomPopupMenu(
+                                controller: popupCtrl,
+                                barrierColor: Colors.transparent,
+                                arrowColor: Color(0xFF666666),
+                                verticalMargin: 0,
+                                // horizontalMargin: 0,
+                                /// 聊天气泡&tips
+                                child: isBubbleBg
+                                    ? GestureDetector(
+                                        onTap: () => _onItemClick?.add(index),
+                                        child: ChatBubble(
+                                          constraints: BoxConstraints(
+                                              minHeight: avatarSize),
+                                          bubbleType: isReceivedMsg
+                                              ? BubbleType.receiver
+                                              : BubbleType.send,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              /// 引用（回复）消息
+                                              if (quoteView != null)
+                                                Padding(
+                                                  child: quoteView!,
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 4.w),
+                                                ),
 
-                          /// 已读
-                          if (isSingleChat &&
-                              !isSendFailed &&
-                              !isSending &&
-                              enabledReadStatus)
-                            _buildReadStatusView(),
-                          if (!isSingleChat &&
-                              !isSendFailed &&
-                              !isSending &&
-                              enabledReadStatus)
-                            _buildGroupReadStatusView(),
+                                              /// 消息体
+                                              child,
+                                            ],
+                                          ),
+                                          backgroundColor: _bubbleColor(),
+                                        ),
+                                      )
+                                    : _noBubbleBgView(),
+                                menuBuilder: menuBuilder,
+                                pressType: PressType.longPress,
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+
+                              /// 阅后即焚
+                              _buildDestroyAfterReadingView(),
+
+                              /// 发送中、发送成功、发送失败
+                              if (delaySendingStatus) _delayedStatusView(),
+                              if (!delaySendingStatus)
+                                Visibility(
+                                  visible: isSending && !isSendFailed,
+                                  child: CupertinoActivityIndicator(),
+                                ),
+                              ChatSendFailedView(
+                                msgId: msgId,
+                                isReceived: isReceivedMsg,
+                                stream: sendStatusStream,
+                                isSendFailed: isSendFailed,
+                                onFailedResend: failedResend,
+                              ),
+
+                              /// 已读
+                              if (isSingleChat &&
+                                  !isSendFailed &&
+                                  !isSending &&
+                                  enabledReadStatus)
+                                _buildReadStatusView(),
+                              if (!isSingleChat &&
+                                  !isSendFailed &&
+                                  !isSending &&
+                                  enabledReadStatus)
+                                _buildGroupReadStatusView(),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 6.w),
+                            child: Row(
+                              children: [
+                                ImageUtil.assetImage("msg_icon_reply",
+                                    width: 12.w, height: 12.w),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Text(
+                                  "${20}条回复",
+                                  style: TextStyle(
+                                      color: Color(0xFF006DFA),
+                                      fontSize: 12.sp),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 6.w),
-                        child: Row(
-                          children: [
-                            ImageUtil.assetImage("msg_icon_reply",
-                                width: 12.w, height: 12.w),
-                            SizedBox(
-                              width: 4.w,
-                            ),
-                            Text(
-                              "${20}条回复",
-                              style: TextStyle(
-                                  color: Color(0xFF006DFA), fontSize: 12.sp),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
