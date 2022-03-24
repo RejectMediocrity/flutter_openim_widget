@@ -99,19 +99,18 @@ class ChatQuoteView extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(6),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
               margin: EdgeInsets.only(right: 4.w),
-              color: Color(0xFF666666),
-              width: 1,
+              color: Color(0xFF999999),
+              width: 2,
               height: 14,
             ),
             Container(
-              constraints: BoxConstraints(maxWidth: 220.w),
+              constraints: BoxConstraints(maxWidth: 0.65.sw),
               child: Text(
                 '${UILocalizations.reply} $name：${content ?? ''}',
                 style: TextStyle(

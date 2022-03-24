@@ -28,7 +28,7 @@ class ChatLocationView extends StatelessWidget {
       name = map['name'];
       addr = map['addr'];
       return Container(
-        width: 200.w,
+        width: 0.65.sw,
         // height: 124.h,
         color: Color(0xFFF0F0F0),
         padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),

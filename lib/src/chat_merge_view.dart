@@ -40,7 +40,7 @@ class ChatMergeMsgView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 200.w),
+      constraints: BoxConstraints(maxWidth: 0.65.sw),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

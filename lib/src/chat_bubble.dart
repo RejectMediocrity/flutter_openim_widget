@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum BubbleType {
   send,
@@ -23,20 +22,11 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: constraints,
-      margin: EdgeInsets.only(right: 10.w, left: 10.w, bottom: 2.h),
-      padding: EdgeInsets.symmetric(
-        horizontal: 7.w,
-        vertical: 7.h,
-      ),
+      padding: EdgeInsets.all(10),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(bubbleType == BubbleType.send ? 8 : 1),
-          topRight: Radius.circular(bubbleType == BubbleType.send ? 1 : 8),
-          bottomLeft: Radius.circular(8),
-          bottomRight: Radius.circular(8),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(6)),
       ),
       child: child,
     );

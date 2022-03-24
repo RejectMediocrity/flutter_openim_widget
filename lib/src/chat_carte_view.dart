@@ -15,7 +15,7 @@ class ChatCarteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // padding: EdgeInsets.only(top: 12.h, bottom: 4.h),
-      width: 200.w,
+      width: 0.65.sw,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),

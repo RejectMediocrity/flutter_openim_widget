@@ -115,6 +115,9 @@ class ChatSingleLayout extends StatelessWidget {
                     ? onLongPressLeftAvatar
                     : onLongPressRightAvatar,
               ),
+              SizedBox(
+                width: 8.w,
+              ),
               Row(
                 children: [
                   Column(
@@ -125,7 +128,7 @@ class ChatSingleLayout extends StatelessWidget {
                       Visibility(
                         visible: isReceivedMsg && !isSingleChat,
                         child: Container(
-                          margin: EdgeInsets.only(bottom: 2.h, left: 10.w),
+                          margin: EdgeInsets.only(bottom: 8.w, left: 8.w),
                           child: Text(
                             leftName ?? '',
                             style: TextStyle(
@@ -161,7 +164,11 @@ class ChatSingleLayout extends StatelessWidget {
                                         children: [
                                           /// 引用（回复）消息
                                           if (quoteView != null)
-                                            _buildQuoteMsgView(),
+                                            Padding(
+                                              child: quoteView!,
+                                              padding:
+                                                  EdgeInsets.only(bottom: 4.w),
+                                            ),
 
                                           /// 消息体
                                           child,
@@ -173,6 +180,9 @@ class ChatSingleLayout extends StatelessWidget {
                                 : _noBubbleBgView(),
                             menuBuilder: menuBuilder,
                             pressType: PressType.longPress,
+                          ),
+                          SizedBox(
+                            width: 8.w,
                           ),
 
                           /// 阅后即焚
@@ -207,7 +217,7 @@ class ChatSingleLayout extends StatelessWidget {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 2, left: 10),
+                        padding: EdgeInsets.only(top: 6.w),
                         child: Row(
                           children: [
                             ImageUtil.assetImage("msg_icon_reply",
@@ -218,7 +228,7 @@ class ChatSingleLayout extends StatelessWidget {
                             Text(
                               "${20}条回复",
                               style: TextStyle(
-                                  color: Color(0xFF006DFA), fontSize: 12),
+                                  color: Color(0xFF006DFA), fontSize: 12.sp),
                             ),
                           ],
                         ),
