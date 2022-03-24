@@ -168,37 +168,40 @@ class ImageUtil {
         height: 48.h,
       );
 
-  static Widget menuCopy() =>
-      assetImage('ic_menu_copy', width: 18.w, height: 18.w);
+  static Widget menuCopy() => assetImage(
+        'msgpopup_but_copy',
+        width: 20.w,
+        height: 20.w,
+      );
 
   static Widget menuDel() => assetImage(
-        'ic_menu_del',
-        width: 18.w,
-        height: 18.w,
+        'msgpopup_but_del',
+        width: 20.w,
+        height: 20.w,
       );
 
   static Widget menuForward() => assetImage(
-        'ic_menu_forward',
-        width: 16.w,
-        height: 16.w,
+        'msgpopup_but_share',
+        width: 20.w,
+        height: 20.w,
       );
 
   static Widget menuMultiChoice() => assetImage(
-        'ic_menu_multichoice',
-        width: 18.w,
-        height: 18.w,
+        'msgpopup_but_multiple',
+        width: 20.w,
+        height: 20.w,
       );
 
   static Widget menuReply() => assetImage(
-        'ic_menu_reply',
-        width: 18.w,
-        height: 18.w,
+        'msgpopup_but_reply',
+        width: 20.w,
+        height: 20.w,
       );
 
   static Widget menuRevoke() => assetImage(
-        'ic_menu_revoke',
-        width: 18.w,
-        height: 18.w,
+        'msgpopup_but_revoke',
+        width: 20.w,
+        height: 20.w,
       );
 
   static Widget menuDownload() => assetImage(
@@ -209,8 +212,8 @@ class ImageUtil {
 
   static Widget menuTranslation() => assetImage(
         'ic_menu_translation',
-        width: 18.w,
-        height: 18.w,
+        width: 20.w,
+        height: 20.w,
       );
 
   static Widget menuAddEmoji() => assetImage(

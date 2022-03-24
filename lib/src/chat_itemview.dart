@@ -568,11 +568,11 @@ class _ChatItemViewState extends State<ChatItemView> {
         menus: widget.menus ?? _menusItem(),
         menuStyle: widget.menuStyle ??
             MenuStyle(
-              crossAxisCount: 5,
-              mainAxisSpacing: 15.w,
+              crossAxisCount: 6,
+              mainAxisSpacing: 30.w,
               crossAxisSpacing: 15.h,
-              radius: 4,
-              background: const Color(0xFF666666),
+              radius: 6.w,
+              background: const Color(0xFFFFFFFF),
             ),
       );
 
@@ -583,7 +583,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
 
   Widget _buildTimeView() => Container(
-        padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
+        padding: EdgeInsets.only(bottom: 20.h),
         child: Text(
           widget.timeStr!,
           style: widget.timeStyle ?? _hintTextStyle,
@@ -632,13 +632,13 @@ class _ChatItemViewState extends State<ChatItemView> {
           textStyle: menuTextStyle,
           onTap: widget.onTapMultiMenu,
         ),
-        MenuInfo(
-          icon: ImageUtil.menuTranslation(),
-          text: UILocalizations.translation,
-          enabled: _showTranslationMenu,
-          textStyle: menuTextStyle,
-          onTap: widget.onTapTranslationMenu,
-        ),
+        // MenuInfo(
+        //   icon: ImageUtil.menuTranslation(),
+        //   text: UILocalizations.translation,
+        //   enabled: _showTranslationMenu,
+        //   textStyle: menuTextStyle,
+        //   onTap: widget.onTapTranslationMenu,
+        // ),
         // MenuInfo(
         //   icon: ImageUtil.menuDownload(),
         //   text: widget.localizations.download,
@@ -650,7 +650,7 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   static var menuTextStyle = TextStyle(
     fontSize: 12.sp,
-    color: Color(0xFFFFFFFF),
+    color: Color(0xFF333333),
   );
 
   bool get _showCopyMenu =>

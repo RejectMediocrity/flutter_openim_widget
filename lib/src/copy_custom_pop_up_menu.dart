@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -100,19 +99,19 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                     verticalMargin: widget.verticalMargin,
                   ),
                   children: <Widget>[
-                    if (widget.showArrow)
-                      LayoutId(
-                        id: _MenuLayoutId.arrow,
-                        child: arrow,
-                      ),
-                    if (widget.showArrow)
-                      LayoutId(
-                        id: _MenuLayoutId.downArrow,
-                        child: Transform.rotate(
-                          angle: math.pi,
-                          child: arrow,
-                        ),
-                      ),
+                    // if (widget.showArrow)
+                    //   LayoutId(
+                    //     id: _MenuLayoutId.arrow,
+                    //     child: arrow,
+                    //   ),
+                    // if (widget.showArrow)
+                    //   LayoutId(
+                    //     id: _MenuLayoutId.downArrow,
+                    //     child: Transform.rotate(
+                    //       angle: math.pi,
+                    //       child: arrow,
+                    //     ),
+                    //   ),
                     LayoutId(
                       id: _MenuLayoutId.content,
                       child: Column(

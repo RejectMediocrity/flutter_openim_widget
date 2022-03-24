@@ -60,9 +60,17 @@ class ChatLongPressMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 20.w),
       decoration: BoxDecoration(
         color: menuStyle.background,
         borderRadius: BorderRadius.circular(menuStyle.radius),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF000000).withAlpha(25),
+            blurRadius: 8.h,
+            spreadRadius: 1.h,
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -92,12 +100,12 @@ class ChatLongPressMenu extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: subList
             .map((e) => _menuItem(
-          icon: e.icon,
-          label: e.text,
-          onTap: e.onTap,
-          style: e.textStyle ??
-              TextStyle(fontSize: 10.sp, color: Color(0xFFFFFFFF)),
-        ))
+                  icon: e.icon,
+                  label: e.text,
+                  onTap: e.onTap,
+                  style: e.textStyle ??
+                      TextStyle(fontSize: 12.sp, color: Color(0xFF333333)),
+                ))
             .toList(),
       ));
     }
@@ -117,19 +125,12 @@ class ChatLongPressMenu extends StatelessWidget {
         },
         behavior: HitTestBehavior.translucent,
         child: Container(
-          //edit by wang.haoran at 2022-01-07
-          width: 56.w,
-          // constraints: BoxConstraints(maxWidth: 35.w, minWidth: 30.w),
-          padding: EdgeInsets.symmetric(
-            horizontal: menuStyle.crossAxisSpacing / 2,
-            //vertical: menuStyle.mainAxisSpacing / 2,
-            vertical: menuStyle.mainAxisSpacing / 2 + 10.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               icon,
-              SizedBox(height: 4.h),
+              SizedBox(height: 10.h),
               Text(
                 label,
                 // maxLines: 1,
