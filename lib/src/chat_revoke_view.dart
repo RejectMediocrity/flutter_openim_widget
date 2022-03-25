@@ -3,52 +3,57 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
-class ChatRevokeView extends StatelessWidget {
+class ChatRevokeView extends StatefulWidget {
   ChatRevokeView({Key? key, required this.message, this.onTap})
-      : revokedOver2Min =
-            ((DateTime.now().millisecondsSinceEpoch - message.sendTime!) >
-                    120 * 1000)
-                .obs,
-        super(key: key);
+      : super(key: key);
   final Message message;
   final Function()? onTap;
-  var revokedOver2Min = false.obs;
+
+  @override
+  State<ChatRevokeView> createState() => _ChatRevokeViewState();
+}
+
+class _ChatRevokeViewState extends State<ChatRevokeView> {
   var timer;
+  var revokedOver2Min;
+  @override
+  void initState() {
+    // 撤回时间超过两分钟，不允许编辑
+    int du = DateTime.now().millisecondsSinceEpoch - widget.message.sendTime!;
+    revokedOver2Min =
+        du > 120 * 1000 && widget.message.contentType == MessageType.text;
+    if (!revokedOver2Min)
+      Future.delayed(Duration(seconds: 120 - du ~/ 1000), () {
+        setState(() {
+          this.revokedOver2Min = true;
+        });
+      });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // 撤回时间超过两分钟，不允许编辑
-    int du = DateTime.now().millisecondsSinceEpoch - message.sendTime!;
-    timer = this.revokedOver2Min.value
-        ? null
-        : Timer(Duration(seconds: 120 - du ~/ 1000), () {
-            this.revokedOver2Min.value = true;
-            timer.cancel();
-          });
     Text text = Text(
       UILocalizations.revokedAMsg,
       style: TextStyle(color: Color(0xFF666666), fontSize: 16.sp),
     );
-    return Obx(
-      () => revokedOver2Min.value || message.contentType != MessageType.text
-          ? text
-          : Row(
-              children: [
-                text,
-                SizedBox(
-                  width: 5.w,
+    return revokedOver2Min
+        ? text
+        : Row(
+            children: [
+              text,
+              SizedBox(
+                width: 5.w,
+              ),
+              GestureDetector(
+                onTap: widget.onTap,
+                child: Text(
+                  UILocalizations.reEdit,
+                  style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
                 ),
-                GestureDetector(
-                  onTap: onTap,
-                  child: Text(
-                    UILocalizations.reEdit,
-                    style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
-                  ),
-                )
-              ],
-            ),
-    );
+              )
+            ],
+          );
   }
 }
