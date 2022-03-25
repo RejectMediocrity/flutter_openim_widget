@@ -23,26 +23,29 @@ class ChatRevokeView extends StatelessWidget {
     int du = DateTime.now().millisecondsSinceEpoch - message.sendTime!;
     timer = this.revokedOver2Min.value
         ? null
-        : Timer(Duration(seconds: 1), () {
+        : Timer(Duration(seconds: 120 - du ~/ 1000), () {
             this.revokedOver2Min.value = true;
+            timer.cancel();
           });
     Text text = Text(
       UILocalizations.revokedAMsg,
       style: TextStyle(color: Color(0xFF666666), fontSize: 16.sp),
     );
-    return revokedOver2Min.value
-        ? text
-        : Row(
-            children: [
-              text,
-              SizedBox(
-                width: 5.w,
-              ),
-              Text(
-                UILocalizations.reEdit,
-                style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
-              )
-            ],
-          );
+    return Obx(
+      () => revokedOver2Min.value
+          ? text
+          : Row(
+              children: [
+                text,
+                SizedBox(
+                  width: 5.w,
+                ),
+                Text(
+                  UILocalizations.reEdit,
+                  style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
+                )
+              ],
+            ),
+    );
   }
 }
