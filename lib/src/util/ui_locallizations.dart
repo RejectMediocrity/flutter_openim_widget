@@ -49,6 +49,8 @@ class UILocalizations {
       "confirm": "Confirm",
       "you": "You",
       "revokeAMsg": "revoke a message",
+      "revokedAMsg": "Message retracted",
+      "reEdit": "Re-edit",
       "picLoadError": "Image failed to load",
       "fileSize": "File size: %s",
       "fileUnavailable": "The file has expired or has been cleaned up",
@@ -93,6 +95,8 @@ class UILocalizations {
       "confirm": "确定",
       "you": "你",
       "revokeAMsg": "撤回了一条消息",
+      "revokedAMsg": "消息已撤回",
+      "reEdit": "重新编辑",
       "picLoadError": "图片加载失败",
       "fileSize": "文件大小：%s",
       "fileUnavailable": "文件已过期或已被清理",
@@ -188,5 +192,10 @@ class UILocalizations {
   static String get unsupportedMessage => _value(key: 'unsupportedMessage');
 
   static String get add => _value(key: 'add');
+
   static String get allRead => _value(key: "allRead");
+
+  static String get revokedAMsg => _value(key: "revokedAMsg");
+
+  static String get reEdit => _value(key: "reEdit");
 }

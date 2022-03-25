@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:rxdart/rxdart.dart';
@@ -481,6 +482,17 @@ class _ChatItemViewState extends State<ChatItemView> {
           );
         }
         break;
+      case MessageType.revoke:
+        {
+          child = _buildCommonItemView(
+            child: ChatRevokeView(
+              message: widget.message,
+              onTap: () {},
+            ),
+            isBubbleBg: true,
+          );
+        }
+        break;
       default:
         {
           try {
@@ -656,11 +668,13 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showCopyMenu =>
       widget.enabledCopyMenu ?? widget.message.contentType == MessageType.text;
 
-  bool get _showDelMenu => widget.enabledDelMenu ?? true;
+  bool get _showDelMenu =>
+      widget.enabledDelMenu ?? widget.message.contentType != MessageType.revoke;
 
   bool get _showForwardMenu =>
       widget.enabledForwardMenu ??
-      widget.message.contentType != MessageType.voice;
+      widget.message.contentType != MessageType.voice &&
+          widget.message.contentType != MessageType.revoke;
 
   bool get _showReplyMenu =>
       widget.enabledReplyMenu ??
@@ -671,9 +685,13 @@ class _ChatItemViewState extends State<ChatItemView> {
           widget.message.contentType == MessageType.quote;
 
   bool get _showRevokeMenu =>
-      widget.enabledRevokeMenu ?? widget.message.sendID == OpenIM.iMManager.uid;
+      widget.enabledRevokeMenu ??
+      widget.message.sendID == OpenIM.iMManager.uid &&
+          widget.message.contentType != MessageType.revoke;
 
-  bool get _showMultiChoiceMenu => widget.enabledMultiMenu ?? true;
+  bool get _showMultiChoiceMenu =>
+      widget.enabledMultiMenu ??
+      widget.message.contentType != MessageType.revoke;
 
   bool get _showTranslationMenu =>
       widget.enabledTranslationMenu ??
