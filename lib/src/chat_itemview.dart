@@ -487,7 +487,9 @@ class _ChatItemViewState extends State<ChatItemView> {
           child = _buildCommonItemView(
             child: ChatRevokeView(
               message: widget.message,
-              onTap: () {},
+              onTap: () {
+                widget.clickSubject.addSafely(widget.index);
+              },
             ),
             isBubbleBg: true,
           );

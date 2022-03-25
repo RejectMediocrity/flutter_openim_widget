@@ -32,7 +32,7 @@ class ChatRevokeView extends StatelessWidget {
       style: TextStyle(color: Color(0xFF666666), fontSize: 16.sp),
     );
     return Obx(
-      () => revokedOver2Min.value
+      () => revokedOver2Min.value || message.contentType != MessageType.text
           ? text
           : Row(
               children: [
@@ -40,9 +40,12 @@ class ChatRevokeView extends StatelessWidget {
                 SizedBox(
                   width: 5.w,
                 ),
-                Text(
-                  UILocalizations.reEdit,
-                  style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
+                GestureDetector(
+                  onTap: onTap,
+                  child: Text(
+                    UILocalizations.reEdit,
+                    style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
+                  ),
                 )
               ],
             ),
