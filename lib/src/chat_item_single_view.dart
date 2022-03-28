@@ -43,6 +43,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Function()? viewMessageReadStatus;
   final Function()? failedResend;
   final Function(Widget bubleView)? expandView;
+  final bool? enableMultiSel;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -83,12 +84,15 @@ class ChatSingleLayout extends StatelessWidget {
     this.viewMessageReadStatus,
     this.failedResend,
     this.expandView,
+    this.enableMultiSel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: showRadio ? () => onRadioChanged?.call(!checked) : null,
+      onTap: enableMultiSel == true && showRadio
+          ? () => onRadioChanged?.call(!checked)
+          : null,
       behavior: HitTestBehavior.translucent,
       child: IgnorePointer(
         ignoring: showRadio,

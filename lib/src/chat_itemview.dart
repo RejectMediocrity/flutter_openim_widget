@@ -647,6 +647,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         delaySendingStatus: widget.delaySendingStatus,
         enabledReadStatus: widget.enabledReadStatus,
         expandView: expandView,
+        enableMultiSel: widget.message.contentType != MessageType.revoke,
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(
