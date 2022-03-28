@@ -3,45 +3,95 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatMultiSelToolbox extends StatelessWidget {
-  const ChatMultiSelToolbox({Key? key, this.onDelete, this.onMergeForward})
+  const ChatMultiSelToolbox(
+      {Key? key, this.onDelete, this.onMergeForward, this.onForwardOneByOne})
       : super(key: key);
   final Function()? onDelete;
   final Function()? onMergeForward;
+  final Function()? onForwardOneByOne;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minHeight: 40.h),
-      decoration: BoxDecoration(color: Color(0xFFF6F6F6), boxShadow: [
-        BoxShadow(color: Color(0xFF000000).withOpacity(0.2), blurRadius: 6)
-      ]),
-      padding: EdgeInsets.symmetric(horizontal: 12.w /*, vertical: 4.h*/),
+      constraints: BoxConstraints(minHeight: 88.h),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      color: Color(0xFFF2F2F2),
+      alignment: Alignment.center,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: onDelete,
-            behavior: HitTestBehavior.translucent,
-            child: Container(
-              padding: EdgeInsets.all(12.h),
-              child: ImageUtil.assetImage(
-                'ic_multi_tool_del',
-                width: 20.w,
-                height: 22.h,
-              ),
-            ),
-          ),
           GestureDetector(
             onTap: onMergeForward,
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: EdgeInsets.all(4),
-              child: ImageUtil.assetImage(
-                'ic_multi_tool_merge_forward',
-                width: 19.w,
-                height: 19.h,
+              padding: EdgeInsets.symmetric(horizontal: 22.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ImageUtil.assetImage(
+                    'msgpopup_btn_share_bg',
+                    width: 46.w,
+                    height: 46.w,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    UILocalizations.mergeForward,
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 12.sp),
+                  ),
+                ],
               ),
             ),
-          )
+          ),
+          GestureDetector(
+            onTap: onForwardOneByOne,
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 22.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ImageUtil.assetImage(
+                    'msgpopup_btn_sharemore_bg',
+                    width: 46.w,
+                    height: 46.w,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    UILocalizations.mergeOneByOne,
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 12.sp),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: onDelete,
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 22.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ImageUtil.assetImage(
+                    'msgpopup_btn_del_bg',
+                    width: 46.w,
+                    height: 46.w,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    UILocalizations.delete,
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 12.sp),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -33,6 +33,8 @@ class UILocalizations {
       'copy': 'Copy',
       "delete": "Delete",
       "forward": "Forward",
+      "mergeForward": "Merge forward",
+      "mergeOneByOne": "Merge one by one",
       "reply": "Quote",
       "revoke": "Revoke",
       "multiChoice": "Choice",
@@ -80,6 +82,8 @@ class UILocalizations {
       'copy': '复制',
       "delete": "删除",
       "forward": "转发",
+      "mergeForward": "合并转发",
+      "mergeOneByOne": "逐条转发",
       "reply": "回复",
       "revoke": "撤回",
       "multiChoice": "多选",
@@ -146,6 +150,10 @@ class UILocalizations {
   static String get delete => _value(key: 'delete');
 
   static String get forward => _value(key: 'forward');
+
+  static String get mergeForward => _value(key: 'mergeForward');
+
+  static String get mergeOneByOne => _value(key: 'mergeOneByOne');
 
   static String get reply => _value(key: 'reply');
 
