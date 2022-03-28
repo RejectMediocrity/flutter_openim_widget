@@ -13,7 +13,7 @@ class ChatTextField extends StatelessWidget {
   final TextStyle? atStyle;
   final TextStyle? atMeStyle;
   final List<TextInputFormatter>? inputFormatters;
-
+  final String? hintText;
   const ChatTextField({
     Key? key,
     this.allAtMap = const {},
@@ -25,6 +25,7 @@ class ChatTextField extends StatelessWidget {
     this.atStyle,
     this.atMeStyle,
     this.inputFormatters,
+    this.hintText,
   }) : super(key: key);
 
   @override
@@ -49,7 +50,7 @@ class ChatTextField extends StatelessWidget {
         border: InputBorder.none,
         isDense: true,
         contentPadding: EdgeInsets.zero,
-        hintText: "发送给 NiKi",
+        hintText: hintText,
         hintStyle: TextStyle(
           fontSize: 16,
           color: Color(0xFF999999),

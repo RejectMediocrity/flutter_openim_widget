@@ -298,6 +298,7 @@ class _ChatItemViewState extends State<ChatItemView> {
 
     return FocusDetector(
       child: Container(
+        color: _checked ? Color(0xFFF9F9F9) : Colors.white,
         padding: widget.padding ??
             EdgeInsets.fromLTRB(
               widget.multiSelMode && !_isHintMsg ? 0 : 22.w,

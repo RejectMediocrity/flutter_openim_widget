@@ -24,6 +24,7 @@ class ChatInputBoxView extends StatefulWidget {
     this.onClearQuote,
     this.multiMode = false,
     this.inputFormatters,
+    this.hintText,
   }) : super(key: key);
   final Function() atAction;
   final Function() picAction;
@@ -42,7 +43,7 @@ class ChatInputBoxView extends StatefulWidget {
   final Function()? onClearQuote;
   final bool multiMode;
   final List<TextInputFormatter>? inputFormatters;
-
+  final String? hintText;
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
 }
@@ -235,6 +236,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             focus();
             if (null != widget.onSubmitted) widget.onSubmitted!(value);
           },
+          hintText: widget.hintText,
         ));
   }
 
