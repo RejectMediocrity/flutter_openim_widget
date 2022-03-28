@@ -42,7 +42,7 @@ class ChatSingleLayout extends StatelessWidget {
   final int groupMemberCount;
   final Function()? viewMessageReadStatus;
   final Function()? failedResend;
-
+  final Function(Widget bubleView)? expandView;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -82,6 +82,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.groupMemberCount = 0,
     this.viewMessageReadStatus,
     this.failedResend,
+    this.expandView,
   }) : super(key: key);
 
   @override
@@ -156,7 +157,7 @@ class ChatSingleLayout extends StatelessWidget {
                                 child: isBubbleBg
                                     ? GestureDetector(
                                         onTap: () => _onItemClick?.add(index),
-                                        child: ChatBubble(
+                                        child: expandView!(ChatBubble(
                                           constraints: BoxConstraints(
                                               minHeight: avatarSize),
                                           bubbleType: isReceivedMsg
@@ -179,7 +180,7 @@ class ChatSingleLayout extends StatelessWidget {
                                             ],
                                           ),
                                           backgroundColor: _bubbleColor(),
-                                        ),
+                                        )),
                                       )
                                     : _noBubbleBgView(),
                                 menuBuilder: menuBuilder,

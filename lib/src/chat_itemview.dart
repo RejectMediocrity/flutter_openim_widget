@@ -195,6 +195,9 @@ class ChatItemView extends StatefulWidget {
 
   final bool enabledReadStatus;
 
+  final bool? isExpanded;
+  final Function()? onTapExpanded;
+
   const ChatItemView({
     Key? key,
     required this.index,
@@ -250,6 +253,8 @@ class ChatItemView extends StatefulWidget {
     this.patterns = const [],
     this.delaySendingStatus = false,
     this.enabledReadStatus = true,
+    this.isExpanded,
+    this.onTapExpanded,
   }) : super(key: key);
 
   @override
@@ -326,6 +331,70 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
+  bool didExceedMaxLines(String text) {
+    TextPainter painter = TextPainter(
+        locale: WidgetsBinding.instance!.window.locale,
+        maxLines: 10,
+        textDirection: TextDirection.ltr,
+        textScaleFactor: 1.0,
+        text: TextSpan(
+            text: text,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 16.sp,
+            )));
+    painter.layout(maxWidth: 0.65.sw);
+    return painter.didExceedMaxLines;
+  }
+
+  Widget expandView(Widget bubleView) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        bubleView,
+        if (didExceedMaxLines(widget.message.content!)! &&
+            widget.isExpanded == false &&
+            widget.message.contentType == MessageType.text)
+          GestureDetector(
+            onTap: widget.onTapExpanded,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 0.65.sw + 20.w,
+                  height: 60.w,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                      ImageUtil.imageResStr("mask_group"),
+                      package: 'flutter_openim_widget',
+                    )),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10.w),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(18),
+                    ),
+                  ),
+                  child: Text(
+                    UILocalizations.spread,
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          Container(),
+      ],
+    );
+  }
+
   Widget? _buildItemView() {
     Widget? child;
     switch (widget.message.contentType) {
@@ -334,6 +403,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           child = _buildCommonItemView(
             child: ChatAtText(
               text: widget.message.content!,
+              maxLines: widget.isExpanded == true ? null : 10,
               allAtMap: {},
               textStyle: widget.textStyle,
               patterns: widget.patterns,
@@ -575,6 +645,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         onRadioChanged: widget.onMultiSelChanged,
         delaySendingStatus: widget.delaySendingStatus,
         enabledReadStatus: widget.enabledReadStatus,
+        expandView: expandView,
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(

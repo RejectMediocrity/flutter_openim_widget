@@ -58,6 +58,7 @@ class UILocalizations {
       "unsupportedMessage": '[Message types not supported]',
       "add": 'Add',
       "allRead": "allRead",
+      "spread": "spread",
     },
     'zh': {
       'top': '置顶',
@@ -103,7 +104,8 @@ class UILocalizations {
       "send": '发送',
       "unsupportedMessage": '[暂不支持的消息类型]',
       "add": '添加',
-      "allRead": "全部已读"
+      "allRead": "全部已读",
+      "spread": "展开",
     },
   };
 
@@ -198,4 +200,6 @@ class UILocalizations {
   static String get revokedAMsg => _value(key: "revokedAMsg");
 
   static String get reEdit => _value(key: "reEdit");
+
+  static String get spread => _value(key: "spread");
 }
