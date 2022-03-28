@@ -353,7 +353,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       alignment: Alignment.bottomCenter,
       children: [
         bubleView,
-        if (didExceedMaxLines(widget.message.content!)! &&
+        if (didExceedMaxLines(widget.message.content!) &&
             widget.isExpanded == false &&
             widget.message.contentType == MessageType.text)
           GestureDetector(
