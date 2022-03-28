@@ -110,16 +110,17 @@ class ChatSingleLayout extends StatelessWidget {
                   /// 多选框
                   if (!isHintMsg)
                     ChatRadio(checked: checked, showRadio: showRadio),
+                  if (!showRadio)
 
-                  /// 头像
-                  _buildAvatar(
-                    isReceivedMsg ? leftAvatar : rightAvatar,
-                    true,
-                    onTap: isReceivedMsg ? onTapLeftAvatar : onTapRightAvatar,
-                    onLongPress: isReceivedMsg
-                        ? onLongPressLeftAvatar
-                        : onLongPressRightAvatar,
-                  ),
+                    /// 头像
+                    _buildAvatar(
+                      isReceivedMsg ? leftAvatar : rightAvatar,
+                      true,
+                      onTap: isReceivedMsg ? onTapLeftAvatar : onTapRightAvatar,
+                      onLongPress: isReceivedMsg
+                          ? onLongPressLeftAvatar
+                          : onLongPressRightAvatar,
+                    ),
                   SizedBox(
                     width: 8.w,
                   ),
