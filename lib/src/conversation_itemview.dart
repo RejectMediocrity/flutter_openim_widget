@@ -36,6 +36,7 @@ class ConversationItemView extends StatelessWidget {
   final bool needToTpliceContent;
   // final bool isPinned;
   final String nickName;
+  final bool isGroupChat;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -77,6 +78,7 @@ class ConversationItemView extends StatelessWidget {
     ),
     this.needToTpliceContent = true,
     this.nickName = '',
+    this.isGroupChat = false,
   }) : super(key: key);
 
   @override
@@ -107,6 +109,7 @@ class ConversationItemView extends StatelessWidget {
         onTap: onTap,
         notDisturb: notDisturb,
         needToTpliceContent: needToTpliceContent,
+        isGroupChat: isGroupChat,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -145,6 +148,7 @@ class _ConversationView extends StatelessWidget {
     this.notDisturb = false,
     this.needToTpliceContent = true,
     this.nickName = '',
+    this.isGroupChat = false,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -170,6 +174,7 @@ class _ConversationView extends StatelessWidget {
   final bool notDisturb;
   final bool needToTpliceContent;
   final String nickName;
+  final bool isGroupChat;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -206,6 +211,7 @@ class _ConversationView extends StatelessWidget {
             Row(
               children: [
                 ChatAvatarView(
+                  isGroup: isGroupChat,
                   text: nickName,
                   size: avatarSize + 10,
                   url: avatarUrl,

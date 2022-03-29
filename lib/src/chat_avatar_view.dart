@@ -94,7 +94,7 @@ class ChatAvatarView extends StatelessWidget {
     if (isGroup)
       return Container(
         child: ImageUtil.assetImage(
-          "msglist_icon_defult",
+          "ic_conversation_group",
           width: size,
           height: size,
         ),
