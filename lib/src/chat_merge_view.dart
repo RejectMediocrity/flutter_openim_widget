@@ -11,26 +11,34 @@ class ChatMergeMsgView extends StatelessWidget {
   List<Widget> _children() {
     var list = <Widget>[];
     list
-      ..add(Text(
-        title,
-        style: TextStyle(
-          color: Color(0xFF333333),
-          fontSize: 15.sp,
+      ..add(
+        Row(
+          children: [
+            Container(
+              width: 2.w,
+              height: 16.w,
+              color: Color(0xFF006DFA),
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-      ))
-      ..add(Padding(
-        padding: EdgeInsets.only(bottom: 8.h, top: 8.h),
-        child: Divider(
-          color: Color(0xFFD8D8D8),
-          height: 0.5.h,
-        ),
-      ));
+      );
     for (var s in summaryList) {
       list.add(Text(
         s.trim(),
         style: TextStyle(
           color: Color(0xFF666666),
-          fontSize: 11.sp,
+          fontSize: 16.sp,
         ),
       ));
     }
