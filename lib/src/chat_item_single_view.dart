@@ -260,7 +260,7 @@ class ChatSingleLayout extends StatelessWidget {
   }
 
   Widget _noBubbleBgView() => Container(
-        margin: EdgeInsets.only(right: 10.w, left: 10.w),
+        // margin: EdgeInsets.only(right: 10.w, left: 10.w),
         // padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),

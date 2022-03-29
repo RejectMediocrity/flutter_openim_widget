@@ -268,7 +268,7 @@ class ImageUtil {
     double? height,
     int? cacheWidth,
     int? cacheHeight,
-    BoxFit? fit,
+    BoxFit? fit = BoxFit.fill,
     bool loadProgress = true,
     bool clearMemoryCacheWhenDispose = true,
     bool lowMemory = true,
