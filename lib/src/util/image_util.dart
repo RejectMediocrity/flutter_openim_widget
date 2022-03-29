@@ -224,8 +224,9 @@ class ImageUtil {
 
   static Widget file() => assetImage(
         'ic_file',
-        width: 22.w,
-        height: 28.h,
+        width: 31.w,
+        height: 38.h,
+        fit: BoxFit.fill,
       );
 
   static Widget delQuote() => assetImage(

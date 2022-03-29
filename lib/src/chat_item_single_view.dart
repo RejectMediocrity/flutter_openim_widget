@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/chat_loading.dart';
 import 'package:flutter_openim_widget/src/timing_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -44,6 +45,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Function()? failedResend;
   final Function(Widget bubleView)? expandView;
   final bool? enableMultiSel;
+  final int? messageType;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -85,6 +87,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.failedResend,
     this.expandView,
     this.enableMultiSel,
+    this.messageType,
   }) : super(key: key);
 
   @override
@@ -163,6 +166,8 @@ class ChatSingleLayout extends StatelessWidget {
                                     ? GestureDetector(
                                         onTap: () => _onItemClick?.add(index),
                                         child: expandView!(ChatBubble(
+                                          showBorder:
+                                              messageType == MessageType.file,
                                           constraints: BoxConstraints(
                                               minHeight: avatarSize),
                                           bubbleType: isReceivedMsg
@@ -203,7 +208,7 @@ class ChatSingleLayout extends StatelessWidget {
                               if (!delaySendingStatus)
                                 Visibility(
                                   visible: isSending && !isSendFailed,
-                                  child: CupertinoActivityIndicator(),
+                                  child: ChatLoading(),
                                 ),
                               ChatSendFailedView(
                                 msgId: msgId,
@@ -356,7 +361,7 @@ class ChatSingleLayout extends StatelessWidget {
         builder: (_, AsyncSnapshot<bool> hot) => Visibility(
           visible:
               index == 0 ? (hot.data == true) : (isSending && !isSendFailed),
-          child: CupertinoActivityIndicator(),
+          child: ChatLoading(),
         ),
       );
 

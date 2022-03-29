@@ -136,40 +136,41 @@ class ChatFileView extends StatelessWidget {
     return Container(
       // width: width,
       // height: 70.h,
-      constraints: BoxConstraints(maxWidth: 140.w),
+      constraints: BoxConstraints(maxWidth: .65.sw),
       child: Column(
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              ImageUtil.file(),
+              SizedBox(
+                width: 10.w,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       fileName,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 16.sp,
                         color: Color(0xFF333333),
                       ),
                     ),
                     SizedBox(
-                      height: 4.w,
+                      height: 8.w,
                     ),
                     Text(
                       CommonUtil.formatBytes(bytes),
                       style: TextStyle(
-                        fontSize: 11.sp,
-                        color: Color(0xFF666666),
+                        fontSize: 12.sp,
+                        color: Color(0xFF999999),
                       ),
                     )
                   ],
                 ),
               ),
-              SizedBox(
-                width: 10.w,
-              ),
-              ImageUtil.file(),
             ],
           ),
           ChatLinearProgressView(

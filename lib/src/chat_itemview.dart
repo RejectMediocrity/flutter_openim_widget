@@ -497,7 +497,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               // filePath: file.filePath!,
               // url: file.sourceUrl!,
               bytes: file.fileSize ?? 0,
-              width: 158.w,
+              width: .65.sw,
               initProgress: 100,
               uploadStream: widget.msgSendProgressSubject.stream,
               index: widget.index,
@@ -648,6 +648,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         enabledReadStatus: widget.enabledReadStatus,
         expandView: expandView,
         enableMultiSel: widget.message.contentType != MessageType.revoke,
+        messageType: widget.message.contentType,
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(
