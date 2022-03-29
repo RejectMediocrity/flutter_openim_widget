@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_emoji_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -311,6 +312,7 @@ class ImageUtil {
             case LoadState.failed:
               //remove memory cached
               state.imageProvider.evict();
+              return ChatAvatarView(text: OpenIM.iMManager.uInfo.nickname);
               return error(width: width, height: height);
           }
         },
