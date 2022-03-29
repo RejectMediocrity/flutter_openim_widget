@@ -122,6 +122,9 @@ class ChatSingleLayout extends StatelessWidget {
                     /// 头像
                     _buildAvatar(
                       isReceivedMsg ? leftAvatar : rightAvatar,
+                      isReceivedMsg
+                          ? leftName
+                          : OpenIM.iMManager.uInfo.nickname,
                       true,
                       onTap: isReceivedMsg ? onTapLeftAvatar : onTapRightAvatar,
                       onLongPress: isReceivedMsg
@@ -288,11 +291,14 @@ class ChatSingleLayout extends StatelessWidget {
 
   Widget _buildAvatar(
     String? url,
+    String? text,
     bool show, {
     final Function()? onTap,
     final Function()? onLongPress,
   }) =>
       ChatAvatarView(
+        isChatFrom: true,
+        text: text,
         url: url,
         visible: show,
         onTap: onTap,

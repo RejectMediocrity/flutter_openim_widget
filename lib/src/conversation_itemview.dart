@@ -35,7 +35,7 @@ class ConversationItemView extends StatelessWidget {
   final double extentRatio;
   final bool needToTpliceContent;
   // final bool isPinned;
-
+  final String nickName;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -76,12 +76,14 @@ class ConversationItemView extends StatelessWidget {
       fontWeight: FontWeight.w600,
     ),
     this.needToTpliceContent = true,
+    this.nickName = '',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
       child: _ConversationView(
+        nickName: nickName,
         title: title,
         content: content,
         timeStr: timeStr,
@@ -142,6 +144,7 @@ class _ConversationView extends StatelessWidget {
     this.onTap,
     this.notDisturb = false,
     this.needToTpliceContent = true,
+    this.nickName = '',
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -166,6 +169,7 @@ class _ConversationView extends StatelessWidget {
   final Function()? onTap;
   final bool notDisturb;
   final bool needToTpliceContent;
+  final String nickName;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -202,6 +206,7 @@ class _ConversationView extends StatelessWidget {
             Row(
               children: [
                 ChatAvatarView(
+                  text: nickName,
                   size: avatarSize + 10,
                   url: avatarUrl,
                   isCircle: isCircleAvatar ?? false,

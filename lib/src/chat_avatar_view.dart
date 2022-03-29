@@ -21,11 +21,13 @@ class ChatAvatarView extends StatelessWidget {
     this.onLongPress,
     this.isCircle = false,
     this.borderRadius,
-    this.text,
+    required this.text,
     this.textStyle,
     this.lowMemory = false,
     this.isNineGrid = false,
     this.nineGridUrls = const [],
+    this.isChatFrom = false, // 会话列表或者聊天详情
+    this.isGroup = false,
   }) : super(key: key);
   final bool visible;
   final double? size;
@@ -39,7 +41,8 @@ class ChatAvatarView extends StatelessWidget {
   final bool lowMemory;
   final List<String> nineGridUrls;
   final bool isNineGrid;
-
+  final bool isChatFrom;
+  final bool isGroup;
   double get _size => size ?? 42.h;
 
   bool _isIndexAvatar() => null != url && indexAvatarList.contains(url);
@@ -87,24 +90,62 @@ class ChatAvatarView extends StatelessWidget {
         child: ImageUtil.assetImage(url, width: size, height: size),
       );
 
-  Widget _defaultAvatar({required double size, String? text}) => Container(
+  Widget _defaultAvatar({required double size, String? text}) {
+    if (isGroup)
+      return Container(
+        child: ImageUtil.assetImage(
+          "msglist_icon_defult",
+          width: size,
+          height: size,
+        ),
+      );
+    if (text == null) text = "";
+    final String cnExp = "[\u4e00-\u9fa5]";
+    final String enExp = "[a-zA-Z]+";
+    List<RegExpMatch>? cnMatchs = RegExp(cnExp).allMatches(text).toList();
+    RegExpMatch? enMatch = RegExp(enExp).firstMatch(text);
+
+    TextStyle? style;
+
+    if (cnMatchs != null && cnMatchs.length > 0) {
+      String match = '';
+      if (cnMatchs.length > 1) {
+        match = text.substring(cnMatchs[cnMatchs.length - 2].start,
+            cnMatchs[cnMatchs.length - 2].end);
+      }
+      match = match + text.substring(cnMatchs.last.start, cnMatchs.last.end);
+      text = match;
+      style = TextStyle(
+          fontSize: isChatFrom ? 12.sp : 16.sp,
+          color: Colors.white,
+          fontWeight: FontWeight.w400);
+    } else if (enMatch != null) {
+      text = text.substring(enMatch.start, 1);
+      style = TextStyle(
+          fontSize: isChatFrom ? 14.sp : 18.sp,
+          color: Colors.white,
+          fontWeight: FontWeight.w400);
+    }
+    if (style != null)
+      return Container(
         color: Color(0xFF5496EB),
-        child: null == text
-            ? Icon(
-                Icons.person,
-                color: Colors.white,
-                size: size - (size / 4),
-              )
-            : Text(
-                text,
-                style: textStyle ??
-                    TextStyle(fontSize: 10.sp, color: Colors.white),
-              ),
+        child: Text(
+          text,
+          style: style,
+        ),
         width: size,
         height: size,
         alignment: Alignment.center,
         // color: Colors.grey[400],
       );
+    return Container(
+      child: ImageUtil.assetImage(
+        "msglist_icon_defult",
+        width: size,
+        height: size,
+      ),
+    );
+  }
 
   Widget _networkImage({
     required bool lowMemory,

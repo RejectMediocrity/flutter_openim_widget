@@ -42,6 +42,7 @@ class ChatCarteView extends StatelessWidget {
                 ChatAvatarView(
                   size: 40.h,
                   url: url,
+                  text: name,
                 ),
                 SizedBox(
                   width: 10.w,
