@@ -46,6 +46,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Function(Widget bubleView)? expandView;
   final bool? enableMultiSel;
   final int? messageType;
+  final Function()? resendMsg;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -88,6 +89,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.expandView,
     this.enableMultiSel,
     this.messageType,
+    this.resendMsg,
   }) : super(key: key);
 
   @override
@@ -313,7 +315,11 @@ class ChatSingleLayout extends StatelessWidget {
       visible: !isReceivedMsg,
       child: read
           ? ImageUtil.assetImage("msg_icon_did_read", width: 20.w, height: 20.w)
-          : ImageUtil.assetImage("msg_icon_unread", width: 20.w, height: 20.w),
+          : GestureDetector(
+              child: ImageUtil.assetImage("msg_icon_unread",
+                  width: 20.w, height: 20.w),
+              onTap: resendMsg,
+            ),
     );
   }
 

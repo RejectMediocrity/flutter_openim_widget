@@ -197,7 +197,7 @@ class ChatItemView extends StatefulWidget {
 
   final bool? isExpanded;
   final Function()? onTapExpanded;
-
+  final Function()? resendMsg;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -255,6 +255,7 @@ class ChatItemView extends StatefulWidget {
     this.enabledReadStatus = true,
     this.isExpanded,
     this.onTapExpanded,
+    this.resendMsg,
   }) : super(key: key);
 
   @override
@@ -649,6 +650,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         expandView: expandView,
         enableMultiSel: widget.message.contentType != MessageType.revoke,
         messageType: widget.message.contentType,
+        resendMsg: widget.resendMsg,
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(
