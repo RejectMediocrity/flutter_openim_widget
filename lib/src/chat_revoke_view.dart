@@ -22,7 +22,8 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
     // 撤回时间超过两分钟，不允许编辑
     int du = DateTime.now().millisecondsSinceEpoch - widget.message.sendTime!;
     revokedOver2Min =
-        du > 120 * 1000 && widget.message.contentType == MessageType.text;
+        du > 120 * 1000 && widget.message.contentType == MessageType.text ||
+            widget.message.contentType != MessageType.text;
     if (!revokedOver2Min)
       Future.delayed(Duration(seconds: 120 - du ~/ 1000), () {
         setState(() {

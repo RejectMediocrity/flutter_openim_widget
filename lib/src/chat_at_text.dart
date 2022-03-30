@@ -53,7 +53,16 @@ class ChatAtText extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<InlineSpan> children = <InlineSpan>[];
 
-    if (prefixSpan != null) children.add(prefixSpan!);
+    if (prefixSpan != null) {
+      children.add(prefixSpan!);
+      // children.add(
+      //   WidgetSpan(
+      //     child: Padding(
+      //       padding: EdgeInsets.only(left: 4),
+      //     ),
+      //   ),
+      // );
+    }
 
     if (model == ChatTextModel.normal) {
       _normalModel(children);
