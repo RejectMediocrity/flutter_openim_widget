@@ -164,6 +164,7 @@ class ChatAvatarView extends StatelessWidget {
               loadProgress: false,
               cacheWidth: cacheWidth ?? (1.sw * .3).toInt(),
               cacheHeight: cacheHeight,
+              defaultImage: _defaultAvatar(size: _size, text: text),
             )
           : ImageUtil.networkImage(
               url: url,
@@ -173,6 +174,7 @@ class ChatAvatarView extends StatelessWidget {
               loadProgress: false,
               cacheWidth: cacheWidth ?? (1.sw * .3).toInt(),
               cacheHeight: cacheHeight,
+              defaultImage: _defaultAvatar(size: _size, text: text),
             );
 
   Widget _nineGridAvatar() => Container(

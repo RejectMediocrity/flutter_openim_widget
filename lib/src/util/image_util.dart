@@ -273,6 +273,7 @@ class ImageUtil {
     bool loadProgress = true,
     bool clearMemoryCacheWhenDispose = true,
     bool lowMemory = true,
+    Widget? defaultImage,
   }) =>
       ExtendedImage.network(
         url,
@@ -312,7 +313,7 @@ class ImageUtil {
             case LoadState.failed:
               //remove memory cached
               state.imageProvider.evict();
-              return ChatAvatarView(text: OpenIM.iMManager.uInfo.nickname);
+              if (defaultImage != null) return defaultImage;
               return error(width: width, height: height);
           }
         },
@@ -332,6 +333,7 @@ class ImageUtil {
     bool loadProgress = true,
     bool clearMemoryCacheWhenDispose = false,
     bool lowMemory = true,
+    Widget? defaultImage,
   }) =>
       lowMemoryNetworkImage(
         url: url,
@@ -343,6 +345,7 @@ class ImageUtil {
         loadProgress: loadProgress,
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
         lowMemory: lowMemory,
+        defaultImage: defaultImage,
       );
 /*CachedNetworkImage(
         imageUrl: url,
