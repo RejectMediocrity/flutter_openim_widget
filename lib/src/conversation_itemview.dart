@@ -253,7 +253,7 @@ class _ConversationView extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(height: 8.h),
+                        Spacer(),
                         Row(
                           children: [
                             Container(
