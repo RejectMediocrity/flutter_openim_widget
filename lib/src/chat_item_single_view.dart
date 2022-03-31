@@ -236,24 +236,26 @@ class ChatSingleLayout extends StatelessWidget {
                                 _buildGroupReadStatusView(),
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 6.w),
-                            child: Row(
-                              children: [
-                                ImageUtil.assetImage("msg_icon_reply",
-                                    width: 12.w, height: 12.w),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  "${20}条回复",
-                                  style: TextStyle(
-                                      color: Color(0xFF006DFA),
-                                      fontSize: 12.sp),
-                                ),
-                              ],
-                            ),
-                          ),
+
+                          /// 暂时隐藏
+                          // Padding(
+                          //   padding: EdgeInsets.only(top: 6.w),
+                          //   child: Row(
+                          //     children: [
+                          //       ImageUtil.assetImage("msg_icon_reply",
+                          //           width: 12.w, height: 12.w),
+                          //       SizedBox(
+                          //         width: 4.w,
+                          //       ),
+                          //       Text(
+                          //         "${20}条回复",
+                          //         style: TextStyle(
+                          //             color: Color(0xFF006DFA),
+                          //             fontSize: 12.sp),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],
