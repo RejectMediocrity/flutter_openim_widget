@@ -144,7 +144,7 @@ class ChatSingleLayout extends StatelessWidget {
                         children: [
                           /// 群聊并且收到的消息，显示对方昵称
                           Visibility(
-                            visible: isReceivedMsg && !isSingleChat,
+                            visible: !isSingleChat,
                             child: Container(
                               margin: EdgeInsets.only(bottom: 8.w, left: 8.w),
                               child: Text(
