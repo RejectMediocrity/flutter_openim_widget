@@ -14,13 +14,14 @@ class PicInfo {
 }
 
 class ChatPicturePreview extends StatelessWidget {
-  ChatPicturePreview({
-    Key? key,
-    required this.picList,
-    this.index = 0,
-    this.tag,
-    this.onDownload,
-  })  : this.controller = ExtendedPageController(
+  ChatPicturePreview(
+      {Key? key,
+      required this.picList,
+      this.index = 0,
+      this.tag,
+      this.onDownload,
+      this.onDragDown})
+      : this.controller = ExtendedPageController(
           initialPage: index,
           pageSpacing: 10,
         ),
@@ -30,6 +31,7 @@ class ChatPicturePreview extends StatelessWidget {
   final String? tag;
   final ExtendedPageController controller;
   final Future<bool> Function(String)? onDownload;
+  final Function(DragDownDetails details)? onDragDown;
 
   @override
   Widget build(BuildContext context) {
@@ -123,12 +125,15 @@ class ChatPicturePreview extends StatelessWidget {
     }
   }
 
-  Widget _buildPageView() => ExtendedImageGesturePageView.builder(
-        controller: controller,
-        itemCount: picList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildChildView(index);
-        },
+  Widget _buildPageView() => GestureDetector(
+        onVerticalDragDown: onDragDown,
+        child: ExtendedImageGesturePageView.builder(
+          controller: controller,
+          itemCount: picList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _buildChildView(index);
+          },
+        ),
       );
 
   Widget _buildToolsBtn({Function()? onDownload}) => Positioned(
