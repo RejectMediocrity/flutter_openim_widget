@@ -202,6 +202,7 @@ class _ConversationView extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap?.call(),
       child: Container(
+        constraints: BoxConstraints(maxHeight: 66.w),
         color: backgroundColor,
         // height: height,
         padding: padding,
@@ -213,7 +214,7 @@ class _ConversationView extends StatelessWidget {
                 ChatAvatarView(
                   isGroup: isGroupChat,
                   text: nickName,
-                  size: avatarSize + 10,
+                  size: avatarSize,
                   url: avatarUrl,
                   isCircle: isCircleAvatar ?? false,
                   borderRadius: avatarBorderRadius,

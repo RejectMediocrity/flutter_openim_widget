@@ -176,20 +176,21 @@ const emojiFaces = <String, String>{
 };
 
 class ChatEmojiView extends StatefulWidget {
-  const ChatEmojiView({
-    Key? key,
-    this.onAddEmoji,
-    this.onDeleteEmoji,
-    this.favoriteList = const [],
-    this.onAddFavorite,
-    this.onSelectedFavorite,
-  }) : super(key: key);
+  const ChatEmojiView(
+      {Key? key,
+      this.onAddEmoji,
+      this.onDeleteEmoji,
+      this.favoriteList = const [],
+      this.onAddFavorite,
+      this.onSelectedFavorite,
+      this.enableDeleteEmoji})
+      : super(key: key);
   final Function()? onDeleteEmoji;
   final Function(String emoji)? onAddEmoji;
   final List<String> favoriteList;
   final Function()? onAddFavorite;
   final Function(int index, String url)? onSelectedFavorite;
-
+  final bool? enableDeleteEmoji;
   @override
   _ChatEmojiViewState createState() => _ChatEmojiViewState();
 }
@@ -203,16 +204,50 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
       duration: Duration(milliseconds: 200),
       child: Container(
         // height: 190.h,
-        color: Colors.white,
-        child: Column(
+        color: Color(0xFFF2F2F2),
+        // child: Column(
+        //   children: [
+        //     Stack(
+        //       children: [
+        //         if (_index == 0) _buildEmojiLayout(),
+        //         if (_index == 1) _buildFavoriteLayout(),
+        //       ],
+        //     ),
+        //     _buildTabView(),
+        //   ],
+        // ),
+        child: Stack(
+          alignment: Alignment.bottomRight,
           children: [
-            Stack(
-              children: [
-                if (_index == 0) _buildEmojiLayout(),
-                if (_index == 1) _buildFavoriteLayout(),
-              ],
+            _buildEmojiLayout(),
+            Container(
+              constraints: BoxConstraints(maxHeight: 106.w, maxWidth: 100.w),
+              color: Color(0xFFF2F2F2).withAlpha(229),
+              padding: EdgeInsets.fromLTRB(35.w, 32.w, 16.w, 34.w),
+              child: GestureDetector(
+                onTap: widget.enableDeleteEmoji == true
+                    ? widget.onDeleteEmoji
+                    : null,
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 12.w, horizontal: 14.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(6.w),
+                    ),
+                  ),
+                  child: ImageUtil.assetImage(
+                    widget.enableDeleteEmoji == true
+                        ? "keyboard_but_delete_disable"
+                        : "keyboard_but_delete",
+                    width: 22.w,
+                    height: 16.w,
+                  ),
+                ),
+              ),
             ),
-            _buildTabView(),
           ],
         ),
       ),
@@ -282,15 +317,15 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
 
   Widget _buildEmojiLayout() => Container(
         // color: Colors.white,
-        height: 190.h,
+        height: 270.w,
         child: GridView.builder(
-          padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 10.h),
+          padding: EdgeInsets.fromLTRB(14.w, 20.w, 14.w, 101.w),
           itemCount: emojiFaces.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 8,
+            crossAxisCount: 7,
             childAspectRatio: 1,
-            mainAxisSpacing: 1.w,
-            crossAxisSpacing: 10.w,
+            mainAxisSpacing: 22.w,
+            crossAxisSpacing: 22.w,
           ),
           itemBuilder: (BuildContext context, int index) {
             return Material(
@@ -302,8 +337,8 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
                   child: Center(
                     child: ImageUtil.faceImage(
                       emojiFaces.values.elementAt(index),
-                      width: 30.h,
-                      height: 30.h,
+                      width: 30.w,
+                      height: 30.w,
                     ),
                   ),
                 ),
@@ -315,7 +350,7 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
 
   Widget _buildFavoriteLayout() => Container(
         // color: Colors.white,
-        height: 190.h,
+        height: 270.w,
         child: GridView.builder(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           itemCount: widget.favoriteList.length + 1,

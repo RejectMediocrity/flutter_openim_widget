@@ -25,6 +25,7 @@ class ChatInputBoxView extends StatefulWidget {
     this.multiMode = false,
     this.inputFormatters,
     this.hintText,
+    this.isGroupChat = false,
   }) : super(key: key);
   final Function() atAction;
   final Function() picAction;
@@ -44,6 +45,7 @@ class ChatInputBoxView extends StatefulWidget {
   final bool multiMode;
   final List<TextInputFormatter>? inputFormatters;
   final String? hintText;
+  final bool? isGroupChat;
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
 }
@@ -169,11 +171,13 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
               _emojiVisible = !_emojiVisible;
               if (_emojiVisible) {
                 unfocus();
+              } else {
+                focus();
               }
             });
           },
           child: ImageUtil.assetImage(
-            "Inputbox_but_emoji",
+            _emojiVisible ? "Inputbox_but_emoji_high" : "Inputbox_but_emoji",
             width: 20,
             height: 20,
           ),
@@ -181,16 +185,22 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         SizedBox(
           width: 30,
         ),
-        GestureDetector(
-          onTap: widget.atAction,
-          child: ImageUtil.assetImage(
-            "Inputbox_but_at",
-            width: 20,
-            height: 20,
+        Visibility(
+          child: GestureDetector(
+            onTap: widget.atAction,
+            child: ImageUtil.assetImage(
+              "Inputbox_but_at",
+              width: 20,
+              height: 20,
+            ),
           ),
+          visible: widget.isGroupChat == true,
         ),
-        SizedBox(
-          width: 30,
+        Visibility(
+          child: SizedBox(
+            width: 30,
+          ),
+          visible: widget.isGroupChat == true,
         ),
         GestureDetector(
           onTap: widget.picAction,
@@ -211,7 +221,9 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             }
           },
           child: ImageUtil.assetImage(
-            "Inputbox_but_send",
+            widget.controller!.text.isNotEmpty
+                ? "Inputbox_but_send"
+                : "Inputbox_but_send_normal",
             width: 20,
             height: 20,
           ),
