@@ -221,6 +221,7 @@ class ChatSingleLayout extends StatelessWidget {
                                 stream: sendStatusStream,
                                 isSendFailed: isSendFailed,
                                 onFailedResend: failedResend,
+                                resend: resendMsg,
                               ),
 
                               /// 已读
@@ -317,11 +318,7 @@ class ChatSingleLayout extends StatelessWidget {
       visible: !isReceivedMsg,
       child: read
           ? ImageUtil.assetImage("msg_icon_did_read", width: 20.w, height: 20.w)
-          : GestureDetector(
-              child: ImageUtil.assetImage("msg_icon_unread",
-                  width: 20.w, height: 20.w),
-              onTap: resendMsg,
-            ),
+          : ImageUtil.assetImage("msg_icon_unread", width: 20.w, height: 20.w),
     );
   }
 

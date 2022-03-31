@@ -6,7 +6,7 @@ class ChatSendFailedView extends StatefulWidget {
   final bool isReceived;
   final Stream<MsgStreamEv<bool>>? stream;
   final bool isSendFailed;
-
+  final Function()? resend;
   const ChatSendFailedView({
     Key? key,
     required this.msgId,
@@ -14,6 +14,7 @@ class ChatSendFailedView extends StatefulWidget {
     this.isSendFailed = false,
     this.stream,
     Function()? onFailedResend,
+    this.resend,
   }) : super(key: key);
 
   @override
@@ -41,7 +42,10 @@ class _ChatSendFailedViewState extends State<ChatSendFailedView> {
   Widget build(BuildContext context) {
     return Visibility(
       visible: !widget.isReceived && _failed,
-      child: ImageUtil.sendFailed(),
+      child: GestureDetector(
+        child: ImageUtil.sendFailed(),
+        onTap: widget.resend,
+      ),
     );
   }
 }

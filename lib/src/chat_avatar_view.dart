@@ -120,11 +120,11 @@ class ChatAvatarView extends StatelessWidget {
           color: Colors.white,
           fontWeight: FontWeight.w400);
     } else if (enMatch != null) {
-      text = text.substring(enMatch.start, 1);
+      text = text.substring(enMatch.start, 1).toUpperCase();
       style = TextStyle(
           fontSize: isChatFrom ? 14.sp : 18.sp,
           color: Colors.white,
-          fontWeight: FontWeight.w400);
+          fontWeight: FontWeight.w500);
     }
     if (style != null)
       return Container(
