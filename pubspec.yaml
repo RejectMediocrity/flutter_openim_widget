@@ -30,7 +30,7 @@ dependencies:
   extended_image: ^6.0.1
   qq_badge: ^0.0.2
   better_player: ^0.0.78
-  flutter_openim_sdk: ^2.0.0+1
+  flutter_openim_sdk: ^2.0.0+4
 #    path: ../flutter_openim_sdk
 
 dev_dependencies:
