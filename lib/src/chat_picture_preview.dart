@@ -31,7 +31,7 @@ class ChatPicturePreview extends StatelessWidget {
   final String? tag;
   final ExtendedPageController controller;
   final Future<bool> Function(String)? onDownload;
-  final Function(DragDownDetails details)? onDragDown;
+  final Function(DragEndDetails details)? onDragDown;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class ChatPicturePreview extends StatelessWidget {
   }
 
   Widget _buildPageView() => GestureDetector(
-        onVerticalDragDown: onDragDown,
+        onVerticalDragEnd: onDragDown,
         child: ExtendedImageGesturePageView.builder(
           controller: controller,
           itemCount: picList.length,

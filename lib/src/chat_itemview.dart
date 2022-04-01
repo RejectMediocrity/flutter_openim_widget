@@ -430,6 +430,8 @@ class _ChatItemViewState extends State<ChatItemView> {
       case MessageType.picture:
         {
           var picture = widget.message.pictureElem;
+          var width = picture?.sourcePicture?.width ?? 0;
+          var height = picture?.sourcePicture?.height ?? 0;
           child = _buildCommonItemView(
             isBubbleBg: false,
             child: ChatPictureView(
@@ -439,9 +441,9 @@ class _ChatItemViewState extends State<ChatItemView> {
               snapshotUrl: picture?.snapshotPicture?.url,
               sourcePath: picture?.sourcePath,
               sourceUrl: picture?.sourcePicture?.url,
-              width: picture?.sourcePicture?.width?.toDouble(),
-              height: picture?.sourcePicture?.height?.toDouble(),
-              widgetWidth: 100.w,
+              width: width.toDouble(),
+              height: height.toDouble(),
+              widgetWidth: width > height ? 226.w : 100.w,
               msgSenProgressStream: widget.msgSendProgressSubject.stream,
               initMsgSendProgress: 100,
               index: widget.index,
@@ -468,6 +470,8 @@ class _ChatItemViewState extends State<ChatItemView> {
       case MessageType.video:
         {
           var video = widget.message.videoElem;
+          var width = video?.snapshotWidth ?? 0;
+          var height = video?.snapshotHeight ?? 0;
           child = _buildCommonItemView(
             isBubbleBg: false,
             child: ChatVideoView(
@@ -477,9 +481,9 @@ class _ChatItemViewState extends State<ChatItemView> {
               snapshotUrl: video?.snapshotUrl,
               videoPath: video?.videoPath,
               videoUrl: video?.videoUrl,
-              width: video?.snapshotWidth?.toDouble(),
-              height: video?.snapshotHeight?.toDouble(),
-              widgetWidth: 100.w,
+              width: width.toDouble(),
+              height: height.toDouble(),
+              widgetWidth: width > height ? 226.w : 100.w,
               msgSenProgressStream: widget.msgSendProgressSubject.stream,
               initMsgSendProgress: 100,
               index: widget.index,
