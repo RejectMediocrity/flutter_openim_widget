@@ -179,8 +179,8 @@ class ChatAtText extends StatelessWidget {
           } else if (mapping.type == PatternType.EMOJI) {
             inlineSpan = ImageSpan(
               ImageUtil.emojiImage(matchText),
-              imageWidth: 20.h,
-              imageHeight: 20.h,
+              imageWidth: 14.w,
+              imageHeight: 14.w,
             );
           } else {
             inlineSpan = TextSpan(
