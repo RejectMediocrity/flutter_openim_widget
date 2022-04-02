@@ -198,10 +198,12 @@ packages:
   flutter_openim_sdk:
     dependency: "direct main"
     description:
-      name: flutter_openim_sdk
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+4"
+      path: "."
+      ref: fix-ios-simulator
+      resolved-ref: "40721ac0e61d9258fda1b3ec7053a7c67ded2be5"
+      url: "https://github.com/OpenIMSDK/Open-IM-SDK-Flutter.git"
+    source: git
+    version: "2.0.0+5"
   flutter_screenutil:
     dependency: "direct main"
     description:

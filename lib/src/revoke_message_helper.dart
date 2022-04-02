@@ -31,10 +31,19 @@ class RevokeMessageHelper {
     revokeInfos.add(info);
   }
 
-  bool canEdit(String? id) {
+  bool canEdit(Message message) {
+    String id = message.clientMsgID!;
     if (id!.isEmpty) return false;
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
+    if (elements.isEmpty) {
+      /// 查找content为ID时的消息是否匹配
+      id = message.content!;
+      if (id!.isEmpty) return false;
+      elements = revokeInfos.where((element) => element["id"] == id).toList();
+    }
+
+    ///
     if (elements.isEmpty) return false;
     Map<String, dynamic> info = elements.first;
     if (info.isNotEmpty) {
@@ -46,10 +55,17 @@ class RevokeMessageHelper {
     return false;
   }
 
-  int createTime(String? id) {
+  int createTime(Message message) {
+    String id = message.clientMsgID!;
     if (id!.isEmpty) return 0;
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
+    if (elements.isEmpty) {
+      /// 查找content为ID时的消息是否匹配
+      id = message.content!;
+      if (id!.isEmpty) return 0;
+      elements = revokeInfos.where((element) => element["id"] == id).toList();
+    }
     if (elements.isEmpty) return 0;
     Map<String, dynamic> info = elements.first;
     if (info.isNotEmpty) {
@@ -58,9 +74,17 @@ class RevokeMessageHelper {
     return 0;
   }
 
-  String? draftText(String id) {
+  String? draftText(Message message) {
+    String id = message.clientMsgID!;
+    if (id!.isEmpty) return null;
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
+    if (elements.isEmpty) {
+      /// 查找content为ID时的消息是否匹配
+      id = message.content!;
+      if (id!.isEmpty) return null;
+      elements = revokeInfos.where((element) => element["id"] == id).toList();
+    }
     if (elements.isEmpty) return null;
     Map<String, dynamic> info = elements.first;
     if (info.isNotEmpty) {
