@@ -27,6 +27,7 @@ class ChatAtText extends StatelessWidget {
   final List<MatchPattern> patterns;
   final ChatTextModel model;
   final bool needToTpliceContent;
+  final InlineSpan? senderSpan;
   // final TextAlign textAlign;
   const ChatAtText({
     Key? key,
@@ -42,6 +43,7 @@ class ChatAtText extends StatelessWidget {
     this.needToTpliceContent = true,
     this.textScaleFactor = 1.0,
     this.model = ChatTextModel.match,
+    this.senderSpan,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -63,7 +65,9 @@ class ChatAtText extends StatelessWidget {
       //   ),
       // );
     }
-
+    if (senderSpan != null) {
+      children.add(senderSpan!);
+    }
     if (model == ChatTextModel.normal) {
       _normalModel(children);
     } else {

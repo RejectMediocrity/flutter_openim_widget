@@ -37,6 +37,7 @@ class ConversationItemView extends StatelessWidget {
   // final bool isPinned;
   final String nickName;
   final bool isGroupChat;
+  final String? senderName;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -79,6 +80,7 @@ class ConversationItemView extends StatelessWidget {
     this.needToTpliceContent = true,
     this.nickName = '',
     this.isGroupChat = false,
+    this.senderName,
   }) : super(key: key);
 
   @override
@@ -110,6 +112,7 @@ class ConversationItemView extends StatelessWidget {
         notDisturb: notDisturb,
         needToTpliceContent: needToTpliceContent,
         isGroupChat: isGroupChat,
+        senderName: senderName,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -149,6 +152,7 @@ class _ConversationView extends StatelessWidget {
     this.needToTpliceContent = true,
     this.nickName = '',
     this.isGroupChat = false,
+    this.senderName,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -175,6 +179,7 @@ class _ConversationView extends StatelessWidget {
   final bool needToTpliceContent;
   final String nickName;
   final bool isGroupChat;
+  final String? senderName;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -195,6 +200,16 @@ class _ConversationView extends StatelessWidget {
         style: contentPrefixStyle,
       );
     }
+  }
+
+  InlineSpan? _buildSendernameSpan(String? senderName) {
+    if (null == senderName) {
+      return null;
+    }
+    return TextSpan(
+      text: senderName,
+      style: contentStyle,
+    );
   }
 
   @override
@@ -267,6 +282,9 @@ class _ConversationView extends StatelessWidget {
                                 prefixSpan: _buildImgSpan(contentPrefix),
                                 patterns: patterns,
                                 needToTpliceContent: needToTpliceContent,
+                                senderSpan: isGroupChat == true
+                                    ? _buildSendernameSpan(senderName)
+                                    : null,
                               ),
                             ),
                             Spacer(),
