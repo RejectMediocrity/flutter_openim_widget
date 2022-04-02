@@ -33,13 +33,13 @@ class RevokeMessageHelper {
 
   bool canEdit(Message message) {
     String id = message.clientMsgID!;
-    if (id!.isEmpty) return false;
+    if (id.isEmpty) return false;
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
     if (elements.isEmpty) {
       /// 查找content为ID时的消息是否匹配
       id = message.content!;
-      if (id!.isEmpty) return false;
+      if (id.isEmpty) return false;
       elements = revokeInfos.where((element) => element["id"] == id).toList();
     }
 
@@ -57,13 +57,13 @@ class RevokeMessageHelper {
 
   int createTime(Message message) {
     String id = message.clientMsgID!;
-    if (id!.isEmpty) return 0;
+    if (id.isEmpty) return 0;
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
     if (elements.isEmpty) {
       /// 查找content为ID时的消息是否匹配
       id = message.content!;
-      if (id!.isEmpty) return 0;
+      if (id.isEmpty) return 0;
       elements = revokeInfos.where((element) => element["id"] == id).toList();
     }
     if (elements.isEmpty) return 0;
@@ -76,13 +76,13 @@ class RevokeMessageHelper {
 
   String? draftText(Message message) {
     String id = message.clientMsgID!;
-    if (id!.isEmpty) return null;
+    if (id.isEmpty) return null;
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
     if (elements.isEmpty) {
       /// 查找content为ID时的消息是否匹配
       id = message.content!;
-      if (id!.isEmpty) return null;
+      if (id.isEmpty) return null;
       elements = revokeInfos.where((element) => element["id"] == id).toList();
     }
     if (elements.isEmpty) return null;
