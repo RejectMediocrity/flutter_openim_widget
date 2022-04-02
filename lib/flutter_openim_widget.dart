@@ -41,6 +41,7 @@ export 'src/copy_custom_pop_up_menu.dart';
 export 'src/custom_chawie_controls.dart';
 export 'src/favorite_emoji_listview.dart';
 export 'src/pop_button.dart';
+export 'src/revoke_message_helper.dart';
 export 'src/title_bar.dart';
 export 'src/unread_count_view.dart';
 export 'src/util/common_util.dart';

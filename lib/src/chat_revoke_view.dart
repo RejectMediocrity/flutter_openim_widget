@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/revoke_message_helper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatRevokeView extends StatefulWidget {
@@ -20,14 +21,25 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
   @override
   void initState() {
     // 撤回时间超过两分钟，不允许编辑
-    int du = DateTime.now().millisecondsSinceEpoch - widget.message.sendTime!;
-    revokedOver2Min = du > 120 * 1000;
-    if (!revokedOver2Min)
-      Future.delayed(Duration(seconds: 120 - du ~/ 1000), () {
+    bool temp = !RevokeMessageHelper().canEdit(widget.message.clientMsgID);
+    revokedOver2Min =
+        !RevokeMessageHelper().canEdit(widget.message.clientMsgID);
+    ;
+    if (!revokedOver2Min) {
+      int duration = 120 -
+          (DateTime.now().millisecondsSinceEpoch -
+                  RevokeMessageHelper()
+                      .createTime(widget.message.clientMsgID)) ~/
+              1000;
+      Future.delayed(
+          Duration(
+            seconds: duration,
+          ), () {
         setState(() {
           this.revokedOver2Min = true;
         });
       });
+    }
     super.initState();
   }
 
