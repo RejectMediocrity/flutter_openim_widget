@@ -146,12 +146,12 @@ class ChatSingleLayout extends StatelessWidget {
                           Visibility(
                             visible: !isSingleChat,
                             child: Container(
-                              margin: EdgeInsets.only(bottom: 8.w, left: 8.w),
+                              padding: EdgeInsets.only(bottom: 8.w),
                               child: Text(
                                 leftName ?? '',
                                 style: TextStyle(
-                                  color: Color(0xFF666666),
-                                  fontSize: 10.sp,
+                                  color: Color(0xFF999999),
+                                  fontSize: 12.sp,
                                 ),
                               ),
                             ),
@@ -202,7 +202,7 @@ class ChatSingleLayout extends StatelessWidget {
                                 pressType: PressType.longPress,
                               ),
                               SizedBox(
-                                width: 8.w,
+                                width: 6.w,
                               ),
 
                               /// 阅后即焚
