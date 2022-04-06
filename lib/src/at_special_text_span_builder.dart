@@ -103,8 +103,8 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
           } else if (emojiReg.hasMatch(value)) {
             inlineSpan = ImageSpan(
               ImageUtil.emojiImage(value),
-              imageWidth: 15.h,
-              imageHeight: 15.h,
+              imageWidth: 16.w,
+              imageHeight: 16.w,
               start: m.start,
               actualText: '$value',
             );
@@ -142,7 +142,10 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
       },
     );
     if (null != atCallback) atCallback!(buffer.toString(), data);
-    return TextSpan(children: children, style: textStyle);
+    return TextSpan(
+      children: children,
+      style: textStyle,
+    );
   }
 
   @override
