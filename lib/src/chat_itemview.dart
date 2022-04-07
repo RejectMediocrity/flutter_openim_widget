@@ -445,7 +445,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               msgId: widget.message.clientMsgID!,
               isReceived: _isFromMsg,
               snapshotPath: null,
-              snapshotUrl: picture?.snapshotPicture?.url,
+              snapshotUrl: picture?.sourcePicture?.url,
               sourcePath: picture?.sourcePath,
               sourceUrl: picture?.sourcePicture?.url,
               width: width.toDouble(),

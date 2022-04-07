@@ -112,7 +112,7 @@ class _ChatPictureViewState extends State<ChatPictureView> {
         url: url,
         height: _trulyHeight,
         width: _trulyWidth,
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.fill,
       );
 
   Widget _pathView({required String path}) => Stack(
@@ -121,7 +121,7 @@ class _ChatPictureViewState extends State<ChatPictureView> {
             image: FileImage(File(path)),
             height: _trulyHeight,
             width: _trulyWidth,
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.fill,
             errorBuilder: (_, error, stack) => _errorIcon(),
           ),
           ChatSendProgressView(

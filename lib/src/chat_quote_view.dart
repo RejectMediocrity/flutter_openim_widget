@@ -112,24 +112,19 @@ class ChatQuoteView extends StatelessWidget {
               width: 2,
               height: 14,
             ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    ' ${UILocalizations.reply} $name：${content ?? ''}',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Color(0xFF666666),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Container(
-                    child: child,
-                  )
-                ],
+            Flexible(
+              child: Text(
+                ' ${UILocalizations.reply} $name：${content ?? ''}',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Color(0xFF666666),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
+            ),
+            Container(
+              child: child,
             ),
           ],
         ),
