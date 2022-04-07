@@ -333,7 +333,13 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
-  bool didExceedMaxLines(String text) {
+  bool didExceedMaxLines(Message message) {
+    String? text;
+    if (message.contentType == MessageType.text) {
+      text = message.content;
+    } else if (message.contentType == MessageType.quote) {
+      text = message.quoteElem?.text;
+    }
     TextPainter painter = TextPainter(
         locale: WidgetsBinding.instance!.window.locale,
         maxLines: 10,
@@ -354,7 +360,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       alignment: Alignment.bottomCenter,
       children: [
         bubleView,
-        if (didExceedMaxLines(widget.message.content!) &&
+        if (didExceedMaxLines(widget.message) &&
             widget.isExpanded == false &&
             (widget.message.contentType == MessageType.text ||
                 widget.message.contentType == MessageType.quote))
