@@ -21,8 +21,8 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
   @override
   void initState() {
     // 撤回时间超过两分钟，不允许编辑
-    revokedOver2Min = !RevokeMessageHelper().canEdit(widget.message);
-    if (!revokedOver2Min) {
+    if (RevokeMessageHelper().canEdit(widget.message)) {
+      revokedOver2Min = false;
       int duration = 120 -
           (DateTime.now().millisecondsSinceEpoch -
                   RevokeMessageHelper().createTime(widget.message)) ~/
@@ -35,6 +35,8 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
           this.revokedOver2Min = true;
         });
       });
+    } else {
+      revokedOver2Min = true;
     }
     super.initState();
   }

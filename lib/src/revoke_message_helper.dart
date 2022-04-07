@@ -2,6 +2,9 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 
 class RevokeMessageHelper {
   static final RevokeMessageHelper _instance = RevokeMessageHelper._internal();
+  factory RevokeMessageHelper() {
+    return _instance;
+  }
   /*
   * {
   *   id:msgId
@@ -10,10 +13,7 @@ class RevokeMessageHelper {
   *   type:msgType
   * }
   * */
-  static List<Map<String, dynamic>> revokeInfos = [];
-  factory RevokeMessageHelper() {
-    return _instance;
-  }
+  List<Map<String, dynamic>> revokeInfos = [];
   RevokeMessageHelper._internal();
 
   void saveInfo(
