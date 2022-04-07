@@ -356,7 +356,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         bubleView,
         if (didExceedMaxLines(widget.message.content!) &&
             widget.isExpanded == false &&
-            widget.message.contentType == MessageType.text)
+            (widget.message.contentType == MessageType.text ||
+                widget.message.contentType == MessageType.quote))
           GestureDetector(
             onTap: widget.onTapExpanded,
             child: Stack(
@@ -532,6 +533,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
               patterns: widget.patterns,
+              maxLines: widget.isExpanded == true ? null : 10,
             ),
           );
         }
