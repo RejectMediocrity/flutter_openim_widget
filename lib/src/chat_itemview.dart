@@ -652,6 +652,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             ? ChatQuoteView(
                 message: widget.message,
                 onTap: widget.onTapQuoteMsg,
+                allAtMap: widget.allAtMap,
+                patterns: widget.patterns,
               )
             : null,
         showRadio: widget.multiSelMode,
@@ -756,7 +758,9 @@ class _ChatItemViewState extends State<ChatItemView> {
   );
 
   bool get _showCopyMenu =>
-      widget.enabledCopyMenu ?? widget.message.contentType == MessageType.text;
+      widget.enabledCopyMenu ??
+      widget.message.contentType == MessageType.text ||
+          widget.message.contentType == MessageType.at_text;
 
   bool get _showDelMenu =>
       widget.enabledDelMenu ?? widget.message.contentType != MessageType.revoke;
@@ -769,6 +773,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showReplyMenu =>
       widget.enabledReplyMenu ??
       widget.message.contentType == MessageType.text ||
+          widget.message.contentType == MessageType.at_text ||
           widget.message.contentType == MessageType.video ||
           widget.message.contentType == MessageType.picture ||
           widget.message.contentType == MessageType.location ||

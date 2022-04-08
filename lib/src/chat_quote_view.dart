@@ -6,12 +6,18 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatQuoteView extends StatelessWidget {
-  ChatQuoteView({Key? key, required this.message, this.onTap})
+  ChatQuoteView(
+      {Key? key,
+      required this.message,
+      this.onTap,
+      this.allAtMap,
+      this.patterns})
       : super(key: key);
   final Message message;
   final Function()? onTap;
   final _decoder = JsonDecoder();
-
+  final Map<String, String>? allAtMap;
+  final List<MatchPattern>? patterns;
   @override
   Widget build(BuildContext context) {
     var child;
@@ -23,6 +29,8 @@ class ChatQuoteView extends StatelessWidget {
         name = quoteMessage.senderNickname;
         if (quoteMessage.contentType == MessageType.text) {
           content = quoteMessage.content;
+        } else if (quoteMessage.contentType == MessageType.at_text) {
+          content = quoteMessage.atElem?.text;
         } else if (quoteMessage.contentType == MessageType.picture) {
           var url1 = quoteMessage.pictureElem?.snapshotPicture?.url;
           var url2 = quoteMessage.pictureElem?.sourcePicture?.url;
@@ -113,12 +121,14 @@ class ChatQuoteView extends StatelessWidget {
               height: 14,
             ),
             Flexible(
-              child: Text(
-                ' ${UILocalizations.reply} $name：${content ?? ''}',
-                style: TextStyle(
+              child: ChatAtText(
+                text: ' ${UILocalizations.reply} $name：${content ?? ''}',
+                allAtMap: allAtMap ?? {},
+                textStyle: TextStyle(
                   fontSize: 14.sp,
                   color: Color(0xFF666666),
                 ),
+                patterns: patterns ?? [],
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
