@@ -79,8 +79,7 @@ class ChatQuoteView extends StatelessWidget {
           //     ),
           //   );
           // }
-          content =
-              "[${UILocalizations.video}]${quoteMessage.videoElem?.videoUUID}";
+          content = "[${UILocalizations.video}]";
         } else if (quoteMessage.contentType == MessageType.location) {
           var location = quoteMessage.locationElem;
           if (null != location) {
