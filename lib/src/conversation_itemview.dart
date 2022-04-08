@@ -253,8 +253,7 @@ class _ConversationView extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Container(
-                              constraints: BoxConstraints(maxWidth: 248.w),
+                            Expanded(
                               child: Text(
                                 title,
                                 style: titleStyle,
