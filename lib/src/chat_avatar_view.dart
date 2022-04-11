@@ -50,14 +50,23 @@ class ChatAvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var child = isNineGrid ? _nineGridAvatar() : _normalAvatar();
-    return Visibility(
-      visible: visible,
-      child: isCircle
-          ? ClipOval(child: child)
-          : ClipRRect(
-              child: child,
-              borderRadius: borderRadius ?? BorderRadius.circular(6),
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xFFF2F2F2), width: 1.w),
+        // boxShadow: [
+        //   BoxShadow(color: Color(0xFFF2F2F2), blurRadius: 1, spreadRadius: 1),
+        // ],
+        borderRadius: borderRadius ?? BorderRadius.circular(6),
+      ),
+      child: Visibility(
+        visible: visible,
+        child: isCircle
+            ? ClipOval(child: child)
+            : ClipRRect(
+                child: child,
+                borderRadius: borderRadius ?? BorderRadius.circular(6),
+              ),
+      ),
     );
   }
 
