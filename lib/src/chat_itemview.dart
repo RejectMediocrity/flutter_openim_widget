@@ -643,6 +643,13 @@ class _ChatItemViewState extends State<ChatItemView> {
                   ? widget.message.senderNickname
                   : UILocalizations.you;
               text = '$who ${UILocalizations.revokeAMsg}';
+            } else if (MessageType.custom == widget.message.contentType) {
+              var result = parseCustomMsg();
+              if (result.runtimeType == String) {
+                text = result;
+              } else if (result.runtimeType == Widget) {
+                return result;
+              }
             } else {
               try {
                 var content = json.decode(widget.message.content!);
@@ -669,6 +676,38 @@ class _ChatItemViewState extends State<ChatItemView> {
         break;
     }
     return child;
+  }
+
+  dynamic parseCustomMsg() {
+    try {
+      String data = widget.message.customElem?.data ?? "";
+      Map map = json.decode(data);
+      String type = map["type"];
+      Map opData = json.decode(map["data"]);
+      if (type == "add_administrator_notification") {
+        String nickName1 = opData["opUser"]["nickname"];
+        List adminUsers = opData["adminUser"];
+        String nickName2 = "";
+        adminUsers.forEach((element) {
+          nickName2 += element["nickname"];
+          if (element != adminUsers.last) nickName2 += ",";
+        });
+        return "${nickName1}已将${nickName2}添加为管理员";
+      } else if (type == "remove_administrator_notification") {
+        String nickName1 = opData["opUser"]["nickname"];
+        List adminUsers = opData["adminUser"];
+        String nickName2 = "";
+        adminUsers.forEach((element) {
+          nickName2 += element["nickname"];
+          if (element != adminUsers.last) nickName2 += ",";
+        });
+        return "${nickName1}已将${nickName2}从群管理员移除";
+      } else if (type == "cloud_doc") {
+      } else if (type == "applet") {}
+    } catch (e) {
+      print(e.toString());
+    }
+    return Container();
   }
 
   Widget _buildCommonItemView({

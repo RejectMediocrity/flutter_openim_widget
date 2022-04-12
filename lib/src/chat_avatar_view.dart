@@ -106,6 +106,7 @@ class ChatAvatarView extends StatelessWidget {
           "ic_conversation_group",
           width: size,
           height: size,
+          fit: BoxFit.fill,
         ),
       );
     if (text == null) text = "";
