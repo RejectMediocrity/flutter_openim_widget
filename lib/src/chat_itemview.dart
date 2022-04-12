@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:rxdart/rxdart.dart';
 
 //edit by wang.haoran at 2022-01-11
@@ -270,7 +273,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _checked => widget.multiList.contains(widget.message);
 
   var _isHintMsg = false;
-
+  final GlobalKey? _key = GlobalKey();
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
     fontSize: 12.sp,
@@ -337,6 +340,15 @@ class _ChatItemViewState extends State<ChatItemView> {
     String? text;
     if (message.contentType == MessageType.text) {
       text = message.content;
+      if (isMarkDownFormat()) {
+        final listHeight = _key?.currentContext
+                ?.findRenderObject()
+                ?.semanticBounds
+                .size
+                .height ??
+            0;
+        return 200.w < listHeight;
+      }
     } else if (message.contentType == MessageType.quote) {
       text = message.quoteElem?.text;
     }
@@ -404,20 +416,62 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
+  bool isMarkDownFormat() {
+    final md.Document document = md.Document(
+      inlineSyntaxes: (<md.InlineSyntax>[])..add(TaskListSyntax()),
+      extensionSet: md.ExtensionSet.gitHubFlavored,
+      encodeHtml: false,
+    );
+
+    final List<String> lines =
+        const LineSplitter().convert(widget.message.content!);
+    final List<md.Node> astNodes = document.parseLines(lines);
+    return astNodes.length > 1;
+  }
+
   Widget? _buildItemView() {
     Widget? child;
     switch (widget.message.contentType) {
       case MessageType.text:
         {
-          child = _buildCommonItemView(
-            child: ChatAtText(
-              text: widget.message.content!,
-              maxLines: widget.isExpanded == true ? null : 10,
-              allAtMap: {},
-              textStyle: widget.textStyle,
-              patterns: widget.patterns,
-            ),
-          );
+          if (isMarkDownFormat()) {
+            child = _buildCommonItemView(
+              child: Container(
+                constraints:
+                    BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
+                child: Markdown(
+                  key: _key,
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  data: widget.message.content!,
+                  selectable: true,
+                  styleSheet: MarkdownStyleSheet(
+                    tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
+                    tableCellsPadding: EdgeInsets.all(10.w),
+                    tableBorder: TableBorder.all(
+                      color: Color(0xFF333333),
+                      width: 1.w,
+                    ),
+                    // tableCellsDecoration: BoxDecoration(
+                    //   color: Colors.white,
+                    //   border: Border.all(color: Colors.black, width: 1.w),
+                    // ),
+                  ),
+                  onTapLink: (String text, String? href, String title) {},
+                ),
+              ),
+            );
+          } else {
+            child = _buildCommonItemView(
+              child: ChatAtText(
+                text: widget.message.content!,
+                maxLines: widget.isExpanded == true ? null : 10,
+                allAtMap: {},
+                textStyle: widget.textStyle,
+                patterns: widget.patterns,
+              ),
+            );
+          }
         }
         break;
       case MessageType.at_text:

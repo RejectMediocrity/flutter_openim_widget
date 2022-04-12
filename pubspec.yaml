@@ -38,6 +38,7 @@ dependencies:
       url: https://github.com/OpenIMSDK/Open-IM-SDK-Flutter.git
       ref: fix-ios-simulator
 #    path: ../flutter_openim_sdk
+  flutter_markdown: ^0.6.9+1
 
 dev_dependencies:
   flutter_test:
