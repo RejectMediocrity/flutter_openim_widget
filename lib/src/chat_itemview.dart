@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:rxdart/rxdart.dart';
+import 'package:sprintf/sprintf.dart';
 
 //edit by wang.haoran at 2022-01-11
 //聊天界面，包括弹出菜单
@@ -692,7 +693,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           nickName2 += element["nickname"];
           if (element != adminUsers.last) nickName2 += ",";
         });
-        return "${nickName1}已将${nickName2}添加为管理员";
+        return sprintf(UILocalizations.addAdmin, [nickName1, nickName2]);
       } else if (type == "remove_administrator_notification") {
         String nickName1 = opData["opUser"]["nickname"];
         List adminUsers = opData["adminUser"];
@@ -701,7 +702,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           nickName2 += element["nickname"];
           if (element != adminUsers.last) nickName2 += ",";
         });
-        return "${nickName1}已将${nickName2}从群管理员移除";
+        return sprintf(UILocalizations.removeAdmin, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
       } else if (type == "applet") {}
     } catch (e) {

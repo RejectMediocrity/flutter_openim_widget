@@ -61,6 +61,8 @@ class UILocalizations {
       "add": 'Add',
       "allRead": "allRead",
       "spread": "spread",
+      "addAdmin": "%s have made %s an administrator",
+      "removeAdmin": "%s have removed %s from the group moderator",
     },
     'zh': {
       'top': '置顶',
@@ -110,6 +112,8 @@ class UILocalizations {
       "add": '添加',
       "allRead": "全部已读",
       "spread": "展开",
+      "addAdmin": "%s 已将 %s 添加为群管理员",
+      "removeAdmin": "%s 已将 %s 从群管理员移除",
     },
   };
 
@@ -210,4 +214,8 @@ class UILocalizations {
   static String get reEdit => _value(key: "reEdit");
 
   static String get spread => _value(key: "spread");
+
+  static String get addAdmin => _value(key: "addAdmin");
+
+  static String get removeAdmin => _value(key: "removeAdmin");
 }
