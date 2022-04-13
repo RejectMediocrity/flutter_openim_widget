@@ -138,7 +138,7 @@ class ChatAvatarView extends StatelessWidget {
     }
     if (style != null)
       return Container(
-        color: Color(0xFF5496EB),
+        color: Color(0xFF006DFA),
         child: Text(
           text,
           style: style,
