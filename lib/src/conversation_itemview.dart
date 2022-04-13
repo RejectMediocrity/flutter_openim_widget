@@ -193,8 +193,9 @@ class _ConversationView extends StatelessWidget {
           "assets/images/${prefixStr?.substring(4)}.webp",
           package: "flutter_openim_widget",
         ),
-        imageWidth: 14,
-        imageHeight: 14,
+        imageWidth: 14.w,
+        imageHeight: 14.w,
+        margin: EdgeInsets.only(right: 4.w),
       );
     } else {
       return TextSpan(
