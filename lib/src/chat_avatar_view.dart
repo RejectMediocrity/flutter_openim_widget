@@ -28,6 +28,7 @@ class ChatAvatarView extends StatelessWidget {
     this.nineGridUrls = const [],
     this.isChatFrom = false, // 会话列表或者聊天详情
     this.isGroup = false,
+    this.innerBorder,
   }) : super(key: key);
   final bool visible;
   final double? size;
@@ -43,6 +44,7 @@ class ChatAvatarView extends StatelessWidget {
   final bool isNineGrid;
   final bool isChatFrom;
   final bool isGroup;
+  final Border? innerBorder;
   double get _size => size ?? 42.h;
 
   bool _isIndexAvatar() => null != url && indexAvatarList.contains(url);
@@ -52,7 +54,9 @@ class ChatAvatarView extends StatelessWidget {
     var child = isNineGrid ? _nineGridAvatar() : _normalAvatar();
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFF2F2F2), width: 1.w),
+        border: innerBorder != null
+            ? innerBorder
+            : Border.all(color: Color(0xFFF2F2F2), width: 1.w),
         // boxShadow: [
         //   BoxShadow(color: Color(0xFFF2F2F2), blurRadius: 1, spreadRadius: 1),
         // ],
