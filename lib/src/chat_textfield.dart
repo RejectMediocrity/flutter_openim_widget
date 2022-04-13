@@ -31,6 +31,7 @@ class ChatTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExtendedTextField(
+      keyboardAppearance: Brightness.light,
       textAlignVertical: TextAlignVertical.center,
       style: style,
       specialTextSpanBuilder: AtSpecialTextSpanBuilder(
