@@ -59,6 +59,10 @@ class ChatLongPressMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var childrens = _children();
+    if (childrens.length == 0) {
+      return Container();
+    }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 20.w),
       decoration: BoxDecoration(
@@ -75,7 +79,7 @@ class ChatLongPressMenu extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _children(),
+        children: childrens,
       ),
     );
   }
