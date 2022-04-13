@@ -254,7 +254,7 @@ class _ConversationView extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Flexible(
+                            Expanded(
                               child: Text(
                                 title,
                                 style: titleStyle,
