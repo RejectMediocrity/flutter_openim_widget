@@ -253,7 +253,7 @@ class _ConversationView extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Expanded(
+                            Flexible(
                               child: Text(
                                 title,
                                 style: titleStyle,
@@ -261,8 +261,8 @@ class _ConversationView extends StatelessWidget {
                                 maxLines: 1,
                               ),
                             ),
-                            Spacer(
-                              flex: 1,
+                            SizedBox(
+                              width: 16.w,
                             ),
                             Text(
                               timeStr,
