@@ -222,7 +222,12 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
             _buildEmojiLayout(),
             Container(
               constraints: BoxConstraints(maxHeight: 106.w, maxWidth: 100.w),
-              color: Color(0xFFF2F2F2).withAlpha(229),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                ImageUtil.imageResStr("Mask_group_emoji"),
+                package: 'flutter_openim_widget',
+              ))),
               padding: EdgeInsets.fromLTRB(35.w, 32.w, 16.w, 34.w),
               child: GestureDetector(
                 onTap: widget.enableDeleteEmoji == true
