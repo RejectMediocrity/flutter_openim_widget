@@ -544,8 +544,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           onTap: () {
             widget.onTapMarkDown!(_isTableElement);
           },
-          child: Positioned(
-            right: 45.w,
+          child: Padding(
+            padding: EdgeInsets.only(right: 45.w),
             child: ImageUtil.assetImage("msg_but_excel_full",
                 width: 20.w, height: 20.w),
           ),
@@ -804,7 +804,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         });
         return sprintf(UILocalizations.removeAdmin, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
-      } else if (type == "applet") {}
+      } else if (type == "applet") {
+      } else if (type == "webhook") {}
     } catch (e) {
       print(e.toString());
     }
