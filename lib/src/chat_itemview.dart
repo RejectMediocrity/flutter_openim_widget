@@ -278,7 +278,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool _isMarkDownFormat = false;
   bool _isTableElement = false;
   String _destination = "";
-
+  bool _isAssistant = false; // 是否是机器人发的消息
   var _isHintMsg = false;
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
@@ -287,7 +287,9 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   @override
   void initState() {
-    _isMarkDownFormat = isMarkDownFormat();
+    if (widget.message.contentType == MessageType.text) {
+      _isMarkDownFormat = isMarkDownFormat(widget.message.content!);
+    } else if (widget.message.contentType == MessageType.custom) {}
     super.initState();
   }
 
@@ -422,7 +424,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
-  bool isMarkDownFormat() {
+  bool isMarkDownFormat(String content) {
     print("start=====${DateTime.now().millisecondsSinceEpoch}");
     final md.Document document = md.Document(
       inlineSyntaxes: (<md.InlineSyntax>[])..add(TaskListSyntax()),
@@ -430,8 +432,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       encodeHtml: false,
     );
 
-    final List<String> lines =
-        const LineSplitter().convert(widget.message.content!);
+    final List<String> lines = const LineSplitter().convert(content);
     final List<md.Node> astNodes = document.parseLines(lines);
     List<String> _kBlockTags = <String>[
       'h1',
@@ -453,14 +454,16 @@ class _ChatItemViewState extends State<ChatItemView> {
     ];
     bool hasNode = false;
     astNodes.forEach((element) {
-      md.Element ele = element as md.Element;
-      if (_kBlockTags.contains(ele.tag)) {
-        hasNode = true;
-      }
-      if (ele.tag == "table") {
-        _isTableElement = true;
-      }
-      enumElement(ele);
+      try {
+        md.Element ele = element as md.Element;
+        if (_kBlockTags.contains(ele.tag)) {
+          hasNode = true;
+        }
+        if (ele.tag == "table") {
+          _isTableElement = true;
+        }
+        enumElement(ele);
+      } catch (e) {}
     });
     print("end=====${DateTime.now().millisecondsSinceEpoch}");
     return hasNode;
@@ -479,7 +482,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     }
   }
 
-  Widget? _buildMarkDownWidget() {
+  Widget? _buildMarkDownWidget(String text) {
     Widget child = Column(
       children: [
         _buildCommonItemView(
@@ -491,7 +494,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               child: MarkdownBody(
                 fitContent: true,
                 shrinkWrap: true,
-                data: widget.message.content!,
+                data: text,
                 selectable: true,
                 styleSheet: MarkdownStyleSheet(
                   tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
@@ -512,7 +515,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         SizedBox(
           height: 10.w,
         ),
-        if (!_isTableElement)
+        if (!_isTableElement && _isAssistant)
           Row(
             children: [
               Spacer(),
@@ -579,7 +582,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       case MessageType.text:
         {
           if (_isMarkDownFormat) {
-            child = _buildMarkDownWidget();
+            child = _buildMarkDownWidget(widget.message.content!);
           } else {
             child = _buildCommonItemView(
               child: ChatAtText(
@@ -823,7 +826,10 @@ class _ChatItemViewState extends State<ChatItemView> {
         return sprintf(UILocalizations.removeAdmin, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
       } else if (type == "applet") {
-      } else if (type == "webhook") {}
+      } else if (type == "webhook") {
+        _isAssistant = true;
+        return _buildMarkDownWidget(data);
+      }
     } catch (e) {
       print(e.toString());
     }
