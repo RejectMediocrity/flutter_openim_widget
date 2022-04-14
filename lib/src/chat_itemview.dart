@@ -202,6 +202,7 @@ class ChatItemView extends StatefulWidget {
   final bool? isExpanded;
   final Function()? onTapExpanded;
   final Function()? resendMsg;
+  final Function(bool isTable)? onTapMarkDown;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -260,6 +261,7 @@ class ChatItemView extends StatefulWidget {
     this.isExpanded,
     this.onTapExpanded,
     this.resendMsg,
+    this.onTapMarkDown,
   }) : super(key: key);
 
   @override
@@ -273,12 +275,20 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   bool get _checked => widget.multiList.contains(widget.message);
 
+  bool _isMarkDownFormat = false;
+  bool _isTableElement = false;
+
   var _isHintMsg = false;
-  final GlobalKey? _key = GlobalKey();
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
     fontSize: 12.sp,
   );
+
+  @override
+  void initState() {
+    _isMarkDownFormat = isMarkDownFormat();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -341,14 +351,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     String? text;
     if (message.contentType == MessageType.text) {
       text = message.content;
-      if (isMarkDownFormat()) {
-        final listHeight = _key?.currentContext
-                ?.findRenderObject()
-                ?.semanticBounds
-                .size
-                .height ??
-            0;
-        return 200.w < listHeight;
+      if (_isMarkDownFormat) {
+        return false;
       }
     } else if (message.contentType == MessageType.quote) {
       text = message.quoteElem?.text;
@@ -418,6 +422,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   }
 
   bool isMarkDownFormat() {
+    print("start=====${DateTime.now().millisecondsSinceEpoch}");
     final md.Document document = md.Document(
       inlineSyntaxes: (<md.InlineSyntax>[])..add(TaskListSyntax()),
       extensionSet: md.ExtensionSet.gitHubFlavored,
@@ -427,7 +432,127 @@ class _ChatItemViewState extends State<ChatItemView> {
     final List<String> lines =
         const LineSplitter().convert(widget.message.content!);
     final List<md.Node> astNodes = document.parseLines(lines);
-    return astNodes.length > 1;
+    List<String> _kBlockTags = <String>[
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'li',
+      'blockquote',
+      'pre',
+      'ol',
+      'ul',
+      'hr',
+      'table',
+      'thead',
+      'tbody',
+      'tr'
+    ];
+    bool hasNode = false;
+    astNodes.forEach((element) {
+      md.Element ele = element as md.Element;
+      if (_kBlockTags.contains(ele.tag)) {
+        hasNode = true;
+      }
+      if (ele.tag == "table") {
+        _isTableElement = true;
+      }
+    });
+    print("end=====${DateTime.now().millisecondsSinceEpoch}");
+    return hasNode;
+  }
+
+  Widget? _buildMarkDownWidget() {
+    Widget child = Column(
+      children: [
+        _buildCommonItemView(
+          isBubbleBg: false,
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: MarkdownBody(
+                fitContent: true,
+                shrinkWrap: true,
+                data: widget.message.content!,
+                selectable: true,
+                styleSheet: MarkdownStyleSheet(
+                  tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
+                  tableCellsPadding: EdgeInsets.all(10.w),
+                  tableBorder: TableBorder.all(
+                    color: Color(0xFF333333),
+                    width: 1.w,
+                  ),
+                ),
+                onTapLink: (String text, String? href, String title) {},
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10.w,
+        ),
+        if (!_isTableElement)
+          Row(
+            children: [
+              Spacer(),
+              Container(
+                width: 90.w,
+                height: 1.w,
+                color: Color(0xFFDDDDDD),
+              ),
+              GestureDetector(
+                onTap: () {
+                  widget.onTapMarkDown!(_isTableElement);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 90.w,
+                  height: 30.w,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18.w),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(25),
+                          blurRadius: 8.w,
+                          spreadRadius: 1.w,
+                        ),
+                      ]),
+                  child: Text(
+                    "${UILocalizations.seeDetails}",
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                  ),
+                ),
+              ),
+              Container(
+                width: 90.w,
+                height: 1.w,
+                color: Color(0xFFDDDDDD),
+              ),
+              Spacer(),
+            ],
+          ),
+      ],
+    );
+    if (_isTableElement) {
+      return Stack(alignment: Alignment.bottomRight, children: [
+        child,
+        GestureDetector(
+          onTap: () {
+            widget.onTapMarkDown!(_isTableElement);
+          },
+          child: Positioned(
+            right: 45.w,
+            child: ImageUtil.assetImage("msg_but_excel_full",
+                width: 20.w, height: 20.w),
+          ),
+        ),
+      ]);
+    }
+    return child;
   }
 
   Widget? _buildItemView() {
@@ -435,33 +560,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     switch (widget.message.contentType) {
       case MessageType.text:
         {
-          if (isMarkDownFormat()) {
-            child = _buildCommonItemView(
-              child: Container(
-                constraints:
-                    BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
-                child: Markdown(
-                  key: _key,
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  data: widget.message.content!,
-                  selectable: true,
-                  styleSheet: MarkdownStyleSheet(
-                    tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
-                    tableCellsPadding: EdgeInsets.all(10.w),
-                    tableBorder: TableBorder.all(
-                      color: Color(0xFF333333),
-                      width: 1.w,
-                    ),
-                    // tableCellsDecoration: BoxDecoration(
-                    //   color: Colors.white,
-                    //   border: Border.all(color: Colors.black, width: 1.w),
-                    // ),
-                  ),
-                  onTapLink: (String text, String? href, String title) {},
-                ),
-              ),
-            );
+          if (_isMarkDownFormat) {
+            child = _buildMarkDownWidget();
           } else {
             child = _buildCommonItemView(
               child: ChatAtText(

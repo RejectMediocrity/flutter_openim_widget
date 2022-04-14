@@ -270,13 +270,14 @@ class ChatSingleLayout extends StatelessWidget {
   Widget _noBubbleBgView() => Container(
         // margin: EdgeInsets.only(right: 10.w, left: 10.w),
         // padding: EdgeInsets.all(1),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: Color(0xFFE6E6E6),
-            width: 1,
-          ),
-        ),
+        /// 非气泡消息，去掉边框（markdown消息）
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(6),
+        //   border: Border.all(
+        //     color: Color(0xFFE6E6E6),
+        //     width: 1,
+        //   ),
+        // ),
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           child: ClipRRect(

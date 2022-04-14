@@ -63,6 +63,7 @@ class UILocalizations {
       "spread": "spread",
       "addAdmin": "%s have made %s an administrator",
       "removeAdmin": "%s have removed %s from the group moderator",
+      "seeDetails": "see details",
     },
     'zh': {
       'top': '置顶',
@@ -114,6 +115,7 @@ class UILocalizations {
       "spread": "展开",
       "addAdmin": "%s 已将 %s 添加为群管理员",
       "removeAdmin": "%s 已将 %s 从群管理员移除",
+      "seeDetails": "查看详情",
     },
   };
 
@@ -218,4 +220,6 @@ class UILocalizations {
   static String get addAdmin => _value(key: "addAdmin");
 
   static String get removeAdmin => _value(key: "removeAdmin");
+
+  static String get seeDetails => _value(key: "seeDetails");
 }
