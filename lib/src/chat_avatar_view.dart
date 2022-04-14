@@ -122,13 +122,15 @@ class ChatAvatarView extends StatelessWidget {
     TextStyle? style;
 
     if (cnMatchs != null && cnMatchs.length > 0) {
-      String match = '';
-      if (cnMatchs.length > 1) {
-        match = text.substring(cnMatchs[cnMatchs.length - 2].start,
-            cnMatchs[cnMatchs.length - 2].end);
-      }
-      match = match + text.substring(cnMatchs.last.start, cnMatchs.last.end);
-      text = match;
+      // String match = '';
+      // if (cnMatchs.length > 1) {
+      //   match = text.substring(cnMatchs[cnMatchs.length - 2].start,
+      //       cnMatchs[cnMatchs.length - 2].end);
+      // }
+      // match = match + text.substring(cnMatchs.last.start, cnMatchs.last.end);
+      // text = match;
+      int start = text.length - 2;
+      text = text.substring(start < 0 ? 0 : start, text.length);
       style = TextStyle(
           fontSize: isChatFrom ? 12.sp : 16.sp,
           color: Colors.white,
