@@ -202,7 +202,7 @@ class ChatItemView extends StatefulWidget {
   final bool? isExpanded;
   final Function()? onTapExpanded;
   final Function()? resendMsg;
-  final Function(bool isTable)? onTapMarkDown;
+  final Function(bool isTable, String? url)? onTapMarkDown;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -277,6 +277,7 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   bool _isMarkDownFormat = false;
   bool _isTableElement = false;
+  String _destination = "";
 
   var _isHintMsg = false;
   var _hintTextStyle = TextStyle(
@@ -459,9 +460,23 @@ class _ChatItemViewState extends State<ChatItemView> {
       if (ele.tag == "table") {
         _isTableElement = true;
       }
+      enumElement(ele);
     });
     print("end=====${DateTime.now().millisecondsSinceEpoch}");
     return hasNode;
+  }
+
+  void enumElement(md.Element element) {
+    if (element.tag == 'a') {
+      String temp = element.attributes['href'] ?? "";
+      if (temp.isNotEmpty) _destination = temp;
+      return;
+    }
+    if (element.children != null) {
+      element.children!.forEach((ele) {
+        if (ele.runtimeType == md.Element) enumElement(ele as md.Element);
+      });
+    }
   }
 
   Widget? _buildMarkDownWidget() {
@@ -486,7 +501,10 @@ class _ChatItemViewState extends State<ChatItemView> {
                     width: 1.w,
                   ),
                 ),
-                onTapLink: (String text, String? href, String title) {},
+                onTapLink: (String text, String? href, String title) {
+                  print(text);
+                  widget.onTapMarkDown!(_isTableElement, href);
+                },
               ),
             ),
           ),
@@ -505,7 +523,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               ),
               GestureDetector(
                 onTap: () {
-                  widget.onTapMarkDown!(_isTableElement);
+                  widget.onTapMarkDown!(_isTableElement, _destination);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -542,7 +560,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         child,
         GestureDetector(
           onTap: () {
-            widget.onTapMarkDown!(_isTableElement);
+            widget.onTapMarkDown!(_isTableElement, null);
           },
           child: Padding(
             padding: EdgeInsets.only(right: 45.w),
