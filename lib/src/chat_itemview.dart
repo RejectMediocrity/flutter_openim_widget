@@ -287,9 +287,6 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   @override
   void initState() {
-    if (widget.message.contentType == MessageType.text) {
-      _isMarkDownFormat = isMarkDownFormat(widget.message.content!);
-    } else if (widget.message.contentType == MessageType.custom) {}
     super.initState();
   }
 
@@ -581,6 +578,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     switch (widget.message.contentType) {
       case MessageType.text:
         {
+          _isMarkDownFormat = isMarkDownFormat(widget.message.content!);
           if (_isMarkDownFormat) {
             child = _buildMarkDownWidget(widget.message.content!);
           } else {
@@ -769,7 +767,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               var result = parseCustomMsg();
               if (result.runtimeType == String) {
                 text = result;
-              } else if (result.runtimeType == Widget) {
+              } else if (result.runtimeType == Column) {
+                /// 机器人消息
                 return result;
               }
             } else {
@@ -805,7 +804,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       String data = widget.message.customElem?.data ?? "";
       Map map = json.decode(data);
       String type = map["type"];
-      Map opData = json.decode(map["data"]);
+      Map opData = map["data"];
       if (type == "add_administrator_notification") {
         String nickName1 = opData["opUser"]["nickname"];
         List adminUsers = opData["adminUser"];
@@ -827,8 +826,12 @@ class _ChatItemViewState extends State<ChatItemView> {
       } else if (type == "cloud_doc") {
       } else if (type == "applet") {
       } else if (type == "webhook") {
-        _isAssistant = true;
-        return _buildMarkDownWidget(data);
+        _isMarkDownFormat = isMarkDownFormat(opData["data"]);
+        if (_isMarkDownFormat) {
+          _isAssistant = true;
+          return _buildMarkDownWidget(opData["data"]);
+        }
+        return opData["data"];
       }
     } catch (e) {
       print(e.toString());
