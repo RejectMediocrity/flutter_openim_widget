@@ -63,8 +63,8 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
             if (allAtMap.containsKey(id)) {
               var name = allAtMap[id]!;
               inlineSpan = ExtendedWidgetSpan(
+                alignment: PlaceholderAlignment.middle,
                 child: Text('@$name ', style: atStyle),
-                style: atStyle,
                 actualText: '$value',
                 start: m.start,
               );
@@ -78,6 +78,7 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
             if (allAtMap.containsKey(id)) {
               var name = allAtMap[id]!;
               inlineSpan = ExtendedWidgetSpan(
+                alignment: PlaceholderAlignment.middle,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                   decoration: BoxDecoration(
@@ -91,13 +92,12 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
                     style: atMeStyle,
                   ),
                 ),
-                style: atMeStyle,
                 actualText: '$value',
                 start: m.start,
               );
               buffer.write('@$name ');
             } else {
-              inlineSpan = TextSpan(text: '$value', style: textStyle);
+              inlineSpan = buildCenteredTextSpan(text: '$value', style: textStyle!);
               buffer.write('$value');
             }
           } else if (emojiReg.hasMatch(value)) {
@@ -126,7 +126,7 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
             style: TextStyle(color: Colors.blue),
             start: m.start,
           );*/
-            inlineSpan = TextSpan(text: '$value', style: textStyle);
+            inlineSpan = buildCenteredTextSpan(text: '$value', style: textStyle!);
             buffer.write('$value');
           }
         } catch (e) {
@@ -136,7 +136,7 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
         return "";
       },
       onNonMatch: (text) {
-        children.add(TextSpan(text: text, style: textStyle));
+        children.add(buildCenteredTextSpan(text: text, style: textStyle!));
         buffer.write(text);
         return '';
       },
@@ -144,7 +144,13 @@ class AtSpecialTextSpanBuilder extends SpecialTextSpanBuilder {
     if (null != atCallback) atCallback!(buffer.toString(), data);
     return TextSpan(
       children: children,
-      style: textStyle,
+    );
+  }
+
+  WidgetSpan buildCenteredTextSpan({required String text, required TextStyle style}) {
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Text(text, style: style),
     );
   }
 

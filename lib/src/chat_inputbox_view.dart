@@ -303,22 +303,19 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   }
 
   static var textStyle = TextStyle(
-    fontSize: 16,
+    fontSize: 16.sp,
     color: Color(0xFF333333),
-    height: 1.5,
     textBaseline: TextBaseline.alphabetic,
   );
 
   static var atStyle = TextStyle(
     fontSize: 16.sp,
     color: Color(0xFF006DFA),
-    height: 1.5,
     textBaseline: TextBaseline.alphabetic,
   );
   static var atMeStyle = TextStyle(
     color: Color(0xFFFFFFFF),
     fontSize: 16.sp,
-    height: 1.5,
     textBaseline: TextBaseline.alphabetic,
   );
 }
