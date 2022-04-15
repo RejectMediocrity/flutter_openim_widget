@@ -256,7 +256,7 @@ class _ConversationView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                title,
+                                CommonUtil.breakWord(title),
                                 style: titleStyle,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,

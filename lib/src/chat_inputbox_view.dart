@@ -26,6 +26,7 @@ class ChatInputBoxView extends StatefulWidget {
     this.inputFormatters,
     this.hintText,
     this.isGroupChat = false,
+    this.emojiViewState,
   }) : super(key: key);
   final Function() atAction;
   final Function() picAction;
@@ -46,6 +47,7 @@ class ChatInputBoxView extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? hintText;
   final bool? isGroupChat;
+  final Function(bool visible)? emojiViewState;
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
 }
@@ -78,6 +80,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
       if (widget.focusNode!.hasFocus) {
         setState(() {
           _emojiVisible = false;
+          widget.emojiViewState!(_emojiVisible);
         });
       }
     });
@@ -86,6 +89,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
       if (!mounted) return;
       setState(() {
         _emojiVisible = false;
+        widget.emojiViewState!(_emojiVisible);
       });
     });
 
@@ -169,6 +173,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
           onTap: () {
             setState(() {
               _emojiVisible = !_emojiVisible;
+              widget.emojiViewState!(_emojiVisible);
               if (_emojiVisible) {
                 unfocus();
               } else {

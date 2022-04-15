@@ -145,4 +145,17 @@ class CommonUtil {
       return sprintf("%d B", [bytes]);
     }
   }
+
+  /// Text 在中英文混排是会出现截取不完整的问题
+  static String breakWord(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    String breakWord = '';
+    text.runes.forEach((element) {
+      breakWord += String.fromCharCode(element);
+      breakWord += '\u200B';
+    });
+    return breakWord;
+  }
 }
