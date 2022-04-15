@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -203,6 +204,7 @@ class ChatItemView extends StatefulWidget {
   final Function()? onTapExpanded;
   final Function()? resendMsg;
   final Function(bool isTable, String? url)? onTapMarkDown;
+  final Function(String? url)? onTapMarkDownImg;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -262,6 +264,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapExpanded,
     this.resendMsg,
     this.onTapMarkDown,
+    this.onTapMarkDownImg,
   }) : super(key: key);
 
   @override
@@ -280,6 +283,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   String _destination = "";
   bool _isAssistant = false; // 是否是机器人发的消息
   var _isHintMsg = false;
+  String? imageDirectory;
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
     fontSize: 12.sp,
@@ -479,35 +483,99 @@ class _ChatItemViewState extends State<ChatItemView> {
     }
   }
 
+  Widget imageBuilder(Uri uri) {
+    if (uri.scheme == 'http' || uri.scheme == 'https') {
+      return Image.network(
+        uri.toString(),
+        width: .65.sw,
+        fit: BoxFit.fitWidth,
+      );
+    } else if (uri.scheme == 'data') {
+      final String mimeType = uri.data!.mimeType;
+      if (mimeType.startsWith('image/')) {
+        return Image.memory(
+          uri.data!.contentAsBytes(),
+          width: .65.sw,
+          fit: BoxFit.fitWidth,
+        );
+      } else if (mimeType.startsWith('text/')) {
+        return Text(uri.data!.contentAsString());
+      }
+      return const SizedBox();
+    } else if (uri.scheme == 'resource') {
+      return Image.asset(
+        uri.path,
+        width: .65.sw,
+        fit: BoxFit.fitWidth,
+      );
+    } else {
+      final Uri fileUri = imageDirectory != null
+          ? Uri.parse(imageDirectory! + uri.toString())
+          : uri;
+      if (fileUri.scheme == 'http' || fileUri.scheme == 'https') {
+        return Image.network(
+          uri.toString(),
+          width: .65.sw,
+          fit: BoxFit.fitWidth,
+        );
+      } else {
+        return Image.file(
+          File.fromUri(uri),
+          width: .65.sw,
+          fit: BoxFit.fitWidth,
+        );
+      }
+    }
+  }
+
   Widget? _buildMarkDownWidget(String text) {
+    Widget content = Container(
+      constraints: BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
+      child: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: MarkdownBody(
+          imageDirectory: imageDirectory,
+          fitContent: true,
+          shrinkWrap: true,
+          data: text,
+          selectable: true,
+          styleSheet: MarkdownStyleSheet(
+            tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
+            tableCellsPadding: EdgeInsets.all(10.w),
+            tableBorder: TableBorder.all(
+              color: Color(0xFF333333),
+              width: 1.w,
+            ),
+          ),
+          imageBuilder: (Uri uri, String? title, String? alt) {
+            return GestureDetector(
+              child: imageBuilder(uri),
+              onTap: () {
+                try {
+                  widget.onTapMarkDownImg!(uri.toString());
+                } catch (e) {}
+              },
+            );
+          },
+          onTapLink: (String text, String? href, String title) {
+            print(text);
+            widget.onTapMarkDown!(_isTableElement, href);
+          },
+        ),
+      ),
+    );
     Widget child = Column(
       children: [
         _buildCommonItemView(
           isBubbleBg: false,
-          child: Container(
-            constraints: BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
-            child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: MarkdownBody(
-                fitContent: true,
-                shrinkWrap: true,
-                data: text,
-                selectable: true,
-                styleSheet: MarkdownStyleSheet(
-                  tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
-                  tableCellsPadding: EdgeInsets.all(10.w),
-                  tableBorder: TableBorder.all(
-                    color: Color(0xFF333333),
-                    width: 1.w,
-                  ),
-                ),
-                onTapLink: (String text, String? href, String title) {
-                  print(text);
-                  widget.onTapMarkDown!(_isTableElement, href);
-                },
-              ),
-            ),
-          ),
+          child: _isTableElement
+              ? GestureDetector(
+                  onTap: () {
+                    widget.onTapMarkDown!(_isTableElement, null);
+                  },
+                  child: content,
+                )
+              : content,
         ),
         SizedBox(
           height: 10.w,
