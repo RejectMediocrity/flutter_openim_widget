@@ -208,6 +208,7 @@ class ChatItemView extends StatefulWidget {
   final Function(String? url)? onTapMarkDownImg;
   final Function()? setPermission;
   final String? conversationName;
+  final Function()? onTapCloudDoc;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -270,6 +271,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapMarkDownImg,
     this.conversationName,
     this.setPermission,
+    this.onTapCloudDoc,
   }) : super(key: key);
 
   @override
@@ -976,74 +978,77 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
     }
     return _buildCommonItemView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              ImageUtil.assetImage(
-                "msg_icon_document",
-                width: 16.w,
-                height: 16.w,
-              ),
-              SizedBox(
-                width: 6.w,
-              ),
-              Text(
-                model.permission?.title ?? "",
-                style: TextStyle(
-                  color: Color(0xFF006DFA),
-                  fontSize: 16.sp,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10.w,
-          ),
-          Container(
-            width: .65.sw,
-            height: 214.w,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6.w),
-            ),
-            padding: EdgeInsets.all(10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: GestureDetector(
+        onTap: widget.onTapCloudDoc,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Expanded(
-                  child: Text(
-                    snapShot,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 100,
-                    style: TextStyle(
-                      color: Color(0XFF333333),
-                      fontSize: 14.sp,
-                    ),
+                ImageUtil.assetImage(
+                  "msg_icon_document",
+                  width: 16.w,
+                  height: 16.w,
+                ),
+                SizedBox(
+                  width: 6.w,
+                ),
+                Text(
+                  model.permission?.title ?? "",
+                  style: TextStyle(
+                    color: Color(0xFF006DFA),
+                    fontSize: 16.sp,
                   ),
                 ),
-                SizedBox(
-                  height: 10.w,
-                ),
-                Container(
-                  color: Color(0xFFDDDDDD),
-                  height: 1.w,
-                ),
-                SizedBox(
-                  height: 10.w,
-                ),
-                permissionStr != null
-                    ? Text(
-                        permissionStr,
-                        style: TextStyle(
-                            color: Color(0xFF333333), fontSize: 14.sp),
-                      )
-                    : permissionWidget!,
               ],
             ),
-          ),
-        ],
+            SizedBox(
+              height: 10.w,
+            ),
+            Container(
+              width: .65.sw,
+              height: 214.w,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6.w),
+              ),
+              padding: EdgeInsets.all(10.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      snapShot,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 100,
+                      style: TextStyle(
+                        color: Color(0XFF333333),
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.w,
+                  ),
+                  Container(
+                    color: Color(0xFFDDDDDD),
+                    height: 1.w,
+                  ),
+                  SizedBox(
+                    height: 10.w,
+                  ),
+                  permissionStr != null
+                      ? Text(
+                          permissionStr,
+                          style: TextStyle(
+                              color: Color(0xFF333333), fontSize: 14.sp),
+                        )
+                      : permissionWidget!,
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
