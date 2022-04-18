@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatPictureView extends StatefulWidget {
   const ChatPictureView({
@@ -166,7 +167,15 @@ class _ChatPictureViewState extends State<ChatPictureView> {
     return Container(
       child: child ?? _errorIcon(),
       alignment: Alignment.center,
-      color: Colors.black,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(6),
+        ),
+        border: Border.all(
+          color: Color(0xFFF2F2F2),
+          width: 1.w,
+        ),
+      ),
     );
   }
 
