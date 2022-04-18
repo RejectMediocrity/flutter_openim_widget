@@ -384,14 +384,21 @@ class _ChatItemViewState extends State<ChatItemView> {
   }
 
   Widget expandView(Widget bubleView) {
+    bool show = didExceedMaxLines(widget.message) &&
+        widget.isExpanded == false &&
+        (widget.message.contentType == MessageType.text ||
+            widget.message.contentType == MessageType.quote);
+    Widget child = show
+        ? ConstrainedBox(
+            child: bubleView,
+            constraints: BoxConstraints(minWidth: 0.65.sw + 20.w),
+          )
+        : bubleView;
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        bubleView,
-        if (didExceedMaxLines(widget.message) &&
-            widget.isExpanded == false &&
-            (widget.message.contentType == MessageType.text ||
-                widget.message.contentType == MessageType.quote))
+        child,
+        if (show)
           GestureDetector(
             onTap: widget.onTapExpanded,
             child: Stack(

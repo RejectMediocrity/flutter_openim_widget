@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -34,13 +36,35 @@ class ChatMergeMsgView extends StatelessWidget {
         ),
       );
     for (var s in summaryList) {
-      list.add(Text(
-        s.trim(),
-        style: TextStyle(
-          color: Color(0xFF666666),
-          fontSize: 16.sp,
-        ),
-      ));
+      Map? map;
+      try {
+        map = json.decode(s);
+      } catch (e) {}
+      if (map != null) {
+        String content = map["content"];
+        String name = map["name"];
+        list.add(
+          Text(
+            "$name:$content".trim(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Color(0xFF666666),
+              fontSize: 16.sp,
+            ),
+          ),
+        );
+      } else {
+        list.add(
+          Text(
+            s.trim(),
+            style: TextStyle(
+              color: Color(0xFF666666),
+              fontSize: 16.sp,
+            ),
+          ),
+        );
+      }
     }
     return list;
   }
