@@ -892,6 +892,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         });
         return sprintf(UILocalizations.removeAdmin, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
+        print("object");
       } else if (type == "applet") {
       } else if (type == "webhook") {
         _isMarkDownFormat = isMarkDownFormat(opData["data"]);

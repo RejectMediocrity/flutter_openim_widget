@@ -29,6 +29,7 @@ class ChatAvatarView extends StatelessWidget {
     this.isChatFrom = false, // 会话列表或者聊天详情
     this.isGroup = false,
     this.innerBorder,
+    this.defaultImg = "ic_conversation_group",
   }) : super(key: key);
   final bool visible;
   final double? size;
@@ -45,6 +46,7 @@ class ChatAvatarView extends StatelessWidget {
   final bool isChatFrom;
   final bool isGroup;
   final Border? innerBorder;
+  final String? defaultImg;
   double get _size => size ?? 42.h;
 
   bool _isIndexAvatar() => null != url && indexAvatarList.contains(url);
@@ -107,7 +109,7 @@ class ChatAvatarView extends StatelessWidget {
     if (isGroup)
       return Container(
         child: ImageUtil.assetImage(
-          "ic_conversation_group",
+          defaultImg!,
           width: size,
           height: size,
           fit: BoxFit.fill,
