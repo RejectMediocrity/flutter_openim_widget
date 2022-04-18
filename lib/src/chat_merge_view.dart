@@ -62,6 +62,8 @@ class ChatMergeMsgView extends StatelessWidget {
         list.add(
           Text(
             s.trim(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Color(0xFF666666),
               fontSize: 16.sp,
