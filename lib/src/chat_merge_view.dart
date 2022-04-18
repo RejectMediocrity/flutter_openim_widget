@@ -24,12 +24,16 @@ class ChatMergeMsgView extends StatelessWidget {
             SizedBox(
               width: 4.w,
             ),
-            Text(
-              title,
-              style: TextStyle(
-                color: Color(0xFF333333),
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
