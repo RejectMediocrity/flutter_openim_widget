@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
+import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -205,6 +206,8 @@ class ChatItemView extends StatefulWidget {
   final Function()? resendMsg;
   final Function(bool isTable, String? url)? onTapMarkDown;
   final Function(String? url)? onTapMarkDownImg;
+  final Function()? setPermission;
+  final String? conversationName;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -265,6 +268,8 @@ class ChatItemView extends StatefulWidget {
     this.resendMsg,
     this.onTapMarkDown,
     this.onTapMarkDownImg,
+    this.conversationName,
+    this.setPermission,
   }) : super(key: key);
 
   @override
@@ -835,8 +840,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               var result = parseCustomMsg();
               if (result.runtimeType == String) {
                 text = result;
-              } else if (result.runtimeType == Column) {
-                /// 机器人消息
+              } else {
+                /// widget
                 return result;
               }
             } else {
@@ -872,7 +877,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       String data = widget.message.customElem?.data ?? "";
       Map map = json.decode(data);
       String type = map["type"];
-      Map opData = map["data"];
+      Map<String, dynamic> opData = map["data"];
       if (type == "add_administrator_notification") {
         String nickName1 = opData["opUser"]["nickname"];
         List adminUsers = opData["adminUser"];
@@ -892,7 +897,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         });
         return sprintf(UILocalizations.removeAdmin, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
-        print("object");
+        return _buildCloudDocChildItem(opData);
       } else if (type == "applet") {
       } else if (type == "webhook") {
         _isMarkDownFormat = isMarkDownFormat(opData["data"]);
@@ -906,6 +911,141 @@ class _ChatItemViewState extends State<ChatItemView> {
       print(e.toString());
     }
     return Container();
+  }
+
+  Widget _buildCloudDocChildItem(Map<String, dynamic> map) {
+    CloudDocMessageModel model = CloudDocMessageModel.fromJson(map);
+    Map params = json.decode(model.params!);
+    String snapShot = params["textSnapshot"];
+    int permission =
+        model.permission?.permission ?? 0; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
+    int shareType =
+        model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
+    String? permissionStr;
+    Widget? permissionWidget;
+    if (permission == 0) {
+      return Container();
+    } else if (permission == 1) {
+      permissionStr = UILocalizations.you + UILocalizations.canRead;
+    } else if (permission == 2) {
+      permissionStr = UILocalizations.you + UILocalizations.canEdit;
+    } else {
+      permissionWidget = Row(
+        children: [
+          Flexible(
+            child: Text(
+              widget.isSingleChat
+                  ? widget.conversationName!
+                  : UILocalizations.grantThisSessionMemberPermissions,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 14.sp,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 4.w,
+          ),
+          GestureDetector(
+            onTap: widget.setPermission,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  permission == 1
+                      ? UILocalizations.canRead
+                      : UILocalizations.canEdit,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Color(0xFF006DFA),
+                    fontSize: 14.sp,
+                  ),
+                ),
+                ImageUtil.assetImage(
+                  "msg_but_unfold",
+                  width: 12.w,
+                  height: 12.w,
+                )
+              ],
+            ),
+          )
+        ],
+      );
+    }
+    return _buildCommonItemView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              ImageUtil.assetImage(
+                "msg_icon_document",
+                width: 16.w,
+                height: 16.w,
+              ),
+              SizedBox(
+                width: 6.w,
+              ),
+              Text(
+                model.permission?.title ?? "",
+                style: TextStyle(
+                  color: Color(0xFF006DFA),
+                  fontSize: 16.sp,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          Container(
+            width: .65.sw,
+            height: 214.w,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6.w),
+            ),
+            padding: EdgeInsets.all(10.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    snapShot,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 100,
+                    style: TextStyle(
+                      color: Color(0XFF333333),
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10.w,
+                ),
+                Container(
+                  color: Color(0xFFDDDDDD),
+                  height: 1.w,
+                ),
+                SizedBox(
+                  height: 10.w,
+                ),
+                permissionStr != null
+                    ? Text(
+                        permissionStr,
+                        style: TextStyle(
+                            color: Color(0xFF333333), fontSize: 14.sp),
+                      )
+                    : permissionWidget!,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildCommonItemView({

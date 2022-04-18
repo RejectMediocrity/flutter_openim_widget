@@ -64,6 +64,11 @@ class UILocalizations {
       "addAdmin": "%s have made %s an administrator",
       "removeAdmin": "%s have removed %s from the group moderator",
       "seeDetails": "see details",
+      "canEdit": "can edit",
+      "canRead": "can read",
+      "grantThisSessionMemberPermissions":
+          "Grant this session member permissions",
+      "thisSessionMember": "this session member",
     },
     'zh': {
       'top': '置顶',
@@ -116,6 +121,10 @@ class UILocalizations {
       "addAdmin": "%s 已将 %s 添加为群管理员",
       "removeAdmin": "%s 已将 %s 从群管理员移除",
       "seeDetails": "查看详情",
+      "canEdit": "可编辑",
+      "canRead": "可阅读",
+      "grantThisSessionMemberPermissions": "赋予本会话成员权限",
+      "thisSessionMember": "本会话成员",
     },
   };
 
@@ -222,4 +231,13 @@ class UILocalizations {
   static String get removeAdmin => _value(key: "removeAdmin");
 
   static String get seeDetails => _value(key: "seeDetails");
+
+  static String get canEdit => _value(key: "canEdit");
+
+  static String get canRead => _value(key: "canRead");
+
+  static String get grantThisSessionMemberPermissions =>
+      _value(key: "grantThisSessionMemberPermissions");
+
+  static String get thisSessionMember => _value(key: "thisSessionMember");
 }

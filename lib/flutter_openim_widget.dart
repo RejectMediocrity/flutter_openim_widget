@@ -40,6 +40,7 @@ export 'src/conversation_itemview.dart';
 export 'src/copy_custom_pop_up_menu.dart';
 export 'src/custom_chawie_controls.dart';
 export 'src/favorite_emoji_listview.dart';
+export 'src/model/cloud_doc_message_model.dart';
 export 'src/pop_button.dart';
 export 'src/revoke_message_helper.dart';
 export 'src/title_bar.dart';
