@@ -69,6 +69,8 @@ class UILocalizations {
       "grantThisSessionMemberPermissions":
           "Grant this session member permissions",
       "thisSessionMember": "this session member",
+      "removeFromGroup": "%s have removed %s from the group chat",
+      "addToGroup": "%s have added %s to the group chat",
     },
     'zh': {
       'top': '置顶',
@@ -125,6 +127,8 @@ class UILocalizations {
       "canRead": "可阅读",
       "grantThisSessionMemberPermissions": "赋予本会话成员权限",
       "thisSessionMember": "本会话成员",
+      "removeFromGroup": "%s 将 %s 移出群聊",
+      "addToGroup": "%s 将 %s 加入群聊",
     },
   };
 
@@ -240,4 +244,8 @@ class UILocalizations {
       _value(key: "grantThisSessionMemberPermissions");
 
   static String get thisSessionMember => _value(key: "thisSessionMember");
+
+  static String get removeFromGroup => _value(key: "removeFromGroup");
+
+  static String get addToGroup => _value(key: "addToGroup");
 }

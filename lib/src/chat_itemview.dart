@@ -929,6 +929,24 @@ class _ChatItemViewState extends State<ChatItemView> {
           if (element != adminUsers.last) nickName2 += ",";
         });
         return sprintf(UILocalizations.removeAdmin, [nickName1, nickName2]);
+      } else if (type == "webhook_del") {
+        String nickName1 = opData["opUser"]["nickname"];
+        List adminUsers = opData["webhookList"];
+        String nickName2 = "";
+        adminUsers.forEach((element) {
+          nickName2 += element["displayName"];
+          if (element != adminUsers.last) nickName2 += ",";
+        });
+        return sprintf(UILocalizations.removeFromGroup, [nickName1, nickName2]);
+      } else if (type == "webhook_add") {
+        String nickName1 = opData["opUser"]["nickname"];
+        List adminUsers = opData["webhookList"];
+        String nickName2 = "";
+        adminUsers.forEach((element) {
+          nickName2 += element["displayName"];
+          if (element != adminUsers.last) nickName2 += ",";
+        });
+        return sprintf(UILocalizations.addToGroup, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
         return _buildCloudDocChildItem(opData);
       } else if (type == "applet") {
