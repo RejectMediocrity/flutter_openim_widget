@@ -552,7 +552,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           fitContent: true,
           shrinkWrap: true,
           data: text,
-          selectable: true,
+          selectable: false,
           styleSheet: MarkdownStyleSheet(
             tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
             tableCellsPadding: EdgeInsets.all(10.w),
