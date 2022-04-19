@@ -204,7 +204,7 @@ class ChatItemView extends StatefulWidget {
   final bool? isExpanded;
   final Function()? onTapExpanded;
   final Function()? resendMsg;
-  final Function(bool isTable, String? url)? onTapMarkDown;
+  final Function(bool isTable, String? url, {String? content})? onTapMarkDown;
   final Function(String? url)? onTapMarkDownImg;
   final Function()? setPermission;
   final String? conversationName;
@@ -291,6 +291,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool _isAssistant = false; // 是否是机器人发的消息
   var _isHintMsg = false;
   String? imageDirectory;
+  String? markDownContent;
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
     fontSize: 12.sp,
@@ -543,6 +544,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   }
 
   Widget? _buildMarkDownWidget(String text) {
+    markDownContent = text;
     Widget content = Container(
       constraints: BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
       child: SingleChildScrollView(
@@ -573,7 +575,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           },
           onTapLink: (String text, String? href, String title) {
             print(text);
-            widget.onTapMarkDown!(_isTableElement, href);
+            widget.onTapMarkDown!(_isTableElement, href,
+                content: markDownContent);
           },
         ),
       ),
@@ -581,60 +584,64 @@ class _ChatItemViewState extends State<ChatItemView> {
     Widget child = Column(
       children: [
         _buildCommonItemView(
-          isBubbleBg: false,
-          child: _isTableElement
-              ? GestureDetector(
-                  onTap: () {
-                    widget.onTapMarkDown!(_isTableElement, null);
-                  },
-                  child: content,
-                )
-              : content,
-        ),
+            isBubbleBg: false,
+            child:
+                // _isTableElement
+                //     ?
+                GestureDetector(
+              onTap: () {
+                widget.onTapMarkDown!(_isTableElement, null,
+                    content: markDownContent);
+              },
+              child: content,
+            )
+            // : content,
+            ),
         SizedBox(
           height: 10.w,
         ),
-        if (!_isTableElement && _isAssistant)
-          Row(
-            children: [
-              Spacer(),
-              Container(
-                width: 90.w,
-                height: 1.w,
-                color: Color(0xFFDDDDDD),
-              ),
-              GestureDetector(
-                onTap: () {
-                  widget.onTapMarkDown!(_isTableElement, _destination);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 90.w,
-                  height: 30.w,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18.w),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(25),
-                          blurRadius: 8.w,
-                          spreadRadius: 1.w,
-                        ),
-                      ]),
-                  child: Text(
-                    "${UILocalizations.seeDetails}",
-                    style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
-                  ),
-                ),
-              ),
-              Container(
-                width: 90.w,
-                height: 1.w,
-                color: Color(0xFFDDDDDD),
-              ),
-              Spacer(),
-            ],
-          ),
+        // if (!_isTableElement && _isAssistant)
+        // Row(
+        //   children: [
+        //     Spacer(),
+        //     Container(
+        //       width: 90.w,
+        //       height: 1.w,
+        //       color: Color(0xFFDDDDDD),
+        //     ),
+        //     GestureDetector(
+        //       onTap: () {
+        //         widget.onTapMarkDown!(_isTableElement, _destination,
+        //             content: markDownContent);
+        //       },
+        //       child: Container(
+        //         alignment: Alignment.center,
+        //         width: 90.w,
+        //         height: 30.w,
+        //         decoration: BoxDecoration(
+        //             color: Colors.white,
+        //             borderRadius: BorderRadius.circular(18.w),
+        //             boxShadow: [
+        //               BoxShadow(
+        //                 color: Colors.black.withAlpha(25),
+        //                 blurRadius: 8.w,
+        //                 spreadRadius: 1.w,
+        //               ),
+        //             ]),
+        //         child: Text(
+        //           "${UILocalizations.seeDetails}",
+        //           style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+        //         ),
+        //       ),
+        //     ),
+        //     Container(
+        //       width: 90.w,
+        //       height: 1.w,
+        //       color: Color(0xFFDDDDDD),
+        //     ),
+        //     Spacer(),
+        //   ],
+        // ),
       ],
     );
     if (_isTableElement) {
@@ -642,7 +649,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         child,
         GestureDetector(
           onTap: () {
-            widget.onTapMarkDown!(_isTableElement, null);
+            widget.onTapMarkDown!(_isTableElement, null,
+                content: markDownContent);
           },
           child: Padding(
             padding: EdgeInsets.only(right: 45.w),
@@ -910,6 +918,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       } else if (type == "applet") {
       } else if (type == "webhook") {
         _isMarkDownFormat = isMarkDownFormat(opData["data"]);
+        _isMarkDownFormat = true;
         if (_isMarkDownFormat) {
           _isAssistant = true;
           return _buildMarkDownWidget(opData["data"]);
