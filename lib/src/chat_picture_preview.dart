@@ -13,15 +13,15 @@ class PicInfo {
   PicInfo({this.url, this.file});
 }
 
-class ChatPicturePreview extends StatelessWidget {
-  ChatPicturePreview(
-      {Key? key,
-      required this.picList,
-      this.index = 0,
-      this.tag,
-      this.onDownload,
-      this.onDragDown})
-      : this.controller = ExtendedPageController(
+class ChatPicturePreview extends StatefulWidget {
+  ChatPicturePreview({
+    Key? key,
+    required this.picList,
+    this.index = 0,
+    this.tag,
+    this.onDownload,
+    this.onTap,
+  })  : this.controller = ExtendedPageController(
           initialPage: index,
           pageSpacing: 10,
         ),
@@ -31,7 +31,14 @@ class ChatPicturePreview extends StatelessWidget {
   final String? tag;
   final ExtendedPageController controller;
   final Future<bool> Function(String)? onDownload;
-  final Function(DragEndDetails details)? onDragDown;
+  final Function()? onTap;
+
+  @override
+  State<ChatPicturePreview> createState() => _ChatPicturePreviewState();
+}
+
+class _ChatPicturePreviewState extends State<ChatPicturePreview> {
+  double initScale = 1.0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +47,21 @@ class ChatPicturePreview extends StatelessWidget {
         _buildPageView(),
         _buildBackBtn(onTap: () => Navigator.pop(context)),
         _buildToolsBtn(onDownload: () {
-          int index = controller.page?.toInt() ?? 0;
-          if (index < picList.length) {
-            onDownload?.call(picList.elementAt(index).url!);
+          int index = widget.controller.page?.toInt() ?? 0;
+          if (index < widget.picList.length) {
+            widget.onDownload?.call(widget.picList.elementAt(index).url!);
           }
         }),
       ],
     );
     return Material(
       color: Color(0xFF000000),
-      child: tag == null ? child : Hero(tag: tag!, child: child),
+      child: widget.tag == null ? child : Hero(tag: widget.tag!, child: child),
     );
   }
 
   Widget _buildChildView(int index) {
-    var info = picList.elementAt(index);
+    var info = widget.picList.elementAt(index);
     if (info.file != null) {
       return ExtendedImage.file(
         info.file!,
@@ -82,7 +89,7 @@ class ChatPicturePreview extends StatelessWidget {
   GestureConfig _buildGestureConfig(ExtendedImageState state) => GestureConfig(
         //you must set inPageView true if you want to use ExtendedImageGesturePageView
         inPageView: true,
-        initialScale: 1.0,
+        initialScale: initScale,
         maxScale: 5.0,
         animationMaxScale: 6.0,
         initialAlignment: InitialAlignment.center,
@@ -126,10 +133,15 @@ class ChatPicturePreview extends StatelessWidget {
   }
 
   Widget _buildPageView() => GestureDetector(
-        onVerticalDragEnd: onDragDown,
+        onTap: widget.onTap,
+        onDoubleTap: () {
+          setState(() {
+            initScale = 1.5;
+          });
+        },
         child: ExtendedImageGesturePageView.builder(
-          controller: controller,
-          itemCount: picList.length,
+          controller: widget.controller,
+          itemCount: widget.picList.length,
           itemBuilder: (BuildContext context, int index) {
             return _buildChildView(index);
           },
