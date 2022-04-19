@@ -7,6 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
 import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
+import 'package:flutter_openim_widget/src/util/event_bus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -292,6 +293,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   var _isHintMsg = false;
   String? imageDirectory;
   String? markDownContent;
+  String permisstionStr = "";
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
     fontSize: 12.sp,
@@ -299,11 +301,25 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   @override
   void initState() {
+    bus.on("doc_permisstion", (arg) {
+      int permission = arg["p"];
+      String id = arg["id"];
+      if (id == widget.message.clientMsgID) {
+        setState(() {
+          if (permission == 1) {
+            permisstionStr = UILocalizations.canRead;
+          } else if (permission == 2) {
+            permisstionStr = UILocalizations.canEdit;
+          }
+        });
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    bus.off("doc_permisstion");
     _popupCtrl.dispose();
     super.dispose();
   }
@@ -972,9 +988,11 @@ class _ChatItemViewState extends State<ChatItemView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  permission == 1
-                      ? UILocalizations.canRead
-                      : UILocalizations.canEdit,
+                  permisstionStr.isNotEmpty
+                      ? permisstionStr
+                      : permission == 1
+                          ? UILocalizations.canRead
+                          : UILocalizations.canEdit,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -994,76 +1012,85 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
     }
     return _buildCommonItemView(
-      child: GestureDetector(
-        onTap: widget.onTapCloudDoc,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ImageUtil.assetImage(
-                  "msg_icon_document",
-                  width: 16.w,
-                  height: 16.w,
-                ),
-                SizedBox(
-                  width: 6.w,
-                ),
-                Text(
-                  model.permission?.title ?? "",
-                  style: TextStyle(
-                    color: Color(0xFF006DFA),
-                    fontSize: 16.sp,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10.w,
-            ),
-            Container(
-              width: .65.sw,
-              height: 214.w,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6.w),
-              ),
-              padding: EdgeInsets.all(10.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: .65.sw,
+        ),
+        child: GestureDetector(
+          onTap: widget.onTapCloudDoc,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Expanded(
+                  ImageUtil.assetImage(
+                    "msg_icon_document",
+                    width: 16.w,
+                    height: 16.w,
+                  ),
+                  SizedBox(
+                    width: 6.w,
+                  ),
+                  Flexible(
                     child: Text(
-                      snapShot,
+                      model.permission?.title ?? "",
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 100,
                       style: TextStyle(
-                        color: Color(0XFF333333),
-                        fontSize: 14.sp,
+                        color: Color(0xFF006DFA),
+                        fontSize: 16.sp,
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10.w,
-                  ),
-                  Container(
-                    color: Color(0xFFDDDDDD),
-                    height: 1.w,
-                  ),
-                  SizedBox(
-                    height: 10.w,
-                  ),
-                  permissionStr != null
-                      ? Text(
-                          permissionStr,
-                          style: TextStyle(
-                              color: Color(0xFF333333), fontSize: 14.sp),
-                        )
-                      : permissionWidget!,
                 ],
               ),
-            ),
-          ],
+              SizedBox(
+                height: 10.w,
+              ),
+              Container(
+                width: .65.sw,
+                height: 214.w,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6.w),
+                ),
+                padding: EdgeInsets.all(10.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        snapShot,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 100,
+                        style: TextStyle(
+                          color: Color(0XFF333333),
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.w,
+                    ),
+                    Container(
+                      color: Color(0xFFDDDDDD),
+                      height: 1.w,
+                    ),
+                    SizedBox(
+                      height: 10.w,
+                    ),
+                    permissionStr != null
+                        ? Text(
+                            permissionStr,
+                            style: TextStyle(
+                                color: Color(0xFF333333), fontSize: 14.sp),
+                          )
+                        : permissionWidget!,
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
