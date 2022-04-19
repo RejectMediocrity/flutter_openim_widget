@@ -230,11 +230,11 @@ class ChatSingleLayout extends StatelessWidget {
                                   !isSending &&
                                   enabledReadStatus)
                                 _buildReadStatusView(),
-                              if (!isSingleChat &&
-                                  !isSendFailed &&
-                                  !isSending &&
-                                  enabledReadStatus)
-                                _buildGroupReadStatusView(),
+                              // if (!isSingleChat &&
+                              //     !isSendFailed &&
+                              //     !isSending &&
+                              //     enabledReadStatus)
+                              //   _buildGroupReadStatusView(),
                             ],
                           ),
 
