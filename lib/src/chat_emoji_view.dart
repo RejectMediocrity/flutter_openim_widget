@@ -183,21 +183,37 @@ class ChatEmojiView extends StatefulWidget {
       this.favoriteList = const [],
       this.onAddFavorite,
       this.onSelectedFavorite,
-      this.enableDeleteEmoji})
+      this.controller})
       : super(key: key);
   final Function()? onDeleteEmoji;
   final Function(String emoji)? onAddEmoji;
   final List<String> favoriteList;
   final Function()? onAddFavorite;
   final Function(int index, String url)? onSelectedFavorite;
-  final bool? enableDeleteEmoji;
+  final TextEditingController? controller;
   @override
   _ChatEmojiViewState createState() => _ChatEmojiViewState();
 }
 
 class _ChatEmojiViewState extends State<ChatEmojiView> {
   var _index = 0;
+  var _enableDeleteEmoji = false;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    _enableDeleteEmoji = widget.controller!.text.isNotEmpty;
+
+    widget.controller?.addListener(() {
+      bool nextValue = widget.controller!.text.isNotEmpty;
+      if (_enableDeleteEmoji != nextValue) {
+        setState(() {
+          _enableDeleteEmoji = nextValue;
+        });
+      }
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return FadeInUp(
@@ -230,7 +246,7 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
               ))),
               padding: EdgeInsets.fromLTRB(35.w, 32.w, 16.w, 34.w),
               child: GestureDetector(
-                onTap: widget.enableDeleteEmoji == true
+                onTap: _enableDeleteEmoji == true
                     ? widget.onDeleteEmoji
                     : null,
                 behavior: HitTestBehavior.translucent,
@@ -244,7 +260,7 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
                     ),
                   ),
                   child: ImageUtil.assetImage(
-                    widget.enableDeleteEmoji == true
+                    _enableDeleteEmoji == true
                         ? "keyboard_but_delete_disable"
                         : "keyboard_but_delete",
                     width: 22.w,
