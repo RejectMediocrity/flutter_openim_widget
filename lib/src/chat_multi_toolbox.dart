@@ -29,7 +29,7 @@ class ChatMultiSelToolbox extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ImageUtil.assetImage(
-                    'msgpopup_btn_share_bg',
+                    'msgpopup_btn_sharemore_bg',
                     width: 46.w,
                     height: 46.w,
                   ),
@@ -53,7 +53,7 @@ class ChatMultiSelToolbox extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ImageUtil.assetImage(
-                    'msgpopup_btn_sharemore_bg',
+                    'msgpopup_btn_share_bg',
                     width: 46.w,
                     height: 46.w,
                   ),
