@@ -910,7 +910,12 @@ class _ChatItemViewState extends State<ChatItemView> {
       String data = widget.message.customElem?.data ?? "";
       Map map = json.decode(data);
       String type = map["type"];
-      Map<String, dynamic> opData = map["data"];
+      Map<String, dynamic> opData;
+      if (map["data"].runtimeType == String) {
+        opData = json.decode(map["data"]);
+      } else {
+        opData = map["data"];
+      }
       if (type == "add_administrator_notification") {
         String nickName1 = opData["opUser"]["nickname"];
         List adminUsers = opData["adminUser"];
