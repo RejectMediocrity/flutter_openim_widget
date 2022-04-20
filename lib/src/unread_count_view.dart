@@ -9,7 +9,7 @@ class UnreadCountView extends StatelessWidget {
   final Stream<int>? steam;
   final int? count;
   final bool qqBadge;
-  final String maxBadge = '99+';
+  final String maxBadge = '99';
 
   const UnreadCountView({
     Key? key,
