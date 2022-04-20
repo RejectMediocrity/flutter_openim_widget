@@ -9,6 +9,7 @@ class UnreadCountView extends StatelessWidget {
   final Stream<int>? steam;
   final int? count;
   final bool qqBadge;
+  final String maxBadge = '99+';
 
   const UnreadCountView({
     Key? key,
@@ -28,14 +29,12 @@ class UnreadCountView extends StatelessWidget {
       stream: steam,
       builder: (_, AsyncSnapshot<int> hot) => Visibility(
         visible: (hot.data ?? 0) > 0,
-        child: hot.data! > 99
-            ? ImageUtil.graterThan99()
-            : qqBadge
+        child: qqBadge
                 ? Container(
                     width: size,
                     height: size,
                     child: QqBadge(
-                      text: '${(hot.data ?? 0) > 99 ? '...' : hot.data}',
+                      text: '${(hot.data ?? 0) > 99 ? maxBadge : hot.data}',
                       radius: size / 2,
                       textStyle: TextStyle(
                         fontSize: 8.sp,
@@ -52,7 +51,7 @@ class UnreadCountView extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '${(hot.data ?? 0) > 99 ? '...' : hot.data}',
+                      '${(hot.data ?? 0) > 99 ? maxBadge : hot.data}',
                       style: TextStyle(
                         fontSize: 8.sp,
                         color: Color(0xFFFFFFFF),
@@ -65,14 +64,12 @@ class UnreadCountView extends StatelessWidget {
 
   Widget _buildChild({required int count}) => Visibility(
         visible: count > 0,
-        child: count > 99
-            ? ImageUtil.graterThan99()
-            : qqBadge
+        child: qqBadge
                 ? Container(
                     width: size,
                     height: size,
                     child: QqBadge(
-                      text: '${count > 99 ? '...' : count}',
+                      text: '${count > 99 ? maxBadge : count}',
                       radius: size / 2,
                       textStyle: TextStyle(
                         fontSize: 8.sp,
@@ -89,7 +86,7 @@ class UnreadCountView extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '${count > 99 ? '...' : count}',
+                      '${count > 99 ? maxBadge : count}',
                       style: TextStyle(
                         fontSize: 8.sp,
                         color: Color(0xFFFFFFFF),
