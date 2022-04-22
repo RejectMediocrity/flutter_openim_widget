@@ -292,7 +292,10 @@ class _ConversationView extends StatelessWidget {
                             ),
                             Spacer(),
                             if (!notDisturb)
-                              UnreadCountView(count: unreadCount),
+                              UnreadCountView(
+                                count: unreadCount,
+                                size: 18.w,
+                              ),
                             if (notDisturb) ImageUtil.notDisturb(),
                           ],
                         ),
