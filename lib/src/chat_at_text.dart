@@ -200,10 +200,16 @@ class ChatAtText extends StatelessWidget {
         } else {
           inlineSpan = TextSpan(text: "$matchText", style: style);
         }
-        if (inlineSpan != null) children.add(inlineSpan);
+        if (inlineSpan != null) {
+          children.add(inlineSpan);
+          children.add(
+            TextSpan(text: "\u200B"),
+          );
+        }
         return '';
       },
       onNonMatch: (text) {
+        text = CommonUtil.breakWord(text);
         children.add(TextSpan(text: text, style: style));
         return '';
       },
