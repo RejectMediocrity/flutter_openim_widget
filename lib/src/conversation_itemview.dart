@@ -85,42 +85,40 @@ class ConversationItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // Slidable(
-        // child:
-        _ConversationView(
-      nickName: nickName,
-      title: title,
-      content: content,
-      timeStr: timeStr,
-      contentPrefix: contentPrefix,
-      contentPrefixStyle: contentPrefixStyle,
-      avatarSize: avatarSize,
-      avatarUrl: avatarUrl,
-      isCircleAvatar: isCircleAvatar,
-      avatarBorderRadius: avatarBorderRadius,
-      backgroundColor: backgroundColor,
-      height: height,
-      contentWidth: contentWidth,
-      unreadCount: unreadCount,
-      padding: padding,
-      underline: underline,
-      allAtMap: allAtMap,
-      patterns: patterns,
-      titleStyle: titleStyle,
-      contentStyle: contentStyle,
-      timeStyle: timeStyle,
-      onTap: onTap,
-      notDisturb: notDisturb,
-      needToTpliceContent: needToTpliceContent,
-      isGroupChat: isGroupChat,
-      senderName: senderName,
-      // ),
-      // endActionPane: ActionPane(
-      //   motion: DrawerMotion(),
-      //   extentRatio: extentRatio,
-      //   children: slideActions.map((e) => _SlidableAction(item: e)).toList(),
-      // ),
+    return Slidable(
+      child: _ConversationView(
+        nickName: nickName,
+        title: title,
+        content: content,
+        timeStr: timeStr,
+        contentPrefix: contentPrefix,
+        contentPrefixStyle: contentPrefixStyle,
+        avatarSize: avatarSize,
+        avatarUrl: avatarUrl,
+        isCircleAvatar: isCircleAvatar,
+        avatarBorderRadius: avatarBorderRadius,
+        backgroundColor: backgroundColor,
+        height: height,
+        contentWidth: contentWidth,
+        unreadCount: unreadCount,
+        padding: padding,
+        underline: underline,
+        allAtMap: allAtMap,
+        patterns: patterns,
+        titleStyle: titleStyle,
+        contentStyle: contentStyle,
+        timeStyle: timeStyle,
+        onTap: onTap,
+        notDisturb: notDisturb,
+        needToTpliceContent: needToTpliceContent,
+        isGroupChat: isGroupChat,
+        senderName: senderName,
+      ),
+      endActionPane: ActionPane(
+        motion: DrawerMotion(),
+        extentRatio: extentRatio,
+        children: slideActions.map((e) => _SlidableAction(item: e)).toList(),
+      ),
     );
   }
 }
