@@ -882,7 +882,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 var content = json.decode(widget.message.content!);
                 text = content['defaultTips'];
               } catch (e) {
-                text = json.encode(widget.message);
+                text = ""; // 避免打印消息体
               }
             }
             child = _buildCommonItemView(
