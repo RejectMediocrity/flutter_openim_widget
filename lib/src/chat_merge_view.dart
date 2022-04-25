@@ -45,8 +45,8 @@ class ChatMergeMsgView extends StatelessWidget {
         map = json.decode(s);
       } catch (e) {}
       if (map != null) {
-        String content = map["content"];
-        String name = map["name"];
+        String content = map["content"] ?? '';
+        String name = map["name"] ?? '';
         list.add(
           Text(
             "$name:$content".trim(),
