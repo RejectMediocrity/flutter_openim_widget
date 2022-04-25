@@ -167,11 +167,12 @@ class CommonUtil {
     List<RegExpMatch> match = atReg.allMatches(content).toList();
     String temp = '';
     match.forEach((element) {
-      String uid = element.group(0)!.replaceFirst("@", "").trim();
+      String des = element.group(0)!;
+      String uid = des.replaceFirst("@", "").trim();
       if (atUserNameMappingMap.containsKey(uid)) {
-        temp += '@${atUserNameMappingMap[uid]!}';
+        content = content.replaceAll(des, '@${atUserNameMappingMap[uid]!}');
       }
     });
-    return temp;
+    return content;
   }
 }
