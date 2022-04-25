@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -157,5 +158,20 @@ class CommonUtil {
       breakWord += '\u200B';
     });
     return breakWord;
+  }
+
+  static String replaceAtMsgIdWithNickName(
+      {required String content,
+      required Map<String, String> atUserNameMappingMap}) {
+    final atReg = RegExp(regexAt);
+    List<RegExpMatch> match = atReg.allMatches(content).toList();
+    String temp = '';
+    match.forEach((element) {
+      String uid = element.group(0)!.replaceFirst("@", "").trim();
+      if (atUserNameMappingMap.containsKey(uid)) {
+        temp += '@${atUserNameMappingMap[uid]!}';
+      }
+    });
+    return temp;
   }
 }
