@@ -562,7 +562,9 @@ class _ChatItemViewState extends State<ChatItemView> {
   Widget? _buildMarkDownWidget(String text) {
     markDownContent = text;
     Widget content = Container(
-      constraints: BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w),
+      constraints: _isTableElement
+          ? BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w)
+          : BoxConstraints(maxWidth: 0.65.sw),
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: MarkdownBody(
