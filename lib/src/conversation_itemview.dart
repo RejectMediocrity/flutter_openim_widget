@@ -305,23 +305,23 @@ class _ConversationView extends StatelessWidget {
                 )
               ],
             ),
-            if (notDisturb && unreadCount > 0)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  width: avatarSize + 4,
-                  height: avatarSize + 4,
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFF4A4A),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-              ),
+            // if (notDisturb && unreadCount > 0)
+            //   Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Container(
+            //       width: avatarSize + 4,
+            //       height: avatarSize + 4,
+            //       alignment: Alignment.topRight,
+            //       child: Container(
+            //         width: 8,
+            //         height: 8,
+            //         decoration: BoxDecoration(
+            //           color: Color(0xFFFF4A4A),
+            //           shape: BoxShape.circle,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
           ],
         ),
       ),
