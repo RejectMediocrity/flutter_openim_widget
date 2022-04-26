@@ -45,7 +45,7 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
   Widget build(BuildContext context) {
     Text text = Text(
       UILocalizations.revokedAMsg,
-      style: TextStyle(color: Color(0xFF666666), fontSize: 16.sp),
+      style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
     );
     return revokedOver2Min
         ? text
@@ -59,7 +59,10 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
                 onTap: widget.onTap,
                 child: Text(
                   UILocalizations.reEdit,
-                  style: TextStyle(color: Color(0xFF006DFA), fontSize: 16.sp),
+                  style: TextStyle(
+                      color: Color(0xFF006DFA),
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500),
                 ),
               )
             ],
