@@ -214,6 +214,7 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return FadeInUp(
@@ -246,9 +247,7 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
               ))),
               padding: EdgeInsets.fromLTRB(35.w, 32.w, 16.w, 34.w),
               child: GestureDetector(
-                onTap: _enableDeleteEmoji == true
-                    ? widget.onDeleteEmoji
-                    : null,
+                onTap: _enableDeleteEmoji == true ? widget.onDeleteEmoji : null,
                 behavior: HitTestBehavior.translucent,
                 child: Container(
                   padding:
