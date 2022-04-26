@@ -163,7 +163,7 @@ class CommonUtil {
   static String replaceAtMsgIdWithNickName(
       {required String content,
       required Map<String, String> atUserNameMappingMap}) {
-    final atReg = RegExp(regexAt);
+    final atReg = RegExp('$regexAt|$regexAtMe');
     List<RegExpMatch> match = atReg.allMatches(content).toList();
     String temp = '';
     match.forEach((element) {

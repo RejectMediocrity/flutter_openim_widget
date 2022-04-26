@@ -276,7 +276,9 @@ class _ConversationView extends StatelessWidget {
                               width: contentWidth,
                               child: ChatAtText(
                                 allAtMap: allAtMap,
-                                text: content,
+                                text: CommonUtil.replaceAtMsgIdWithNickName(
+                                    content: content,
+                                    atUserNameMappingMap: allAtMap),
                                 textStyle: contentStyle,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
