@@ -574,13 +574,15 @@ class _ChatItemViewState extends State<ChatItemView> {
           data: text,
           selectable: false,
           styleSheet: MarkdownStyleSheet(
-            tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
-            tableCellsPadding: EdgeInsets.all(10.w),
-            tableBorder: TableBorder.all(
-              color: Color(0xFF333333),
-              width: 1.w,
-            ),
-          ),
+              tableColumnWidth: FixedColumnWidth(.65.sw / 2.5),
+              tableCellsPadding: EdgeInsets.all(10.w),
+              tableBorder: TableBorder.all(
+                color: Color(0xFF333333),
+                width: 1.w,
+              ),
+              blockquoteDecoration: BoxDecoration(
+                color: Colors.transparent,
+              )),
           imageBuilder: (Uri uri, String? title, String? alt) {
             return GestureDetector(
               child: imageBuilder(uri),
@@ -602,7 +604,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     Widget child = Column(
       children: [
         _buildCommonItemView(
-            isBubbleBg: false,
+            isBubbleBg: true,
             child:
                 // _isTableElement
                 //     ?
