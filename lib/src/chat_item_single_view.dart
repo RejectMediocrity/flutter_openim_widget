@@ -118,7 +118,11 @@ class ChatSingleLayout extends StatelessWidget {
                 children: [
                   /// 多选框
                   if (!isHintMsg)
-                    ChatRadio(checked: checked, showRadio: showRadio),
+                    ChatRadio(
+                      checked: checked,
+                      showRadio: showRadio,
+                      enable: messageType != MessageType.revoke && !isHintMsg,
+                    ),
                   if (!showRadio)
 
                     /// 头像

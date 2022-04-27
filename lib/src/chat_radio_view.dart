@@ -7,9 +7,11 @@ class ChatRadio extends StatelessWidget {
     Key? key,
     this.checked = false,
     this.showRadio = false,
+    this.enable = true,
   }) : super(key: key);
   final bool checked;
   final bool showRadio;
+  final bool enable;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,11 @@ class ChatRadio extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(left: 6.w, right: 12.w),
           child: ImageUtil.assetImage(
-            checked ? 'ic_radio_msg_sel' : 'ic_radio_msg_nor',
+            enable
+                ? checked
+                    ? 'ic_radio_msg_sel'
+                    : 'ic_radio_msg_nor'
+                : 'UserAgreement_but_invalid',
             width: 18.w,
             height: 18.w,
           ),

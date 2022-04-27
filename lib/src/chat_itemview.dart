@@ -1168,7 +1168,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         delaySendingStatus: widget.delaySendingStatus,
         enabledReadStatus: widget.enabledReadStatus,
         expandView: expandView,
-        enableMultiSel: widget.message.contentType != MessageType.revoke,
+        enableMultiSel:
+            widget.message.contentType != MessageType.revoke && !isHintMsg,
         messageType: widget.message.contentType,
         resendMsg: widget.resendMsg,
       );
