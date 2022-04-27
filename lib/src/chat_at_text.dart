@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 enum ChatTextModel { match, normal }
 
 class ChatAtText extends StatelessWidget {
-  final String text;
+  String text;
   final TextStyle? textStyle;
   final InlineSpan? prefixSpan;
 
@@ -29,7 +29,7 @@ class ChatAtText extends StatelessWidget {
   final bool needToTpliceContent;
   final InlineSpan? senderSpan;
   // final TextAlign textAlign;
-  const ChatAtText({
+  ChatAtText({
     Key? key,
     required this.text,
     this.allAtMap = const <String, String>{},
@@ -53,17 +53,25 @@ class ChatAtText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> uIds = _checkAtMatch();
+    if (uIds.isNotEmpty) {
+      return FutureBuilder(
+        future: _replaceUIds(uIds),
+        initialData: text,
+        builder: (context, snapShort) {
+          return _buildView();
+        },
+      );
+    } else {
+      return _buildView();
+    }
+  }
+
+  _buildView() {
     final List<InlineSpan> children = <InlineSpan>[];
 
     if (prefixSpan != null) {
       children.add(prefixSpan!);
-      // children.add(
-      //   WidgetSpan(
-      //     child: Padding(
-      //       padding: EdgeInsets.only(left: 4),
-      //     ),
-      //   ),
-      // );
     }
     if (senderSpan != null) {
       children.add(senderSpan!);
@@ -84,6 +92,29 @@ class ChatAtText extends StatelessWidget {
         text: TextSpan(children: children),
       ),
     );
+  }
+
+  _checkAtMatch() {
+    final atReg = RegExp('$regexAt');
+    List<RegExpMatch> match = atReg.allMatches(text).toList();
+    List<String> uIds = [];
+    match.forEach((element) {
+      String des = element.group(0)!;
+      String uid = des.replaceFirst("@", "").trim();
+      if (!allAtMap.containsKey(uid)) {
+        uIds.add(uid);
+      }
+    });
+    return uIds;
+  }
+
+  Future<String> _replaceUIds(List<String> uIds) async {
+    var userInfos =
+        await OpenIM.iMManager.userManager.getUsersInfo(uidList: uIds);
+    for (UserInfo info in userInfos) {
+      text = text.replaceAll(" @${info.userID} ", "@${info.nickname!}");
+    }
+    return text;
   }
 
   _normalModel(List<InlineSpan> children) {
