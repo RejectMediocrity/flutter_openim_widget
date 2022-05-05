@@ -57,7 +57,9 @@ class CustomCircularProgressState extends State<CustomCircularProgress>
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Center(
+      child: Container(
+        width: widget.size,
+        height: widget.size,
         child: CustomPaint(
           painter: MyPainter(animation,
               size: widget.size,
@@ -94,14 +96,14 @@ class MyPainter extends CustomPainter {
       ..color = activeColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.w;
-    canvas.drawCircle(Offset(size.w / 2, -size.w / 2), size / 2, paint);
+    canvas.drawCircle(Offset(size.w / 2, size.w / 2), size / 2, paint);
 
     paint
       ..color = activeColor
       ..style = PaintingStyle.fill;
     canvas.drawArc(
         Rect.fromCenter(
-            center: Offset(size.w / 2, -size.w / 2),
+            center: Offset(size.w / 2, size.w / 2),
             height: size - 4.w,
             width: size - 4.w),
         0,
