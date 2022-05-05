@@ -210,6 +210,8 @@ class ChatItemView extends StatefulWidget {
   final Function()? setPermission;
   final String? conversationName;
   final Function()? onTapCloudDoc;
+  final int? memberCount;
+  final Function()? onTapReadView;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -273,6 +275,8 @@ class ChatItemView extends StatefulWidget {
     this.conversationName,
     this.setPermission,
     this.onTapCloudDoc,
+    this.memberCount,
+    this.onTapReadView,
   }) : super(key: key);
 
   @override
@@ -1172,6 +1176,11 @@ class _ChatItemViewState extends State<ChatItemView> {
             widget.message.contentType != MessageType.revoke && !isHintMsg,
         messageType: widget.message.contentType,
         resendMsg: widget.resendMsg,
+        groupHaveReadCount:
+            widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadCount ??
+                0,
+        groupMemberCount: widget.memberCount ?? 0,
+        onTapReadView: widget.onTapReadView,
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(

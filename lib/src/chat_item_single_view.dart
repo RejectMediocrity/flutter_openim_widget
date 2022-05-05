@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_loading.dart';
+import 'package:flutter_openim_widget/src/custom_circular_progress.dart';
 import 'package:flutter_openim_widget/src/timing_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,6 +48,7 @@ class ChatSingleLayout extends StatelessWidget {
   final bool? enableMultiSel;
   final int? messageType;
   final Function()? resendMsg;
+  final Function()? onTapReadView;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -90,6 +92,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.enableMultiSel,
     this.messageType,
     this.resendMsg,
+    this.onTapReadView,
   }) : super(key: key);
 
   @override
@@ -234,11 +237,11 @@ class ChatSingleLayout extends StatelessWidget {
                                   !isSending &&
                                   enabledReadStatus)
                                 _buildReadStatusView(),
-                              // if (!isSingleChat &&
-                              //     !isSendFailed &&
-                              //     !isSending &&
-                              //     enabledReadStatus)
-                              //   _buildGroupReadStatusView(),
+                              if (!isSingleChat &&
+                                  !isSendFailed &&
+                                  !isSending &&
+                                  enabledReadStatus)
+                                _buildGroupReadStatusView(),
                             ],
                           ),
 
@@ -329,6 +332,17 @@ class ChatSingleLayout extends StatelessWidget {
 
   /// 群聊
   Widget _buildGroupReadStatusView() {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onTapReadView,
+      child: CustomCircularProgress(
+        size: 16.w,
+        activeColor: Color.fromARGB(255, 0, 192, 155),
+        backColor: Colors.white,
+        progress: groupHaveReadCount / groupMemberCount,
+      ),
+    );
+
     int unreadCount = groupMemberCount - groupHaveReadCount;
     bool isAllRead = unreadCount <= 0;
     bool isAllUnRead = groupHaveReadCount == 0;
