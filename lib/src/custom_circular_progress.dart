@@ -60,12 +60,15 @@ class CustomCircularProgressState extends State<CustomCircularProgress>
       child: Container(
         width: widget.size,
         height: widget.size,
-        child: CustomPaint(
-          painter: MyPainter(animation,
-              size: widget.size,
-              activeColor: widget.activeColor,
-              backColor: widget.backColor,
-              progress: widget.progress),
+        child: RotatedBox(
+          quarterTurns: 135,
+          child: CustomPaint(
+            painter: MyPainter(animation,
+                size: widget.size,
+                activeColor: widget.activeColor,
+                backColor: widget.backColor,
+                progress: widget.progress),
+          ),
         ),
       ),
     );
