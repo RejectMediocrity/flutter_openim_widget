@@ -105,7 +105,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   csslib:
     dependency: transitive
     description:
@@ -126,7 +126,7 @@ packages:
       name: extended_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.2+1"
+    version: "6.0.3"
   extended_image_library:
     dependency: transitive
     description:
@@ -201,7 +201,7 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.1+1"
+    version: "5.4.3+7"
   flutter_markdown:
     dependency: "direct main"
     description:
@@ -212,19 +212,17 @@ packages:
   flutter_openim_sdk:
     dependency: "direct main"
     description:
-      path: "."
-      ref: fix-ios-simulator
-      resolved-ref: "27ec9bb8e14a4109eade60a641928abc7a9a02f3"
-      url: "https://github.com/OpenIMSDK/Open-IM-SDK-Flutter.git"
-    source: git
-    version: "2.0.0+5"
+      name: flutter_openim_sdk
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+6"
   flutter_screenutil:
     dependency: "direct main"
     description:
       name: flutter_screenutil
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.0+1"
+    version: "5.5.2"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -297,7 +295,7 @@ packages:
       name: just_audio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.20"
+    version: "0.9.21"
   just_audio_platform_interface:
     dependency: transitive
     description:
@@ -395,7 +393,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.12"
+    version: "2.0.13"
   path_provider_ios:
     dependency: transitive
     description:
@@ -666,7 +664,7 @@ packages:
       name: video_player_avfoundation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.3"
   video_player_platform_interface:
     dependency: transitive
     description:
@@ -729,7 +727,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.2"
   xdg_directories:
     dependency: transitive
     description:
