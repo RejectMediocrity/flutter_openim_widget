@@ -240,7 +240,11 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         child: Row(
           children: [
             SizedBox(
-              width: isVideo ? 20.w : 118.w,
+              width: isVideo
+                  ? 20.w
+                  : widget.showMenu == null
+                      ? 170.w
+                      : 118.w,
             ),
             isVideo
                 ? Flexible(
@@ -297,18 +301,22 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                       ),
                     ),
                   ),
-            SizedBox(
-              width: 20.w,
-            ),
-            GestureDetector(
-              onTap: widget.showMenu,
-              child: ImageUtil.assetImage(
-                "preview_but_thumbnail_background",
-                width: 32.w,
-                height: 32.w,
-                fit: BoxFit.fill,
-              ),
-            ),
+            widget.showMenu != null
+                ? SizedBox(
+                    width: 20.w,
+                  )
+                : Container(),
+            widget.showMenu != null
+                ? GestureDetector(
+                    onTap: widget.showMenu,
+                    child: ImageUtil.assetImage(
+                      "preview_but_thumbnail_background",
+                      width: 32.w,
+                      height: 32.w,
+                      fit: BoxFit.fill,
+                    ),
+                  )
+                : Container(),
             SizedBox(
               width: 16.w,
             ),
