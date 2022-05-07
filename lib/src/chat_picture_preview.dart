@@ -44,7 +44,7 @@ class ChatPicturePreview extends StatefulWidget {
   final int index;
   final String? tag;
   final ExtendedPageController controller;
-  final Future<bool> Function(String)? onDownload;
+  final Future<bool> Function(String, bool)? onDownload;
   final Function()? onTap;
   final Function()? showMenu;
 
@@ -86,7 +86,8 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
 
   void downLoadImg() {
     if (currentPage < picList.length) {
-      widget.onDownload?.call(picList.elementAt(currentPage).url!);
+      PicInfo info = picList.elementAt(currentPage);
+      widget.onDownload?.call(info.url!, info.isVideo == true);
     }
   }
 
@@ -126,6 +127,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
       );
     }
     String? url = info.showSourcePic == true ? info.url : info.thumbUrl;
+    if (info.thumbUrl == null || info.thumbUrl!.isEmpty) url = info.url;
     if (info.file != null) {
       return ExtendedImage.file(
         info.file!,
