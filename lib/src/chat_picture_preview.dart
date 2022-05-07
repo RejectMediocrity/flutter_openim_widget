@@ -4,20 +4,23 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/chat_video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PicInfo {
-  final String? thumbUrl;
-  final String? url;
-  final File? file;
-  final int? size;
-  bool? showSourcePic; // 查看原图
+  final String? thumbUrl; // 视频或者图片的缩略图
+  final String? url; // 适配或者图片的地址
+  final File? file; // 图片文件
+  final int? size; // 图片或者适配的大小
+  bool? showSourcePic; // 是都点了查看原图
+  final bool? isVideo; // 是否是视频
   PicInfo({
     this.url,
     this.file,
     this.thumbUrl,
     this.size,
     this.showSourcePic = false,
+    this.isVideo = false,
   });
 }
 
@@ -50,6 +53,8 @@ class ChatPicturePreview extends StatefulWidget {
 class _ChatPicturePreviewState extends State<ChatPicturePreview> {
   late int currentPage;
   late List<PicInfo> picList;
+  int duration = 0;
+  int postion = 0;
   @override
   void initState() {
     currentPage = widget.index;
@@ -62,6 +67,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
     var child = Stack(
       children: [
         _buildPageView(),
+        _buildBackBtn(),
         _buildToolsView(onDownload: () {
           downLoadImg();
         }, onViewOriginImg: () {
@@ -86,8 +92,37 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
     Navigator.pop(context);
   }
 
+  Widget _buildBackBtn() {
+    bool isVideo = picList[currentPage].isVideo == true;
+    if (!isVideo) return Container();
+    return Positioned(
+      left: 16.w,
+      top: MediaQuery.of(context).padding.top + 16.w,
+      child: GestureDetector(
+        onTap: close,
+        child: ImageUtil.assetImage(
+          "title_but_close_white",
+          width: 20.w,
+          height: 20.w,
+        ),
+      ),
+    );
+  }
+
   Widget _buildChildView(int index) {
     var info = picList.elementAt(index);
+    if (info.isVideo == true) {
+      return ChatVideoPlayer(
+        url: info.url ?? "",
+        thumbUrl: info.thumbUrl,
+        playCallback: (int p, int d) {
+          setState(() {
+            postion = p;
+            duration = d;
+          });
+        },
+      );
+    }
     String? url = info.showSourcePic == true ? info.url : info.thumbUrl;
     if (info.file != null) {
       return ExtendedImage.file(
@@ -168,66 +203,123 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
             return _buildChildView(index);
           },
           onPageChanged: (int index) {
-            currentPage = index;
+            setState(() {
+              currentPage = index;
+            });
           },
         ),
       );
+  String _getVideoDurationFormat(int seconds) {
+    var d = Duration(seconds: seconds);
+    // var hours = d.inHours > 10 ? d.inHours : '0${d.inHours}';
+    // var minute =
+    //     d.inMinutes % 60 > 10 ? d.inMinutes % 60 : '0${d.inMinutes % 60}';
+    var minute = d.inMinutes > 10 ? d.inMinutes : '0${d.inMinutes}';
+    var sec = d.inSeconds % 60 > 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
+    return '$minute:$sec';
+  }
 
   Widget _buildToolsView(
       {Function()? onViewOriginImg, Function()? onDownload}) {
-    int size = picList[currentPage].size ?? 0;
+    PicInfo info = picList[currentPage];
+    bool isVideo = info.isVideo == true;
+    int size = info.size ?? 0;
     String sizeStr = CommonUtil.formatBytes(size);
+    Duration du = Duration(seconds: duration);
+    Duration po = Duration(seconds: postion);
     return Positioned(
       bottom: MediaQuery.of(context).padding.bottom + 16.w,
-      child: Row(
-        children: [
-          SizedBox(
-            width: 118.w,
-          ),
-          GestureDetector(
-            onTap: onViewOriginImg,
-            child: Container(
-              width: 140.w,
-              height: 32.w,
-              decoration: BoxDecoration(
-                color: Color(0xFF999999).withAlpha(76),
-                borderRadius: BorderRadius.circular(100.w),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 1.sw),
+        child: Row(
+          children: [
+            SizedBox(
+              width: isVideo ? 20.w : 118.w,
+            ),
+            isVideo
+                ? Flexible(
+                    child: Row(
+                      children: [
+                        Text(
+                          _getVideoDurationFormat(po.inSeconds),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.white),
+                        ),
+                        SizedBox(width: 8.w),
+                        Flexible(
+                          child: SliderTheme(
+                            data: SliderThemeData().copyWith(
+                              trackShape: null,
+                              trackHeight: 2.w,
+                              thumbShape: RoundSliderThumbShape(
+                                enabledThumbRadius: 6.w,
+                              ),
+                              overlayShape:
+                                  RoundSliderOverlayShape(overlayRadius: 0),
+                            ),
+                            child: Slider(
+                              value: duration == 0 ? 0 : postion / duration,
+                              onChanged: (value) {},
+                              activeColor: Color(0xFF006DFA),
+                              inactiveColor: Color(0xFFDDDDDD),
+                              thumbColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          _getVideoDurationFormat(du.inSeconds),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: onViewOriginImg,
+                    child: Container(
+                      width: 140.w,
+                      height: 32.w,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF999999).withAlpha(76),
+                        borderRadius: BorderRadius.circular(100.w),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "查看原图($sizeStr)",
+                        style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                      ),
+                    ),
+                  ),
+            SizedBox(
+              width: 20.w,
+            ),
+            GestureDetector(
+              onTap: widget.showMenu,
+              child: ImageUtil.assetImage(
+                "preview_but_thumbnail_background",
+                width: 32.w,
+                height: 32.w,
+                fit: BoxFit.fill,
               ),
-              alignment: Alignment.center,
-              child: Text(
-                "查看原图($sizeStr)",
-                style: TextStyle(fontSize: 12.sp, color: Colors.white),
+            ),
+            SizedBox(
+              width: 16.w,
+            ),
+            GestureDetector(
+              onTap: onDownload,
+              child: ImageUtil.assetImage(
+                "preview_but_download_background",
+                width: 32.w,
+                height: 32.w,
+                fit: BoxFit.fill,
               ),
             ),
-          ),
-          SizedBox(
-            width: 20.w,
-          ),
-          GestureDetector(
-            onTap: widget.showMenu,
-            child: ImageUtil.assetImage(
-              "preview_but_thumbnail_background",
-              width: 32.w,
-              height: 32.w,
-              fit: BoxFit.fill,
+            SizedBox(
+              width: 16.w,
             ),
-          ),
-          SizedBox(
-            width: 16.w,
-          ),
-          GestureDetector(
-            onTap: onDownload,
-            child: ImageUtil.assetImage(
-              "preview_but_download_background",
-              width: 32.w,
-              height: 32.w,
-              fit: BoxFit.fill,
-            ),
-          ),
-          SizedBox(
-            width: 16.w,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
