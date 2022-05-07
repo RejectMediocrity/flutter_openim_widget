@@ -13,6 +13,7 @@ class PicInfo {
   final File? file; // 图片文件
   final int? size; // 图片或者适配的大小
   bool? showSourcePic; // 是都点了查看原图
+  final int? duration;
   final bool? isVideo; // 是否是视频
   PicInfo({
     this.url,
@@ -21,6 +22,7 @@ class PicInfo {
     this.size,
     this.showSourcePic = false,
     this.isVideo = false,
+    this.duration,
   });
 }
 
