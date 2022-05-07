@@ -15,6 +15,7 @@ class PicInfo {
   bool? showSourcePic; // 是都点了查看原图
   final int? duration;
   final bool? isVideo; // 是否是视频
+  final int? sendTime;
   PicInfo({
     this.url,
     this.file,
@@ -23,6 +24,7 @@ class PicInfo {
     this.showSourcePic = false,
     this.isVideo = false,
     this.duration,
+    this.sendTime,
   });
 }
 
