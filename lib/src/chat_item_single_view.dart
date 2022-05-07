@@ -18,7 +18,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Function()? onLongPressLeftAvatar;
   final Function()? onTapRightAvatar;
   final Function()? onLongPressRightAvatar;
-  final String leftAvatar;
+  final String? leftAvatar;
   final String? leftName;
   final String rightAvatar;
   final double avatarSize;
