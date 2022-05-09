@@ -332,35 +332,41 @@ class ChatSingleLayout extends StatelessWidget {
 
   /// 群聊
   Widget _buildGroupReadStatusView() {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: onTapReadView,
-      child: CustomCircularProgress(
-        size: 16.w,
-        activeColor: Color.fromARGB(255, 0, 192, 155),
-        backColor: Colors.white,
-        progress: groupHaveReadCount / groupMemberCount,
-      ),
-    );
-
-    int unreadCount = groupMemberCount - groupHaveReadCount;
-    bool isAllRead = unreadCount <= 0;
-    bool isAllUnRead = groupHaveReadCount == 0;
+    bool isAllRead = groupHaveReadCount == groupMemberCount;
     return Visibility(
       visible: !isReceivedMsg,
-      child: GestureDetector(
-        onTap: viewMessageReadStatus,
-        behavior: HitTestBehavior.translucent,
-        child: isAllRead
-            ? ImageUtil.assetImage("msg_icon_did_read",
-                width: 20.w, height: 20.w)
-            : isAllUnRead
-                ? ImageUtil.assetImage("msg_icon_unread",
-                    width: 20.w, height: 20.w)
-                : ImageUtil.assetImage("msg_icon_partread",
-                    width: 20.w, height: 20.w),
-      ),
+      child: isAllRead
+          ? ImageUtil.assetImage("msg_icon_did_read", width: 20.w, height: 20.w)
+          : GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: onTapReadView,
+              child: CustomCircularProgress(
+                size: 16.w,
+                activeColor: Color.fromARGB(255, 0, 192, 155),
+                backColor: Colors.white,
+                progress: groupHaveReadCount / groupMemberCount,
+              ),
+            ),
     );
+
+    // int unreadCount = groupMemberCount - groupHaveReadCount;
+    // bool isAllRead = unreadCount <= 0;
+    // bool isAllUnRead = groupHaveReadCount == 0;
+    // return Visibility(
+    //   visible: !isReceivedMsg,
+    //   child: GestureDetector(
+    //     onTap: viewMessageReadStatus,
+    //     behavior: HitTestBehavior.translucent,
+    //     child: isAllRead
+    //         ? ImageUtil.assetImage("msg_icon_did_read",
+    //             width: 20.w, height: 20.w)
+    //         : isAllUnRead
+    //             ? ImageUtil.assetImage("msg_icon_unread",
+    //                 width: 20.w, height: 20.w)
+    //             : ImageUtil.assetImage("msg_icon_partread",
+    //                 width: 20.w, height: 20.w),
+    //   ),
+    // );
   }
 
   Widget _buildQuoteMsgView() {
