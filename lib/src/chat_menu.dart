@@ -59,61 +59,58 @@ class ChatLongPressMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var childrens = _children();
-    if (childrens.length == 0) {
+    menus.removeWhere((element) => element.enabled != true);
+    if (menus.length == 0) {
       return Container();
     }
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 20.w),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: menuStyle.background,
         borderRadius: BorderRadius.circular(menuStyle.radius),
         boxShadow: [
           BoxShadow(
             color: Color(0xFF000000).withAlpha(25),
-            blurRadius: 8.h,
-            spreadRadius: 1.h,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
           ),
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: childrens,
+        children: [
+          _buildMenuGridView(),
+          // Container(
+          //   margin: EdgeInsets.symmetric(horizontal: 20.w),
+          //   color: Color(0xFF999999),
+          //   height: 1.w,
+          // ),
+        ],
       ),
     );
   }
 
-  List<Widget> _children() {
-    var widgets = <Widget>[];
-    menus.removeWhere((element) => !element.enabled);
-    var rows = menus.length ~/ menuStyle.crossAxisCount;
-    if (menus.length % menuStyle.crossAxisCount != 0) {
-      rows++;
-    }
-    for (var i = 0; i < rows; i++) {
-      var start = i * menuStyle.crossAxisCount;
-      var end = (i + 1) * menuStyle.crossAxisCount;
-      if (end > menus.length) {
-        end = menus.length;
-      }
-      var subList = menus.sublist(start, end);
-      widgets.add(Row(
-        mainAxisSize: MainAxisSize.min,
-        // mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: subList
-            .map((e) => _menuItem(
-                  icon: e.icon,
-                  label: e.text,
-                  onTap: e.onTap,
-                  style: e.textStyle ??
-                      TextStyle(fontSize: 12.sp, color: Color(0xFF333333)),
-                ))
-            .toList(),
-      ));
-    }
-    return widgets;
+  GridView _buildMenuGridView() {
+    return GridView.builder(
+      padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 15.w),
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: menuStyle.crossAxisCount,
+        crossAxisSpacing: menuStyle.crossAxisSpacing,
+        mainAxisSpacing: menuStyle.mainAxisSpacing,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        MenuInfo info = menus[index];
+        return _menuItem(
+          icon: info.icon,
+          label: info.text,
+          onTap: info.onTap,
+          style: info.textStyle ??
+              TextStyle(fontSize: 12.sp, color: Color(0xFF333333)),
+        );
+      },
+      itemCount: menus.length,
+    );
   }
 
   Widget _menuItem({
@@ -128,21 +125,19 @@ class ChatLongPressMenu extends StatelessWidget {
           if (null != onTap) onTap();
         },
         behavior: HitTestBehavior.translucent,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              icon,
-              SizedBox(height: 10.h),
-              Text(
-                label,
-                // maxLines: 1,
-                // overflow: TextOverflow.ellipsis,
-                style: style,
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            SizedBox(height: 10.h),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: style,
+            ),
+          ],
         ),
       );
 }

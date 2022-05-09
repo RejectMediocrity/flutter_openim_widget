@@ -1189,8 +1189,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         menuStyle: widget.menuStyle ??
             MenuStyle(
               crossAxisCount: 6,
-              mainAxisSpacing: 30.w,
-              crossAxisSpacing: 15.h,
+              mainAxisSpacing: 20.w,
+              crossAxisSpacing: 0.w,
               radius: 6.w,
               background: const Color(0xFFFFFFFF),
             ),
