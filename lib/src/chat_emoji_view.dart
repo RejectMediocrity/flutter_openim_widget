@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/util/recently_used_emoji_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const emojiFaces = <String, String>{
@@ -201,17 +202,18 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    _enableDeleteEmoji = widget.controller!.text.isNotEmpty;
+    if (widget.controller != null) {
+      _enableDeleteEmoji = widget.controller!.text.isNotEmpty;
 
-    widget.controller?.addListener(() {
-      bool nextValue = widget.controller!.text.isNotEmpty;
-      if (_enableDeleteEmoji != nextValue) {
-        setState(() {
-          _enableDeleteEmoji = nextValue;
-        });
-      }
-    });
+      widget.controller?.addListener(() {
+        bool nextValue = widget.controller!.text.isNotEmpty;
+        if (_enableDeleteEmoji != nextValue) {
+          setState(() {
+            _enableDeleteEmoji = nextValue;
+          });
+        }
+      });
+    }
     super.initState();
   }
 
@@ -352,8 +354,11 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
               color: Colors.transparent,
               child: Ink(
                 child: InkWell(
-                  onTap: () =>
-                      widget.onAddEmoji?.call(emojiFaces.keys.elementAt(index)),
+                  onTap: () {
+                    String emojiName = emojiFaces.keys.elementAt(index);
+                    RecentlyUsedEmojiManager.updateEmoji(emojiName);
+                    widget.onAddEmoji?.call(emojiName);
+                  },
                   child: Center(
                     child: ImageUtil.faceImage(
                       emojiFaces.values.elementAt(index),
