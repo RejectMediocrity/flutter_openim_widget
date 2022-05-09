@@ -138,14 +138,11 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
                           width: 30.w,
                           height: 30.w,
                         )
-                      : RotatedBox(
-                          quarterTurns: openEmoji ? 90 : 0,
-                          child: ImageUtil.assetImage(
-                            "ic_video_close",
-                            color: Colors.black,
-                            width: 30.w,
-                            height: 30.w,
-                          ),
+                      : ImageUtil.assetImage(
+                          "ic_video_close",
+                          color: openEmoji ? Colors.black : Colors.red,
+                          width: 30.w,
+                          height: 30.w,
                         ),
                 ),
               ),
@@ -161,8 +158,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
       constraints: BoxConstraints(maxHeight: 190.w),
       child: SingleChildScrollView(
         child: ChatEmojiView(
-          onAddEmoji: (emo) {
-            print(emo);
+          onAddEmoji: (emojiName) {
+            setState(() {});
           },
           onDeleteEmoji: null,
           controller: null,
