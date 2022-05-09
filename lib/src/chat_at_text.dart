@@ -241,6 +241,7 @@ class ChatAtText extends StatelessWidget {
       },
       onNonMatch: (text) {
         text = CommonUtil.breakWord(text);
+        print("$text");
         children.add(TextSpan(text: text, style: style));
         return '';
       },
