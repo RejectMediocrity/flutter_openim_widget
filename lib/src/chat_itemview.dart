@@ -906,7 +906,9 @@ class _ChatItemViewState extends State<ChatItemView> {
                     : widget.textStyle,
               ),
             );
-          } catch (e) {}
+          } catch (e) {
+            print(e);
+          }
         }
         break;
     }
@@ -1143,10 +1145,10 @@ class _ChatItemViewState extends State<ChatItemView> {
         isReceivedMsg: _isFromMsg,
         isSingleChat: widget.isSingleChat,
         avatarSize: widget.avatarSize ?? 42.h,
-        rightAvatar: OpenIM.iMManager.uInfo.faceURL!,
-        leftAvatar: widget.message.senderFaceUrl!,
-        leftName: widget.message.senderNickname!,
-        isUnread: !widget.message.isRead!,
+        rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
+        leftAvatar: widget.message.senderFaceUrl ?? "",
+        leftName: widget.message.senderNickname ?? "",
+        isUnread: widget.message.isRead != true,
         leftBubbleColor: widget.leftBubbleColor,
         rightBubbleColor: widget.rightBubbleColor,
         onLongPressRightAvatar: widget.onLongPressRightAvatar,
