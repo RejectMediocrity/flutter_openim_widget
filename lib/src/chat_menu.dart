@@ -121,8 +121,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
               child: InkWell(
                 onTap: () {
                   if (index < 6) {
-                    String emojiName = emojiFaces.keys.elementAt(index);
-                    RecentlyUsedEmojiManager.updateEmoji(emojiName);
+                    RecentlyUsedEmojiManager.updateEmoji(latestEmojis[index]);
+                    setState(() {});
                   } else {
                     setState(() {
                       openEmoji = !openEmoji;
@@ -132,7 +132,9 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
                 child: Center(
                   child: index < 6
                       ? ImageUtil.faceImage(
-                          emojiFaces.values.elementAt(index),
+                          emojiFaces.values.elementAt(emojiFaces.keys
+                              .toList()
+                              .indexOf(latestEmojis[index])),
                           width: 30.w,
                           height: 30.w,
                         )

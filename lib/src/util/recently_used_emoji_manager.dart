@@ -19,7 +19,7 @@ class RecentlyUsedEmojiManager {
       emojis.removeLast();
     }
     emojis.insert(0, emojiName);
-    SpUtil.putObject(RecentlyEmojiKey, emojis);
+    SpUtil.putStringList(RecentlyEmojiKey, emojis);
   }
 
   static List<String> getEmojiList() {
