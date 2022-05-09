@@ -332,7 +332,7 @@ class ChatSingleLayout extends StatelessWidget {
 
   /// 群聊
   Widget _buildGroupReadStatusView() {
-    bool isAllRead = groupHaveReadCount == groupMemberCount;
+    bool isAllRead = groupHaveReadCount >= groupMemberCount - 1;
     return Visibility(
       visible: !isReceivedMsg,
       child: isAllRead
@@ -344,7 +344,7 @@ class ChatSingleLayout extends StatelessWidget {
                 size: 16.w,
                 activeColor: Color.fromARGB(255, 0, 192, 155),
                 backColor: Colors.white,
-                progress: groupHaveReadCount / groupMemberCount,
+                progress: groupHaveReadCount / (groupMemberCount - 1),
               ),
             ),
     );
