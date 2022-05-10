@@ -74,6 +74,7 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
       return Container();
     }
     return Container(
+      constraints: BoxConstraints(maxWidth: 330.w),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: widget.menuStyle.background,
@@ -90,8 +91,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
         children: [
           if (!openEmoji) _buildMenuGridView(),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.w),
-            color: Color(0xFF999999),
+            margin: EdgeInsets.symmetric(horizontal: 16.w),
+            color: Color(0xFFF2F2F2),
             height: 1.w,
           ),
           if (openEmoji) _buildEmojiBox(),
@@ -104,16 +105,16 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
   ConstrainedBox _buildLatestEmojiBox() {
     List<String> latestEmojis = RecentlyUsedEmojiManager.getEmojiList();
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 42.w),
+      constraints: BoxConstraints(maxHeight: 48.w),
       child: GridView.builder(
-        padding: EdgeInsets.fromLTRB(14.w, 0, 14.w, 0),
+        padding: EdgeInsets.fromLTRB(16.w, 10.w, 16.w, 16.w),
         physics: NeverScrollableScrollPhysics(),
         itemCount: latestEmojis.length + 1,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 7,
           childAspectRatio: 1,
-          mainAxisSpacing: 22.w,
-          crossAxisSpacing: 22.w,
+          mainAxisSpacing: 12.w,
+          crossAxisSpacing: 20.w,
         ),
         itemBuilder: (BuildContext context, int index) {
           return Material(
@@ -139,14 +140,14 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
                           emojiFaces.values.elementAt(emojiFaces.keys
                               .toList()
                               .indexOf(latestEmojis[index])),
-                          width: 30.w,
-                          height: 30.w,
+                          width: 24.w,
+                          height: 24.w,
                         )
                       : ImageUtil.assetImage(
-                          "ic_video_close",
-                          color: openEmoji ? Colors.black : Colors.red,
-                          width: 30.w,
-                          height: 30.w,
+                          openEmoji ? "ic_video_close" : "title_but_add_dark",
+                          color: Colors.black,
+                          width: 20.w,
+                          height: 20.w,
                         ),
                 ),
               ),
@@ -159,7 +160,7 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
 
   ConstrainedBox _buildEmojiBox() {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 190.w),
+      constraints: BoxConstraints(maxHeight: 226.w),
       child: SingleChildScrollView(
         child: ChatEmojiView(
           onAddEmoji: (emojiName) {
@@ -168,6 +169,11 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
           },
           onDeleteEmoji: null,
           controller: null,
+          crossAxisSpacing: 20.w,
+          mainAxisSpacing: 12.w,
+          backColor: Colors.white,
+          edgeInsets: EdgeInsets.fromLTRB(16.w, 16.w, 16.w, 44.w),
+          size: 24.w,
         ),
       ),
     );
