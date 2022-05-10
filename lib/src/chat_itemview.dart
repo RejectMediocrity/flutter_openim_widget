@@ -1183,6 +1183,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 0,
         groupMemberCount: widget.memberCount ?? 0,
         onTapReadView: widget.onTapReadView,
+        isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
       );
 
   Widget _menuBuilder() => ChatLongPressMenu(

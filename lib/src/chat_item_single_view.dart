@@ -49,6 +49,7 @@ class ChatSingleLayout extends StatelessWidget {
   final int? messageType;
   final Function()? resendMsg;
   final Function()? onTapReadView;
+  final bool? isSelfChat; // 自己和自己聊天
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -93,6 +94,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.messageType,
     this.resendMsg,
     this.onTapReadView,
+    this.isSelfChat,
   }) : super(key: key);
 
   @override
@@ -323,7 +325,7 @@ class ChatSingleLayout extends StatelessWidget {
   Widget _buildReadStatusView() {
     bool read = !isUnread!;
     return Visibility(
-      visible: !isReceivedMsg,
+      visible: !isReceivedMsg && isSelfChat == false,
       child: read
           ? ImageUtil.assetImage("msg_icon_did_read", width: 20.w, height: 20.w)
           : ImageUtil.assetImage("msg_icon_unread", width: 20.w, height: 20.w),
