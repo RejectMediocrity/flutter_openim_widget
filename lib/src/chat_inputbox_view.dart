@@ -226,7 +226,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             }
           },
           child: ImageUtil.assetImage(
-            widget.controller!.text.isNotEmpty
+            widget.controller!.text.isNotEmpty &&
+                    widget.controller!.text.trim()!.isNotEmpty
                 ? "Inputbox_but_send"
                 : "Inputbox_but_send_normal",
             width: 20,
