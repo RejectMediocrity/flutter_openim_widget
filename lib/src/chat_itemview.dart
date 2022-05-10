@@ -212,6 +212,7 @@ class ChatItemView extends StatefulWidget {
   final Function()? onTapCloudDoc;
   final int? memberCount;
   final Function()? onTapReadView;
+  final Function(String emoji, int index)? onReplayWithFace;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -277,6 +278,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapCloudDoc,
     this.memberCount,
     this.onTapReadView,
+    this.onReplayWithFace,
   }) : super(key: key);
 
   @override
@@ -1194,6 +1196,10 @@ class _ChatItemViewState extends State<ChatItemView> {
               radius: 6.w,
               background: const Color(0xFFFFFFFF),
             ),
+        onTapEmoji: (emojiName) {
+          if (widget.onReplayWithFace != null)
+            widget.onReplayWithFace!(emojiName, widget.index);
+        },
       );
 
   Widget? _customItemView() => widget.customItemBuilder?.call(

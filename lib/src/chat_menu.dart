@@ -47,12 +47,13 @@ class ChatLongPressMenu extends StatefulWidget {
   final CustomPopupMenuController controller;
   final List<MenuInfo> menus;
   final MenuStyle menuStyle;
-
+  final Function(String)? onTapEmoji;
   const ChatLongPressMenu({
     Key? key,
     required this.controller,
     required this.menus,
     this.menuStyle = const MenuStyle.base(),
+    this.onTapEmoji,
   }) : super(key: key);
 
   @override
@@ -122,7 +123,10 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
                 onTap: () {
                   if (index < 6) {
                     RecentlyUsedEmojiManager.updateEmoji(latestEmojis[index]);
-                    setState(() {});
+                    // setState(() {});
+                    widget.controller.hideMenu();
+                    if (widget.onTapEmoji != null)
+                      widget.onTapEmoji!(latestEmojis[index]);
                   } else {
                     setState(() {
                       openEmoji = !openEmoji;
@@ -159,7 +163,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
       child: SingleChildScrollView(
         child: ChatEmojiView(
           onAddEmoji: (emojiName) {
-            setState(() {});
+            widget.controller.hideMenu();
+            if (widget.onTapEmoji != null) widget.onTapEmoji!(emojiName);
           },
           onDeleteEmoji: null,
           controller: null,
