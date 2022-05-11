@@ -22,36 +22,9 @@ class CustomCircularProgress extends StatefulWidget {
 
 class CustomCircularProgressState extends State<CustomCircularProgress>
     with TickerProviderStateMixin {
-  late AnimationController anim;
-  late Animation<double> animation;
-
   @override
   void initState() {
-    anim =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    animation = CurvedAnimation(
-      parent: anim,
-      curve: Curves.linear,
-    );
-    animation =
-        Tween<double>(begin: 0, end: 360 * widget.progress).animate(animation)
-          ..addListener(() {
-            if (mounted) setState(() {});
-          })
-          ..addStatusListener((status) {
-            switch (status) {
-              case AnimationStatus.completed:
-                // anim.reverse();
-                break;
-              case AnimationStatus.dismissed:
-                // anim.forward();
-                break;
-              default:
-                break;
-            }
-          });
     super.initState();
-    anim.forward();
   }
 
   @override
@@ -63,7 +36,7 @@ class CustomCircularProgressState extends State<CustomCircularProgress>
         child: RotatedBox(
           quarterTurns: 135,
           child: CustomPaint(
-            painter: MyPainter(animation,
+            painter: MyPainter(
                 size: widget.size,
                 activeColor: widget.activeColor,
                 backColor: widget.backColor,
@@ -76,18 +49,16 @@ class CustomCircularProgressState extends State<CustomCircularProgress>
 
   @override
   void dispose() {
-    anim.dispose();
     super.dispose();
   }
 }
 
 class MyPainter extends CustomPainter {
-  Animation animation;
   final double size;
   final Color activeColor;
   final Color backColor;
   final double progress;
-  MyPainter(this.animation,
+  MyPainter(
       {required this.size,
       required this.activeColor,
       required this.backColor,
@@ -110,7 +81,7 @@ class MyPainter extends CustomPainter {
             height: size - 4.w,
             width: size - 4.w),
         0,
-        animation.value * pi / 180,
+        360 * progress * pi / 180,
         true,
         paint);
   }

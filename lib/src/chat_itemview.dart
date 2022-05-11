@@ -212,6 +212,7 @@ class ChatItemView extends StatefulWidget {
   final Function()? onTapCloudDoc;
   final int? memberCount;
   final Function()? onTapReadView;
+  final int? hasReadCount;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -277,6 +278,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapCloudDoc,
     this.memberCount,
     this.onTapReadView,
+    this.hasReadCount,
   }) : super(key: key);
 
   @override
@@ -1133,58 +1135,57 @@ class _ChatItemViewState extends State<ChatItemView> {
     required Widget child,
     bool isBubbleBg = true,
     bool isHintMsg = false,
-  }) =>
-      ChatSingleLayout(
-        child: child,
-        msgId: widget.message.clientMsgID!,
-        index: widget.index,
-        menuBuilder: _menuBuilder,
-        clickSink: widget.clickSubject.sink,
-        sendStatusStream: widget.msgSendStatusSubject.stream,
-        popupCtrl: _popupCtrl,
-        isReceivedMsg: _isFromMsg,
-        isSingleChat: widget.isSingleChat,
-        avatarSize: widget.avatarSize ?? 42.h,
-        rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
-        leftAvatar: widget.message.senderFaceUrl ?? "",
-        leftName: widget.message.senderNickname ?? "",
-        isUnread: widget.message.isRead != true,
-        leftBubbleColor: widget.leftBubbleColor,
-        rightBubbleColor: widget.rightBubbleColor,
-        onLongPressRightAvatar: widget.onLongPressRightAvatar,
-        onTapRightAvatar: widget.onTapRightAvatar,
-        onLongPressLeftAvatar: widget.onLongPressLeftAvatar,
-        onTapLeftAvatar: widget.onTapLeftAvatar,
-        isSendFailed: widget.message.status == MessageStatus.failed,
-        isSending: widget.message.status == MessageStatus.sending,
-        timeView: widget.timeStr == null ? null : _buildTimeView(),
-        isBubbleBg: isBubbleBg,
-        isHintMsg: isHintMsg,
-        quoteView: widget.message.contentType == MessageType.quote
-            ? ChatQuoteView(
-                message: widget.message,
-                onTap: widget.onTapQuoteMsg,
-                allAtMap: widget.allAtMap,
-                patterns: widget.patterns,
-              )
-            : null,
-        showRadio: widget.multiSelMode,
-        checked: _checked,
-        onRadioChanged: widget.onMultiSelChanged,
-        delaySendingStatus: widget.delaySendingStatus,
-        enabledReadStatus: widget.enabledReadStatus,
-        expandView: expandView,
-        enableMultiSel:
-            widget.message.contentType != MessageType.revoke && !isHintMsg,
-        messageType: widget.message.contentType,
-        resendMsg: widget.resendMsg,
-        groupHaveReadCount:
-            widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadCount ??
-                0,
-        groupMemberCount: widget.memberCount ?? 0,
-        onTapReadView: widget.onTapReadView,
-        isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
-      );
+  }) {
+    return ChatSingleLayout(
+      child: child,
+      msgId: widget.message.clientMsgID!,
+      index: widget.index,
+      menuBuilder: _menuBuilder,
+      clickSink: widget.clickSubject.sink,
+      sendStatusStream: widget.msgSendStatusSubject.stream,
+      popupCtrl: _popupCtrl,
+      isReceivedMsg: _isFromMsg,
+      isSingleChat: widget.isSingleChat,
+      avatarSize: widget.avatarSize ?? 42.h,
+      rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
+      leftAvatar: widget.message.senderFaceUrl ?? "",
+      leftName: widget.message.senderNickname ?? "",
+      isUnread: widget.message.isRead != true,
+      leftBubbleColor: widget.leftBubbleColor,
+      rightBubbleColor: widget.rightBubbleColor,
+      onLongPressRightAvatar: widget.onLongPressRightAvatar,
+      onTapRightAvatar: widget.onTapRightAvatar,
+      onLongPressLeftAvatar: widget.onLongPressLeftAvatar,
+      onTapLeftAvatar: widget.onTapLeftAvatar,
+      isSendFailed: widget.message.status == MessageStatus.failed,
+      isSending: widget.message.status == MessageStatus.sending,
+      timeView: widget.timeStr == null ? null : _buildTimeView(),
+      isBubbleBg: isBubbleBg,
+      isHintMsg: isHintMsg,
+      quoteView: widget.message.contentType == MessageType.quote
+          ? ChatQuoteView(
+              message: widget.message,
+              onTap: widget.onTapQuoteMsg,
+              allAtMap: widget.allAtMap,
+              patterns: widget.patterns,
+            )
+          : null,
+      showRadio: widget.multiSelMode,
+      checked: _checked,
+      onRadioChanged: widget.onMultiSelChanged,
+      delaySendingStatus: widget.delaySendingStatus,
+      enabledReadStatus: widget.enabledReadStatus,
+      expandView: expandView,
+      enableMultiSel:
+          widget.message.contentType != MessageType.revoke && !isHintMsg,
+      messageType: widget.message.contentType,
+      resendMsg: widget.resendMsg,
+      groupHaveReadCount: widget.hasReadCount ?? 0,
+      groupMemberCount: widget.memberCount ?? 0,
+      onTapReadView: widget.onTapReadView,
+      isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
+    );
+  }
 
   Widget _menuBuilder() => ChatLongPressMenu(
         controller: _popupCtrl,
