@@ -221,7 +221,9 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         GestureDetector(
           onTap: () {
             if (!_emojiVisible) focus();
-            if (null != widget.onSubmitted && null != widget.controller) {
+            if (null != widget.onSubmitted &&
+                null != widget.controller &&
+                widget.controller!.text.trim().isNotEmpty) {
               widget.onSubmitted!(widget.controller!.text.toString());
             }
           },
