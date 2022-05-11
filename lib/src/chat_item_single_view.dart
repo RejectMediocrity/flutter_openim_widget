@@ -335,20 +335,21 @@ class ChatSingleLayout extends StatelessWidget {
   /// 群聊
   Widget _buildGroupReadStatusView() {
     bool isAllRead = groupHaveReadCount >= groupMemberCount - 1;
-    return Visibility(
-      visible: !isReceivedMsg,
-      child: isAllRead
-          ? ImageUtil.assetImage("msg_icon_did_read", width: 20.w, height: 20.w)
-          : GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: onTapReadView,
-              child: CustomCircularProgress(
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onTapReadView,
+      child: Visibility(
+        visible: !isReceivedMsg,
+        child: isAllRead
+            ? ImageUtil.assetImage("msg_icon_did_read",
+                width: 20.w, height: 20.w)
+            : CustomCircularProgress(
                 size: 16.w,
                 activeColor: Color.fromARGB(255, 0, 192, 155),
                 backColor: Colors.white,
                 progress: groupHaveReadCount / (groupMemberCount - 1),
               ),
-            ),
+      ),
     );
 
     // int unreadCount = groupMemberCount - groupHaveReadCount;
