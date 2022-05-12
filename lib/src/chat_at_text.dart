@@ -28,6 +28,7 @@ class ChatAtText extends StatelessWidget {
   final ChatTextModel model;
   final bool needToTpliceContent;
   final InlineSpan? senderSpan;
+  final TextSpan? faceReplySpan;
   // final TextAlign textAlign;
   ChatAtText({
     Key? key,
@@ -44,6 +45,7 @@ class ChatAtText extends StatelessWidget {
     this.textScaleFactor = 1.0,
     this.model = ChatTextModel.match,
     this.senderSpan,
+    this.faceReplySpan,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -69,7 +71,9 @@ class ChatAtText extends StatelessWidget {
 
   _buildView() {
     final List<InlineSpan> children = <InlineSpan>[];
-
+    if (faceReplySpan != null) {
+      children.add(faceReplySpan!);
+    }
     if (prefixSpan != null) {
       children.add(prefixSpan!);
     }

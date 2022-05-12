@@ -1219,13 +1219,6 @@ class _ChatItemViewState extends State<ChatItemView> {
     ];
     String userStr = '';
     int showCount = 0;
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn1"});
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn2"});
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn3"});
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn4"});
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn5"});
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn6"});
-    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn7"});
 
     for (int i = 0; i < users.length; i++) {
       Map e = users[i];

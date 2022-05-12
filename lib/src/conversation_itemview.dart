@@ -19,6 +19,7 @@ class ConversationItemView extends StatelessWidget {
   final String content;
   final TextStyle contentStyle;
   final String? contentPrefix;
+  final TextSpan? faceReplySpan;
   final TextStyle? contentPrefixStyle;
   final String timeStr;
   final TextStyle timeStyle;
@@ -81,6 +82,7 @@ class ConversationItemView extends StatelessWidget {
     this.nickName = '',
     this.isGroupChat = false,
     this.senderName,
+    this.faceReplySpan,
   }) : super(key: key);
 
   @override
@@ -113,6 +115,7 @@ class ConversationItemView extends StatelessWidget {
         needToTpliceContent: needToTpliceContent,
         isGroupChat: isGroupChat,
         senderName: senderName,
+        faceReplySpan: faceReplySpan,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -153,6 +156,7 @@ class _ConversationView extends StatelessWidget {
     this.nickName = '',
     this.isGroupChat = false,
     this.senderName,
+    this.faceReplySpan,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -163,6 +167,7 @@ class _ConversationView extends StatelessWidget {
   final String content;
   final TextStyle contentStyle;
   final String? contentPrefix;
+  final TextSpan? faceReplySpan;
   final TextStyle? contentPrefixStyle;
   final String timeStr;
   final TextStyle timeStyle;
@@ -288,6 +293,7 @@ class _ConversationView extends StatelessWidget {
                                 senderSpan: isGroupChat == true
                                     ? _buildSendernameSpan(senderName)
                                     : null,
+                                faceReplySpan: faceReplySpan,
                               ),
                             ),
                             Spacer(),
