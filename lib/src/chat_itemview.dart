@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -209,7 +210,10 @@ class ChatItemView extends StatefulWidget {
   final Function()? onTapCloudDoc;
   final int? memberCount;
   final Function()? onTapReadView;
-  final Function(String emoji, int index)? onReplayWithFace;
+  final Function(String emoji, int index, {bool? isResignReply})?
+      onReplayWithFace;
+  final Function(String uid)? onTapUser;
+  final Function(int index, String emoji)? onTapUnShowReplyUser;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -276,6 +280,8 @@ class ChatItemView extends StatefulWidget {
     this.memberCount,
     this.onTapReadView,
     this.onReplayWithFace,
+    this.onTapUser,
+    this.onTapUnShowReplyUser,
   }) : super(key: key);
 
   @override
@@ -1193,16 +1199,41 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
+  bool didReplyWithThisEmoji(String emojiName) {
+    List replayList = json.decode(widget.message.ex ?? "[]");
+    if (replayList.length <= 0) return false;
+    for (int i = 0; i < replayList.length; i++) {
+      Map replay = replayList[i];
+      String key = replay.keys.first;
+      if (key == emojiName) {
+        List users = replay.values.first;
+        bool contain = jsonEncode(users).contains(OpenIM.iMManager.uid);
+        if (contain == true) return contain;
+      }
+    }
+    return false;
+  }
+
   Widget _buildFaceReplyCell(Map replay) {
     String? emoji = emojiFaces[replay.keys.first];
     List users = replay.values.first;
     List<InlineSpan> children = [
       WidgetSpan(
         alignment: PlaceholderAlignment.middle,
-        child: ImageUtil.faceImage(
-          emoji ?? "",
-          width: 18.w,
-          height: 18.w,
+        child: GestureDetector(
+          onTap: () {
+            if (widget.onReplayWithFace != null)
+              widget.onReplayWithFace!(
+                replay.keys.first,
+                widget.index,
+                isResignReply: didReplyWithThisEmoji(replay.keys.first),
+              );
+          },
+          child: ImageUtil.faceImage(
+            emoji ?? "",
+            width: 18.w,
+            height: 18.w,
+          ),
         ),
       ),
       WidgetSpan(
@@ -1243,11 +1274,24 @@ class _ChatItemViewState extends State<ChatItemView> {
           children.removeLast();
           showCount--;
         }
-        children.add(TextSpan(text: "+${users.length - showCount}人"));
+        children.add(TextSpan(
+          text: "+${users.length - showCount}人",
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              if (widget.onTapUnShowReplyUser != null)
+                widget.onTapUnShowReplyUser!(widget.index, replay.keys.first);
+            },
+        ));
         break;
       }
       showCount++;
-      children.add(TextSpan(text: CommonUtil.breakWord(name)));
+      children.add(TextSpan(
+        text: CommonUtil.breakWord(name),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            if (widget.onTapUser != null) widget.onTapUser!(e.keys.first);
+          },
+      ));
     }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 3.w, horizontal: 6.w),
@@ -1281,7 +1325,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             ),
         onTapEmoji: (emojiName) {
           if (widget.onReplayWithFace != null)
-            widget.onReplayWithFace!(emojiName, widget.index);
+            widget.onReplayWithFace!(emojiName, widget.index,
+                isResignReply: didReplyWithThisEmoji(emojiName));
         },
       );
 
