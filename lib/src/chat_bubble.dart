@@ -24,7 +24,7 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: constraints,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(0),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         border: showBorder ?? false

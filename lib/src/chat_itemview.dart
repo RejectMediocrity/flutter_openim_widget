@@ -14,9 +14,6 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:rxdart/rxdart.dart';
 import 'package:sprintf/sprintf.dart';
 
-//edit by wang.haoran at 2022-01-11
-//聊天界面，包括弹出菜单
-
 class MsgStreamEv<T> {
   final String msgId;
   final T value;
@@ -391,19 +388,15 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else if (message.contentType == MessageType.quote) {
       text = message.quoteElem?.text;
     }
-    TextPainter painter = TextPainter(
-        locale: WidgetsBinding.instance!.window.locale,
-        maxLines: 10,
-        textDirection: TextDirection.ltr,
-        textScaleFactor: 1.0,
-        text: TextSpan(
-            text: text,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 16.sp,
-            )));
-    painter.layout(maxWidth: 0.65.sw);
-    return painter.didExceedMaxLines;
+    return CommonUtil.didExceedMaxLines(
+      content: text ?? "",
+      maxLine: 10,
+      maxWidth: .65.sw,
+      style: TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 16.sp,
+      ),
+    );
   }
 
   Widget expandView(Widget bubleView) {
@@ -414,7 +407,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     Widget child = show
         ? ConstrainedBox(
             child: bubleView,
-            constraints: BoxConstraints(minWidth: 0.65.sw + 20.w),
+            constraints: BoxConstraints(minWidth: 0.65.sw),
           )
         : bubleView;
     return Stack(
@@ -1183,7 +1176,104 @@ class _ChatItemViewState extends State<ChatItemView> {
                 0,
         groupMemberCount: widget.memberCount ?? 0,
         onTapReadView: widget.onTapReadView,
+        faceReplyView: _buildFaceReplyView(),
       );
+
+  Widget? _buildFaceReplyView() {
+    List replayList = json.decode(widget.message.ex ?? "[]");
+    if (replayList.length <= 0) return null;
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: .65.sw),
+      child: Wrap(
+        spacing: 6.w,
+        runSpacing: 6.w,
+        alignment: WrapAlignment.start,
+        children: replayList.map((e) => _buildFaceReplyCell(e)).toList(),
+      ),
+    );
+  }
+
+  Widget _buildFaceReplyCell(Map replay) {
+    String? emoji = emojiFaces[replay.keys.first];
+    List users = replay.values.first;
+    List<InlineSpan> children = [
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: ImageUtil.faceImage(
+          emoji ?? "",
+          width: 18.w,
+          height: 18.w,
+        ),
+      ),
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          child: Container(
+            width: 1.w,
+            height: 16.w,
+            color: Color(0xFF333333).withAlpha(25),
+          ),
+        ),
+      ),
+    ];
+    String userStr = '';
+    int showCount = 0;
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn1"});
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn2"});
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn3"});
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn4"});
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn5"});
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn6"});
+    users.add({"ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx": "Robyn7"});
+
+    for (int i = 0; i < users.length; i++) {
+      Map e = users[i];
+      String name = e == users.last ? e.values.first : "${e.values.first}，";
+      userStr = userStr + name;
+      if (CommonUtil.didExceedMaxLines(
+        content: userStr,
+        maxLine: 1,
+        maxWidth: 190.w,
+        style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
+      )) {
+        // 判断加上剩余显示多少人后缀，是否溢出
+        userStr = userStr.replaceRange(
+            userStr.length - name.length, userStr.length, "");
+        userStr += "+${users.length - showCount}人";
+        if (CommonUtil.didExceedMaxLines(
+          content: userStr,
+          maxLine: 1,
+          maxWidth: 190.w,
+          style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
+        )) {
+          children.removeLast();
+          showCount--;
+        }
+        children.add(TextSpan(text: "+${users.length - showCount}人"));
+        break;
+      }
+      showCount++;
+      children.add(TextSpan(text: CommonUtil.breakWord(name)));
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 3.w, horizontal: 6.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.w),
+        color: widget.message.sendID == OpenIM.iMManager.uid
+            ? Color(0xFFAFD2FD)
+            : Color(0xFFE4E4E4),
+      ),
+      child: RichText(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        text: TextSpan(
+          style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
+          children: children,
+        ),
+      ),
+    );
+  }
 
   Widget _menuBuilder() => ChatLongPressMenu(
         controller: _popupCtrl,

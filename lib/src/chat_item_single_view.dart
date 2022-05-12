@@ -49,6 +49,7 @@ class ChatSingleLayout extends StatelessWidget {
   final int? messageType;
   final Function()? resendMsg;
   final Function()? onTapReadView;
+  final Widget? faceReplyView;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -93,6 +94,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.messageType,
     this.resendMsg,
     this.onTapReadView,
+    this.faceReplyView,
   }) : super(key: key);
 
   @override
@@ -177,7 +179,7 @@ class ChatSingleLayout extends StatelessWidget {
                                 child: isBubbleBg
                                     ? GestureDetector(
                                         onTap: () => _onItemClick?.add(index),
-                                        child: expandView!(ChatBubble(
+                                        child: ChatBubble(
                                           showBorder:
                                               messageType == MessageType.file,
                                           constraints: BoxConstraints(
@@ -193,17 +195,27 @@ class ChatSingleLayout extends StatelessWidget {
                                               if (quoteView != null)
                                                 Padding(
                                                   child: quoteView!,
-                                                  padding: EdgeInsets.only(
-                                                      bottom: 4.w),
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10.w, 10.w, 10.w, 14.w),
                                                 ),
 
                                               /// 消息体
-                                              child,
+                                              expandView!(
+                                                Padding(
+                                                  child: child,
+                                                  padding: EdgeInsets.all(10.w),
+                                                ),
+                                              ),
+                                              if (faceReplyView != null)
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10.w, 0.w, 10.w, 10.w),
+                                                  child: faceReplyView,
+                                                ),
                                             ],
                                           ),
                                           backgroundColor: _bubbleColor(),
-                                        )),
-                                      )
+                                        ))
                                     : _noBubbleBgView(),
                                 menuBuilder: menuBuilder,
                                 pressType: PressType.longPress,
@@ -274,26 +286,38 @@ class ChatSingleLayout extends StatelessWidget {
           );
   }
 
-  Widget _noBubbleBgView() => Container(
-        // margin: EdgeInsets.only(right: 10.w, left: 10.w),
-        // padding: EdgeInsets.all(1),
-        /// 非气泡消息，去掉边框（markdown消息）
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(6),
-        //   border: Border.all(
-        //     color: Color(0xFFE6E6E6),
-        //     width: 1,
-        //   ),
-        // ),
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: child,
-          ),
-          onTap: () => _onItemClick?.add(index),
+  Widget _noBubbleBgView() {
+    Widget widget = Container(
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: child,
         ),
-      );
+        onTap: () => _onItemClick?.add(index),
+      ),
+    );
+    if (faceReplyView == null) return widget;
+    return ChatBubble(
+      showBorder: messageType == MessageType.file,
+      constraints: BoxConstraints(minHeight: avatarSize),
+      bubbleType: isReceivedMsg ? BubbleType.receiver : BubbleType.send,
+      child: Padding(
+        padding: EdgeInsets.all(10.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget,
+            Padding(
+              padding: EdgeInsets.only(top: 10.w),
+              child: faceReplyView!,
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: _bubbleColor(),
+    );
+  }
 
   Sink<int>? get _onItemClick => clickSink;
 
