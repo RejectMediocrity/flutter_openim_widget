@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -13,9 +14,6 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:rxdart/rxdart.dart';
 import 'package:sprintf/sprintf.dart';
-
-//edit by wang.haoran at 2022-01-11
-//聊天界面，包括弹出菜单
 
 class MsgStreamEv<T> {
   final String msgId;
@@ -213,6 +211,10 @@ class ChatItemView extends StatefulWidget {
   final int? memberCount;
   final Function()? onTapReadView;
   final int? hasReadCount;
+  final Function(String emoji, int index, {bool? isResignReply})?
+      onReplayWithFace;
+  final Function(String uid)? onTapUser;
+  final Function()? onTapUnShowReplyUser;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -279,6 +281,9 @@ class ChatItemView extends StatefulWidget {
     this.memberCount,
     this.onTapReadView,
     this.hasReadCount,
+    this.onReplayWithFace,
+    this.onTapUser,
+    this.onTapUnShowReplyUser,
   }) : super(key: key);
 
   @override
@@ -391,19 +396,15 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else if (message.contentType == MessageType.quote) {
       text = message.quoteElem?.text;
     }
-    TextPainter painter = TextPainter(
-        locale: WidgetsBinding.instance!.window.locale,
-        maxLines: 10,
-        textDirection: TextDirection.ltr,
-        textScaleFactor: 1.0,
-        text: TextSpan(
-            text: text,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 16.sp,
-            )));
-    painter.layout(maxWidth: 0.65.sw);
-    return painter.didExceedMaxLines;
+    return CommonUtil.didExceedMaxLines(
+      content: text ?? "",
+      maxLine: 10,
+      maxWidth: .65.sw,
+      style: TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 16.sp,
+      ),
+    );
   }
 
   Widget expandView(Widget bubleView) {
@@ -414,7 +415,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     Widget child = show
         ? ConstrainedBox(
             child: bubleView,
-            constraints: BoxConstraints(minWidth: 0.65.sw + 20.w),
+            constraints: BoxConstraints(minWidth: 0.65.sw),
           )
         : bubleView;
     return Stack(
@@ -1135,55 +1136,209 @@ class _ChatItemViewState extends State<ChatItemView> {
     required Widget child,
     bool isBubbleBg = true,
     bool isHintMsg = false,
-  }) {
-    return ChatSingleLayout(
-      child: child,
-      msgId: widget.message.clientMsgID!,
-      index: widget.index,
-      menuBuilder: _menuBuilder,
-      clickSink: widget.clickSubject.sink,
-      sendStatusStream: widget.msgSendStatusSubject.stream,
-      popupCtrl: _popupCtrl,
-      isReceivedMsg: _isFromMsg,
-      isSingleChat: widget.isSingleChat,
-      avatarSize: widget.avatarSize ?? 42.h,
-      rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
-      leftAvatar: widget.message.senderFaceUrl ?? "",
-      leftName: widget.message.senderNickname ?? "",
-      isUnread: widget.message.isRead != true,
-      leftBubbleColor: widget.leftBubbleColor,
-      rightBubbleColor: widget.rightBubbleColor,
-      onLongPressRightAvatar: widget.onLongPressRightAvatar,
-      onTapRightAvatar: widget.onTapRightAvatar,
-      onLongPressLeftAvatar: widget.onLongPressLeftAvatar,
-      onTapLeftAvatar: widget.onTapLeftAvatar,
-      isSendFailed: widget.message.status == MessageStatus.failed,
-      isSending: widget.message.status == MessageStatus.sending,
-      timeView: widget.timeStr == null ? null : _buildTimeView(),
-      isBubbleBg: isBubbleBg,
-      isHintMsg: isHintMsg,
-      quoteView: widget.message.contentType == MessageType.quote
-          ? ChatQuoteView(
-              message: widget.message,
-              onTap: widget.onTapQuoteMsg,
-              allAtMap: widget.allAtMap,
-              patterns: widget.patterns,
-            )
-          : null,
-      showRadio: widget.multiSelMode,
-      checked: _checked,
-      onRadioChanged: widget.onMultiSelChanged,
-      delaySendingStatus: widget.delaySendingStatus,
-      enabledReadStatus: widget.enabledReadStatus,
-      expandView: expandView,
-      enableMultiSel:
-          widget.message.contentType != MessageType.revoke && !isHintMsg,
-      messageType: widget.message.contentType,
-      resendMsg: widget.resendMsg,
-      groupHaveReadCount: widget.hasReadCount ?? 0,
-      groupMemberCount: widget.memberCount ?? 0,
-      onTapReadView: widget.onTapReadView,
-      isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
+  }) =>
+      ChatSingleLayout(
+        child: child,
+        msgId: widget.message.clientMsgID!,
+        index: widget.index,
+        menuBuilder: _menuBuilder,
+        clickSink: widget.clickSubject.sink,
+        sendStatusStream: widget.msgSendStatusSubject.stream,
+        popupCtrl: _popupCtrl,
+        isReceivedMsg: _isFromMsg,
+        isSingleChat: widget.isSingleChat,
+        avatarSize: widget.avatarSize ?? 42.h,
+        rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
+        leftAvatar: widget.message.senderFaceUrl ?? "",
+        leftName: widget.message.senderNickname ?? "",
+        isUnread: widget.message.isRead != true,
+        leftBubbleColor: widget.leftBubbleColor,
+        rightBubbleColor: widget.rightBubbleColor,
+        onLongPressRightAvatar: widget.onLongPressRightAvatar,
+        onTapRightAvatar: widget.onTapRightAvatar,
+        onLongPressLeftAvatar: widget.onLongPressLeftAvatar,
+        onTapLeftAvatar: widget.onTapLeftAvatar,
+        isSendFailed: widget.message.status == MessageStatus.failed,
+        isSending: widget.message.status == MessageStatus.sending,
+        timeView: widget.timeStr == null ? null : _buildTimeView(),
+        isBubbleBg: isBubbleBg,
+        isHintMsg: isHintMsg,
+        quoteView: widget.message.contentType == MessageType.quote
+            ? ChatQuoteView(
+                message: widget.message,
+                onTap: widget.onTapQuoteMsg,
+                allAtMap: widget.allAtMap,
+                patterns: widget.patterns,
+              )
+            : null,
+        showRadio: widget.multiSelMode,
+        checked: _checked,
+        onRadioChanged: widget.onMultiSelChanged,
+        delaySendingStatus: widget.delaySendingStatus,
+        enabledReadStatus: widget.enabledReadStatus,
+        expandView: expandView,
+        enableMultiSel:
+            widget.message.contentType != MessageType.revoke && !isHintMsg,
+        messageType: widget.message.contentType,
+        resendMsg: widget.resendMsg,
+        groupHaveReadCount:
+            widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadCount ??
+                0,
+        groupMemberCount: widget.memberCount ?? 0,
+        onTapReadView: widget.onTapReadView,
+        isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
+        faceReplyView: _buildFaceReplyView(),
+      );
+
+  Widget? _buildFaceReplyView() {
+    ChatFaceReplyListModel listModel =
+        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    if (listModel.dataList.length <= 0) return null;
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: .65.sw),
+      child: Wrap(
+        spacing: 6.w,
+        runSpacing: 6.w,
+        alignment: WrapAlignment.start,
+        children:
+            listModel.dataList.map((e) => _buildFaceReplyCell(e)).toList(),
+      ),
+    );
+  }
+
+  bool didReplyWithThisEmoji(String emojiName) {
+    if (widget.message.ex == null || widget.message.ex!.isEmpty) return false;
+    ChatFaceReplyListModel listModel =
+        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    if (listModel.dataList.length <= 0) return false;
+    int index =
+        listModel.dataList.indexWhere((element) => element.emoji == emojiName);
+    if (index == -1) return false;
+    ChatFaceReplyModel model = listModel.dataList.elementAt(index);
+    int user =
+        model.user!.indexWhere((element) => element.id == OpenIM.iMManager.uid);
+    return user != -1;
+  }
+
+  Widget _buildFaceReplyCell(ChatFaceReplyModel replay) {
+    String? emoji = emojiFaces[replay.emoji];
+    List<User> users = replay.user!;
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn1",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn2",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn3",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn4",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn5",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn6",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    List<InlineSpan> children = [
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: GestureDetector(
+          onTap: () {
+            if (widget.onReplayWithFace != null)
+              widget.onReplayWithFace!(
+                replay.emoji!,
+                widget.index,
+                isResignReply: didReplyWithThisEmoji(replay.emoji!),
+              );
+          },
+          child: ImageUtil.faceImage(
+            emoji ?? "",
+            width: 18.w,
+            height: 18.w,
+          ),
+        ),
+      ),
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          child: Container(
+            width: 1.w,
+            height: 16.w,
+            color: Color(0xFF333333).withAlpha(25),
+          ),
+        ),
+      ),
+    ];
+    String userStr = '';
+    int showCount = 0;
+
+    for (int i = 0; i < users.length; i++) {
+      User e = users[i];
+      String name = e == users.last ? e.name! : "${e.name!}，";
+      userStr = userStr + name;
+      if (CommonUtil.didExceedMaxLines(
+        content: userStr,
+        maxLine: 1,
+        maxWidth: 190.w,
+        style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
+      )) {
+        // 判断加上剩余显示多少人后缀，是否溢出
+        userStr = userStr.replaceRange(
+            userStr.length - name.length, userStr.length, "");
+        userStr += "+${users.length - showCount}人";
+        if (CommonUtil.didExceedMaxLines(
+          content: userStr,
+          maxLine: 1,
+          maxWidth: 190.w,
+          style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
+        )) {
+          children.removeLast();
+          showCount--;
+        }
+        children.add(TextSpan(
+          text: "+${users.length - showCount}人",
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              if (widget.onTapUnShowReplyUser != null)
+                widget.onTapUnShowReplyUser!();
+            },
+        ));
+        break;
+      }
+      showCount++;
+      children.add(TextSpan(
+        text: CommonUtil.breakWord(name),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            if (widget.onTapUser != null) widget.onTapUser!(e.name!);
+          },
+      ));
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 3.w, horizontal: 6.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.w),
+        color: widget.message.sendID == OpenIM.iMManager.uid
+            ? Color(0xFFAFD2FD)
+            : Color(0xFFE4E4E4),
+      ),
+      child: RichText(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        text: TextSpan(
+          style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
+          children: children,
+        ),
+      ),
     );
   }
 
@@ -1198,6 +1353,11 @@ class _ChatItemViewState extends State<ChatItemView> {
               radius: 6.w,
               background: const Color(0xFFFFFFFF),
             ),
+        onTapEmoji: (emojiName) {
+          if (widget.onReplayWithFace != null)
+            widget.onReplayWithFace!(emojiName, widget.index,
+                isResignReply: didReplyWithThisEmoji(emojiName));
+        },
       );
 
   Widget? _customItemView() => widget.customItemBuilder?.call(

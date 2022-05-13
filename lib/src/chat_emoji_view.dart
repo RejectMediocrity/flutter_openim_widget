@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/util/recently_used_emoji_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const emojiFaces = <String, String>{
@@ -176,21 +177,33 @@ const emojiFaces = <String, String>{
 };
 
 class ChatEmojiView extends StatefulWidget {
-  const ChatEmojiView(
-      {Key? key,
-      this.onAddEmoji,
-      this.onDeleteEmoji,
-      this.favoriteList = const [],
-      this.onAddFavorite,
-      this.onSelectedFavorite,
-      this.controller})
-      : super(key: key);
+  const ChatEmojiView({
+    Key? key,
+    this.onAddEmoji,
+    this.onDeleteEmoji,
+    this.favoriteList = const [],
+    this.onAddFavorite,
+    this.onSelectedFavorite,
+    this.controller,
+    this.mainAxisSpacing,
+    this.crossAxisSpacing,
+    this.backColor,
+    this.edgeInsets,
+    this.size,
+    this.showDelete,
+  }) : super(key: key);
   final Function()? onDeleteEmoji;
   final Function(String emoji)? onAddEmoji;
   final List<String> favoriteList;
   final Function()? onAddFavorite;
   final Function(int index, String url)? onSelectedFavorite;
   final TextEditingController? controller;
+  final double? mainAxisSpacing;
+  final double? crossAxisSpacing;
+  final Color? backColor;
+  final EdgeInsets? edgeInsets;
+  final double? size;
+  final bool? showDelete;
   @override
   _ChatEmojiViewState createState() => _ChatEmojiViewState();
 }
@@ -201,17 +214,18 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    _enableDeleteEmoji = widget.controller!.text.isNotEmpty;
+    if (widget.controller != null) {
+      _enableDeleteEmoji = widget.controller!.text.isNotEmpty;
 
-    widget.controller?.addListener(() {
-      bool nextValue = widget.controller!.text.isNotEmpty;
-      if (_enableDeleteEmoji != nextValue) {
-        setState(() {
-          _enableDeleteEmoji = nextValue;
-        });
-      }
-    });
+      widget.controller?.addListener(() {
+        bool nextValue = widget.controller!.text.isNotEmpty;
+        if (_enableDeleteEmoji != nextValue) {
+          setState(() {
+            _enableDeleteEmoji = nextValue;
+          });
+        }
+      });
+    }
     super.initState();
   }
 
@@ -237,37 +251,42 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
           alignment: Alignment.bottomRight,
           children: [
             _buildEmojiLayout(),
-            Container(
-              constraints: BoxConstraints(maxHeight: 106.w, maxWidth: 100.w),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                ImageUtil.imageResStr("Mask_group_emoji"),
-                package: 'flutter_openim_widget',
-              ))),
-              padding: EdgeInsets.fromLTRB(35.w, 32.w, 16.w, 34.w),
-              child: GestureDetector(
-                onTap: _enableDeleteEmoji == true ? widget.onDeleteEmoji : null,
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 12.w, horizontal: 14.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(6.w),
+            widget.showDelete == true
+                ? Container(
+                    constraints:
+                        BoxConstraints(maxHeight: 106.w, maxWidth: 100.w),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                      ImageUtil.imageResStr("Mask_group_emoji"),
+                      package: 'flutter_openim_widget',
+                    ))),
+                    padding: EdgeInsets.fromLTRB(35.w, 32.w, 16.w, 34.w),
+                    child: GestureDetector(
+                      onTap: _enableDeleteEmoji == true
+                          ? widget.onDeleteEmoji
+                          : null,
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.w, horizontal: 14.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6.w),
+                          ),
+                        ),
+                        child: ImageUtil.assetImage(
+                          _enableDeleteEmoji == true
+                              ? "keyboard_but_delete_disable"
+                              : "keyboard_but_delete",
+                          width: 22.w,
+                          height: 16.w,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: ImageUtil.assetImage(
-                    _enableDeleteEmoji == true
-                        ? "keyboard_but_delete_disable"
-                        : "keyboard_but_delete",
-                    width: 22.w,
-                    height: 16.w,
-                  ),
-                ),
-              ),
-            ),
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -336,29 +355,33 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
       );
 
   Widget _buildEmojiLayout() => Container(
-        // color: Colors.white,
+        color: widget.backColor ?? Colors.transparent,
         height: 270.w,
         child: GridView.builder(
-          padding: EdgeInsets.fromLTRB(14.w, 20.w, 14.w, 101.w),
+          padding:
+              widget.edgeInsets ?? EdgeInsets.fromLTRB(14.w, 20.w, 14.w, 101.w),
           itemCount: emojiFaces.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
             childAspectRatio: 1,
-            mainAxisSpacing: 22.w,
-            crossAxisSpacing: 22.w,
+            mainAxisSpacing: widget.mainAxisSpacing ?? 22.w,
+            crossAxisSpacing: widget.crossAxisSpacing ?? 22.w,
           ),
           itemBuilder: (BuildContext context, int index) {
             return Material(
               color: Colors.transparent,
               child: Ink(
                 child: InkWell(
-                  onTap: () =>
-                      widget.onAddEmoji?.call(emojiFaces.keys.elementAt(index)),
+                  onTap: () {
+                    String emojiName = emojiFaces.keys.elementAt(index);
+                    RecentlyUsedEmojiManager.updateEmoji(emojiName);
+                    widget.onAddEmoji?.call(emojiName);
+                  },
                   child: Center(
                     child: ImageUtil.faceImage(
                       emojiFaces.values.elementAt(index),
-                      width: 30.w,
-                      height: 30.w,
+                      width: widget.size ?? 30.w,
+                      height: widget.size ?? 30.w,
                     ),
                   ),
                 ),

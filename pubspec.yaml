@@ -39,6 +39,7 @@ dependencies:
 #      ref: fix-ios-simulator
 #    path: ../flutter_openim_sdk
   flutter_markdown: ^0.6.9+1
+  sp_util: ^2.0.3
 
 dev_dependencies:
   flutter_test:

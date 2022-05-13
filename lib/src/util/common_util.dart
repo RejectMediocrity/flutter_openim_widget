@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:path_provider/path_provider.dart';
@@ -174,5 +175,22 @@ class CommonUtil {
       }
     });
     return content;
+  }
+
+  static bool didExceedMaxLines({
+    required String content,
+    required int maxLine,
+    required double maxWidth,
+    required TextStyle style,
+  }) {
+    TextPainter painter = TextPainter(
+      locale: WidgetsBinding.instance!.window.locale,
+      maxLines: maxLine,
+      textDirection: TextDirection.ltr,
+      textScaleFactor: 1.0,
+      text: TextSpan(text: content, style: style),
+    );
+    painter.layout(maxWidth: maxWidth);
+    return painter.didExceedMaxLines;
   }
 }
