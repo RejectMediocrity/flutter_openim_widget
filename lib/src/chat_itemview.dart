@@ -213,7 +213,7 @@ class ChatItemView extends StatefulWidget {
   final Function(String emoji, int index, {bool? isResignReply})?
       onReplayWithFace;
   final Function(String uid)? onTapUser;
-  final Function(int index, String emoji)? onTapUnShowReplyUser;
+  final Function()? onTapUnShowReplyUser;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -1186,37 +1186,62 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
 
   Widget? _buildFaceReplyView() {
-    List replayList = json.decode(widget.message.ex ?? "[]");
-    if (replayList.length <= 0) return null;
+    ChatFaceReplyListModel listModel =
+        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    if (listModel.dataList.length <= 0) return null;
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: .65.sw),
       child: Wrap(
         spacing: 6.w,
         runSpacing: 6.w,
         alignment: WrapAlignment.start,
-        children: replayList.map((e) => _buildFaceReplyCell(e)).toList(),
+        children:
+            listModel.dataList.map((e) => _buildFaceReplyCell(e)).toList(),
       ),
     );
   }
 
   bool didReplyWithThisEmoji(String emojiName) {
-    List replayList = json.decode(widget.message.ex ?? "[]");
-    if (replayList.length <= 0) return false;
-    for (int i = 0; i < replayList.length; i++) {
-      Map replay = replayList[i];
-      String key = replay.keys.first;
-      if (key == emojiName) {
-        List users = replay.values.first;
-        bool contain = jsonEncode(users).contains(OpenIM.iMManager.uid);
-        if (contain == true) return contain;
-      }
-    }
-    return false;
+    if (widget.message.ex == null || widget.message.ex!.isEmpty) return false;
+    ChatFaceReplyListModel listModel =
+        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    if (listModel.dataList.length <= 0) return false;
+    int index =
+        listModel.dataList.indexWhere((element) => element.emoji == emojiName);
+    if (index == -1) return false;
+    ChatFaceReplyModel model = listModel.dataList.elementAt(index);
+    int user =
+        model.user!.indexWhere((element) => element.id == OpenIM.iMManager.uid);
+    return user != -1;
   }
 
-  Widget _buildFaceReplyCell(Map replay) {
-    String? emoji = emojiFaces[replay.keys.first];
-    List users = replay.values.first;
+  Widget _buildFaceReplyCell(ChatFaceReplyModel replay) {
+    String? emoji = emojiFaces[replay.emoji];
+    List<User> users = replay.user!;
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn1",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn2",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn3",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn4",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn5",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
+    users.add(User(
+        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
+        name: "Robyn6",
+        avatar: OpenIM.iMManager.uInfo.faceURL));
     List<InlineSpan> children = [
       WidgetSpan(
         alignment: PlaceholderAlignment.middle,
@@ -1224,9 +1249,9 @@ class _ChatItemViewState extends State<ChatItemView> {
           onTap: () {
             if (widget.onReplayWithFace != null)
               widget.onReplayWithFace!(
-                replay.keys.first,
+                replay.emoji!,
                 widget.index,
-                isResignReply: didReplyWithThisEmoji(replay.keys.first),
+                isResignReply: didReplyWithThisEmoji(replay.emoji!),
               );
           },
           child: ImageUtil.faceImage(
@@ -1252,8 +1277,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     int showCount = 0;
 
     for (int i = 0; i < users.length; i++) {
-      Map e = users[i];
-      String name = e == users.last ? e.values.first : "${e.values.first}，";
+      User e = users[i];
+      String name = e == users.last ? e.name! : "${e.name!}，";
       userStr = userStr + name;
       if (CommonUtil.didExceedMaxLines(
         content: userStr,
@@ -1279,7 +1304,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               if (widget.onTapUnShowReplyUser != null)
-                widget.onTapUnShowReplyUser!(widget.index, replay.keys.first);
+                widget.onTapUnShowReplyUser!();
             },
         ));
         break;
@@ -1289,7 +1314,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         text: CommonUtil.breakWord(name),
         recognizer: TapGestureRecognizer()
           ..onTap = () {
-            if (widget.onTapUser != null) widget.onTapUser!(e.keys.first);
+            if (widget.onTapUser != null) widget.onTapUser!(e.name!);
           },
       ));
     }
