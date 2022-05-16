@@ -1295,7 +1295,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         text: CommonUtil.breakWord(name),
         recognizer: TapGestureRecognizer()
           ..onTap = () {
-            if (widget.onTapUser != null) widget.onTapUser!(e.name!);
+            if (widget.onTapUser != null) widget.onTapUser!(e.id!);
           },
       ));
     }
