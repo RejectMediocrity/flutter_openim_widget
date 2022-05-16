@@ -1223,30 +1223,6 @@ class _ChatItemViewState extends State<ChatItemView> {
   Widget _buildFaceReplyCell(ChatFaceReplyModel replay) {
     String? emoji = emojiFaces[replay.emoji];
     List<User> users = replay.user!;
-    users.add(User(
-        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
-        name: "Robyn1",
-        avatar: OpenIM.iMManager.uInfo.faceURL));
-    users.add(User(
-        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
-        name: "Robyn2",
-        avatar: OpenIM.iMManager.uInfo.faceURL));
-    users.add(User(
-        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
-        name: "Robyn3",
-        avatar: OpenIM.iMManager.uInfo.faceURL));
-    users.add(User(
-        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
-        name: "Robyn4",
-        avatar: OpenIM.iMManager.uInfo.faceURL));
-    users.add(User(
-        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
-        name: "Robyn5",
-        avatar: OpenIM.iMManager.uInfo.faceURL));
-    users.add(User(
-        id: "ushkdbz7sfdn7ynd_5x4uozeiwtde5gfx",
-        name: "Robyn6",
-        avatar: OpenIM.iMManager.uInfo.faceURL));
     List<InlineSpan> children = [
       WidgetSpan(
         alignment: PlaceholderAlignment.middle,
