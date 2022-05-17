@@ -976,6 +976,12 @@ class _ChatItemViewState extends State<ChatItemView> {
           return _buildMarkDownWidget(opData["data"]);
         }
         return opData["data"];
+      } else if (type.startsWith('task_')) {
+        String nickName1 = opData["opUser"]["nickname"];
+        return nickName1 + " " + opData["msg"];
+      } else if (type.startsWith('goal_')) {
+        String nickName1 = opData["opUser"]["nickname"];
+        return nickName1 + " " + opData["msg"];
       }
     } catch (e) {
       print(e.toString());
