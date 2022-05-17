@@ -126,7 +126,7 @@ class ConversationItemView extends StatelessWidget {
   }
 }
 
-class _ConversationView extends StatelessWidget {
+class _ConversationView extends StatefulWidget {
   const _ConversationView({
     Key? key,
     required this.title,
@@ -186,8 +186,15 @@ class _ConversationView extends StatelessWidget {
   final bool isGroupChat;
   final String? senderName;
 
+  @override
+  State<_ConversationView> createState() => _ConversationViewState();
+}
+
+class _ConversationViewState extends State<_ConversationView> {
+  String content = "";
+
   InlineSpan? _buildImgSpan(String? prefixStr) {
-    if (null == contentPrefix) {
+    if (null == widget.contentPrefix) {
       return null;
     }
     if (prefixStr?.startsWith(RegExp("img:"), 0) == true) {
@@ -202,8 +209,8 @@ class _ConversationView extends StatelessWidget {
       );
     } else {
       return TextSpan(
-        text: contentPrefix,
-        style: contentPrefixStyle,
+        text: widget.contentPrefix,
+        style: widget.contentPrefixStyle,
       );
     }
   }
@@ -214,37 +221,43 @@ class _ConversationView extends StatelessWidget {
     }
     return TextSpan(
       text: senderName,
-      style: contentStyle,
+      style: widget.contentStyle,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    content = "${widget.content}";
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap?.call(),
+      onTap: () => widget.onTap?.call(),
       child: Container(
         constraints: BoxConstraints(maxHeight: 66.w),
-        color: backgroundColor,
+        color: widget.backgroundColor,
         // height: height,
-        padding: padding,
+        padding: widget.padding,
         child: Stack(
           alignment: Alignment.center,
           children: [
             Row(
               children: [
                 ChatAvatarView(
-                  isGroup: isGroupChat,
-                  text: nickName,
-                  size: avatarSize,
-                  url: avatarUrl,
-                  isCircle: isCircleAvatar ?? false,
-                  borderRadius: avatarBorderRadius,
+                  isGroup: widget.isGroupChat,
+                  text: widget.nickName,
+                  size: widget.avatarSize,
+                  url: widget.avatarUrl,
+                  isCircle: widget.isCircleAvatar ?? false,
+                  borderRadius: widget.avatarBorderRadius,
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
                   flex: 1,
                   child: Container(
-                    decoration: underline
+                    decoration: widget.underline
                         ? BoxDecoration(
                             border: BorderDirectional(
                               bottom: BorderSide(
@@ -259,8 +272,8 @@ class _ConversationView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                CommonUtil.breakWord(title),
-                                style: titleStyle,
+                                CommonUtil.breakWord(widget.title),
+                                style: widget.titleStyle,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -269,8 +282,8 @@ class _ConversationView extends StatelessWidget {
                               width: 16.w,
                             ),
                             Text(
-                              timeStr,
-                              style: timeStyle,
+                              widget.timeStr,
+                              style: widget.timeStyle,
                             )
                           ],
                         ),
@@ -278,29 +291,14 @@ class _ConversationView extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              width: contentWidth,
-                              child: ChatAtText(
-                                allAtMap: allAtMap,
-                                text: CommonUtil.replaceAtMsgIdWithNickName(
-                                    content: content,
-                                    atUserNameMappingMap: allAtMap),
-                                textStyle: contentStyle,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                prefixSpan: _buildImgSpan(contentPrefix),
-                                patterns: patterns,
-                                needToTpliceContent: needToTpliceContent,
-                                senderSpan: isGroupChat == true
-                                    ? _buildSendernameSpan(senderName)
-                                    : null,
-                                faceReplySpan: faceReplySpan,
-                              ),
+                              width: widget.contentWidth,
+                              child: buildChatAtText(),
                             ),
                             Spacer(),
                             UnreadCountView(
-                              count: unreadCount,
+                              count: widget.unreadCount,
                               size: 18.w,
-                              color: notDisturb
+                              color: widget.notDisturb
                                   ? Color(0xFFDDDDDD)
                                   : Color(0xFFFF4A4A),
                             ),
@@ -333,6 +331,56 @@ class _ConversationView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget buildChatAtText() {
+    List<String> noMatchUids = CommonUtil.checkHasNoMatchUids(
+        content: content, atUserNameMappingMap: widget.allAtMap);
+    return noMatchUids.length > 0
+        ? FutureBuilder(
+            builder: (context, snapshot) {
+              return ChatAtText(
+                allAtMap: widget.allAtMap,
+                text: CommonUtil.replaceAtMsgIdWithNickName(
+                    content: content, atUserNameMappingMap: widget.allAtMap),
+                textStyle: widget.contentStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                prefixSpan: _buildImgSpan(widget.contentPrefix),
+                patterns: widget.patterns,
+                needToTpliceContent: widget.needToTpliceContent,
+                senderSpan: widget.isGroupChat == true
+                    ? _buildSendernameSpan(widget.senderName)
+                    : null,
+                faceReplySpan: widget.faceReplySpan,
+              );
+            },
+            future: _replaceUIds(noMatchUids),
+            initialData: content,
+          )
+        : ChatAtText(
+            allAtMap: widget.allAtMap,
+            text: CommonUtil.replaceAtMsgIdWithNickName(
+                content: content, atUserNameMappingMap: widget.allAtMap),
+            textStyle: widget.contentStyle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            prefixSpan: _buildImgSpan(widget.contentPrefix),
+            patterns: widget.patterns,
+            needToTpliceContent: widget.needToTpliceContent,
+            senderSpan: widget.isGroupChat == true
+                ? _buildSendernameSpan(widget.senderName)
+                : null,
+            faceReplySpan: widget.faceReplySpan,
+          );
+  }
+
+  Future<void> _replaceUIds(List<String> uIds) async {
+    var userInfos =
+        await OpenIM.iMManager.userManager.getUsersInfo(uidList: uIds);
+    for (UserInfo info in userInfos) {
+      content = content.replaceAll(" @${info.userID} ", "@${info.nickname!}");
+    }
   }
 }
 

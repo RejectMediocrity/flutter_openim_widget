@@ -161,6 +161,22 @@ class CommonUtil {
     return breakWord;
   }
 
+  static List<String> checkHasNoMatchUids(
+      {required String content,
+      required Map<String, String> atUserNameMappingMap}) {
+    final atReg = RegExp('$regexAt|$regexAtMe');
+    List<RegExpMatch> match = atReg.allMatches(content).toList();
+    List<String> noMatchUids = [];
+    for (RegExpMatch element in match) {
+      String des = element.group(0)!;
+      String uid = des.replaceFirst("@", "").trim();
+      if (!atUserNameMappingMap.containsKey(uid)) {
+        noMatchUids.add(uid);
+      }
+    }
+    return noMatchUids;
+  }
+
   static String replaceAtMsgIdWithNickName(
       {required String content,
       required Map<String, String> atUserNameMappingMap}) {
