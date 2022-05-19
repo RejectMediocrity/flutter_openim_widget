@@ -346,9 +346,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     bool friendHandle =
         widget.message.contentType == MessageType.friendAddedNotification;
     bool profile = widget.message.contentType == 1398;
-    if ((!widget.isSingleChat && isHideType && isFullGroup == true) ||
-        friendHandle ||
-        profile) return true;
+    if ((!widget.isSingleChat && isHideType) || friendHandle || profile)
+      return true;
     return false;
   }
 
