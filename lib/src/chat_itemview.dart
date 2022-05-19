@@ -305,6 +305,8 @@ class _ChatItemViewState extends State<ChatItemView> {
   String? imageDirectory;
   String? markDownContent;
   String permisstionStr = "";
+
+  bool isFullGroup = false;
   var _hintTextStyle = TextStyle(
     color: Color(0xFF999999),
     fontSize: 12.sp,
@@ -335,6 +337,16 @@ class _ChatItemViewState extends State<ChatItemView> {
     super.dispose();
   }
 
+  bool needHideMessage() {
+    int type = widget.message.contentType ?? 0;
+    bool isHideType = type == MessageType.memberInvitedNotification ||
+        type == MessageType.memberEnterNotification ||
+        type == MessageType.memberQuitNotification ||
+        type == MessageType.memberKickedNotification;
+    if (!widget.isSingleChat && isHideType && isFullGroup == true) return true;
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget? child;
@@ -349,7 +361,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else {
       child = _buildItemView();
     }
-
+    if (needHideMessage()) return Container();
     return FocusDetector(
       child: Container(
         color: _checked ? Color(0xFFF9F9F9) : Colors.white,
@@ -892,6 +904,9 @@ class _ChatItemViewState extends State<ChatItemView> {
               try {
                 var content = json.decode(widget.message.content!);
                 text = content['defaultTips'];
+                String jsonDetail = content["jsonDetail"];
+                Map detail = json.decode(jsonDetail);
+                isFullGroup = detail["groupType"] == 1000;
               } catch (e) {
                 text = UILocalizations.unsupportedMessage; // 避免打印消息体
               }
