@@ -343,7 +343,12 @@ class _ChatItemViewState extends State<ChatItemView> {
         type == MessageType.memberEnterNotification ||
         type == MessageType.memberQuitNotification ||
         type == MessageType.memberKickedNotification;
-    if (!widget.isSingleChat && isHideType && isFullGroup == true) return true;
+    bool friendHandle =
+        widget.message.contentType == MessageType.friendAddedNotification;
+    bool profile = widget.message.contentType == 1398;
+    if ((!widget.isSingleChat && isHideType && isFullGroup == true) ||
+        friendHandle ||
+        profile) return true;
     return false;
   }
 
