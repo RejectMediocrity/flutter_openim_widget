@@ -346,8 +346,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     bool friendHandle =
         widget.message.contentType == MessageType.friendAddedNotification;
     bool profile = widget.message.contentType == 1398;
-    if ((!widget.isSingleChat && isHideType) || friendHandle || profile)
-      return true;
+    if ((isFullGroup && isHideType) || friendHandle || profile) return true;
     return false;
   }
 
@@ -910,7 +909,9 @@ class _ChatItemViewState extends State<ChatItemView> {
                 text = content['defaultTips'];
                 String jsonDetail = content["jsonDetail"];
                 Map detail = json.decode(jsonDetail);
-                isFullGroup = detail["groupType"] == 1000;
+                try {
+                  isFullGroup = detail["group"]["groupType"] == 1000;
+                } catch (e) {}
               } catch (e) {
                 text = UILocalizations.unsupportedMessage; // 避免打印消息体
               }
@@ -1012,6 +1013,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     CloudDocMessageModel model = CloudDocMessageModel.fromJson(map);
     Map params = json.decode(model.params!);
     String snapShot = params["textSnapshot"];
+    String remark = params['remark'] ?? "";
     int permission =
         model.permission?.permission ?? 0; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
     int shareType =
@@ -1082,6 +1084,14 @@ class _ChatItemViewState extends State<ChatItemView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (remark.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4.w),
+                  child: Text(
+                    remark,
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                  ),
+                ),
               Row(
                 children: [
                   ImageUtil.assetImage(
