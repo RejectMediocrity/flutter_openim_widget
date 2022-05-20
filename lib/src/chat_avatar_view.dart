@@ -134,13 +134,13 @@ class ChatAvatarView extends StatelessWidget {
       int start = text.length - 2;
       text = text.substring(start < 0 ? 0 : start, text.length);
       style = TextStyle(
-          fontSize: isChatFrom ? 12.sp : 16.sp,
+          fontSize: (_size / 42.h) * 14.sp,
           color: Colors.white,
           fontWeight: FontWeight.w400);
     } else if (enMatch != null) {
       text = text.substring(enMatch.start, 1).toUpperCase();
       style = TextStyle(
-          fontSize: isChatFrom ? 14.sp : 18.sp,
+          fontSize: (_size / 42.h) * 15.sp,
           color: Colors.white,
           fontWeight: FontWeight.w500);
     }
