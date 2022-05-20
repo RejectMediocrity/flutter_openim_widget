@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -134,14 +136,16 @@ class ChatAvatarView extends StatelessWidget {
       int start = text.length - 2;
       text = text.substring(start < 0 ? 0 : start, text.length);
       style = TextStyle(
-          fontSize: isChatFrom ? 12.sp : 16.sp,
+          fontSize: (_size / 42.h) * (Platform.isAndroid ? 13.sp : 16.sp),
           color: Colors.white,
+          letterSpacing: .5,
           fontWeight: FontWeight.w400);
     } else if (enMatch != null) {
       text = text.substring(enMatch.start, 1).toUpperCase();
       style = TextStyle(
-          fontSize: isChatFrom ? 14.sp : 18.sp,
+          fontSize: (_size / 42.h) *(Platform.isAndroid ? 15.sp : 18.sp),
           color: Colors.white,
+          letterSpacing: .5,
           fontWeight: FontWeight.w500);
     }
     if (style != null)
