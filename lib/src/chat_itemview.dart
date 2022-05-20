@@ -1086,10 +1086,10 @@ class _ChatItemViewState extends State<ChatItemView> {
             children: [
               if (remark.isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4.w),
+                  padding: EdgeInsets.only(bottom: 8),
                   child: Text(
                     remark,
-                    style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                    style: TextStyle(color: Color(0xFF666666), fontSize: 14.sp),
                   ),
                 ),
               Row(
