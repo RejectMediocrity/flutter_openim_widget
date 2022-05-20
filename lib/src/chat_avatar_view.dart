@@ -136,16 +136,16 @@ class ChatAvatarView extends StatelessWidget {
       int start = text.length - 2;
       text = text.substring(start < 0 ? 0 : start, text.length);
       style = TextStyle(
-          fontSize: (_size / 42.h) * (Platform.isAndroid ? 14.sp : 16.sp),
+          fontSize: (_size / 42.h) * (Platform.isAndroid ? 13.sp : 16.sp),
           color: Colors.white,
-          letterSpacing: 1,
+          letterSpacing: .5,
           fontWeight: FontWeight.w400);
     } else if (enMatch != null) {
       text = text.substring(enMatch.start, 1).toUpperCase();
       style = TextStyle(
           fontSize: (_size / 42.h) *(Platform.isAndroid ? 15.sp : 18.sp),
           color: Colors.white,
-          letterSpacing: 1,
+          letterSpacing: .5,
           fontWeight: FontWeight.w500);
     }
     if (style != null)
