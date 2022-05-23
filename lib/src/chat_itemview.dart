@@ -364,7 +364,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else {
       child = _buildItemView();
     }
-    if (needHideMessage()) return Container();
+    // if (needHideMessage()) return Container();
     return FocusDetector(
       child: Container(
         color: _checked ? Color(0xFFF9F9F9) : Colors.white,
