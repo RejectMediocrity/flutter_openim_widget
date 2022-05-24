@@ -128,8 +128,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         },
       );
     }
-    String? url = info.showSourcePic == true ? info.url : info.thumbUrl;
-    if (info.thumbUrl == null || info.thumbUrl!.isEmpty) url = info.url;
+    String? url = info.url;
     if (info.file != null) {
       return ExtendedImage.file(
         info.file!,
@@ -286,21 +285,10 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                       ],
                     ),
                   )
-                : GestureDetector(
-                    onTap: onViewOriginImg,
-                    child: Container(
-                      width: 140.w,
-                      height: 32.w,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF999999).withAlpha(76),
-                        borderRadius: BorderRadius.circular(100.w),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "查看原图($sizeStr)",
-                        style: TextStyle(fontSize: 12.sp, color: Colors.white),
-                      ),
-                    ),
+                : Container(
+                    width: 140.w,
+                    height: 32.w,
+                    color: Colors.transparent,
                   ),
             widget.showMenu != null
                 ? SizedBox(
