@@ -202,7 +202,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
   Widget _buildPageView() => GestureDetector(
         onTap: widget.onTap ?? close,
         child: ExtendedImageGesturePageView.builder(
-          reverse: true,
+          reverse: widget.showMenu==null?true:false,
           controller: widget.controller,
           itemCount: picList.length,
           itemBuilder: (BuildContext context, int index) {
