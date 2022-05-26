@@ -49,7 +49,7 @@ class _VideoAppState extends State<ChatVideoPlayer> {
       alignment: Alignment.center,
       children: [
         Center(
-          child: _controller.value.isInitialized
+          child: _isPlaying
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
                   child: VideoPlayer(_controller),
