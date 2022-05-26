@@ -198,14 +198,14 @@ class ChatSingleLayout extends StatelessWidget {
                                                 Padding(
                                                   child: quoteView!,
                                                   padding: EdgeInsets.fromLTRB(
-                                                      10.w, 10.w, 10.w, 14.w),
+                                                      10.w, 10.w, 10.w, 0.w),
                                                 ),
 
                                               /// 消息体
                                               expandView!(
                                                 Padding(
                                                   child: child,
-                                                  padding: EdgeInsets.all(10.w),
+                                                  padding: EdgeInsets.fromLTRB(10.w,6.w,10.w,10.w),
                                                 ),
                                               ),
                                               if (faceReplyView != null)
