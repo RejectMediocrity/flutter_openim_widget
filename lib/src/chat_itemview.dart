@@ -924,6 +924,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 allAtMap: {},
                 textAlign: TextAlign.center,
                 // enabled: false,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 textStyle: null != text
                     ? widget.hintTextStyle ?? _hintTextStyle
                     : widget.textStyle,
