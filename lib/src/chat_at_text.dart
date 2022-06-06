@@ -24,6 +24,7 @@ class ChatAtText extends StatelessWidget {
   /// key:userid
   /// value:username
   final Map<String, String> allAtMap;
+  final List<String>? hasReadList;
   final List<MatchPattern> patterns;
   final ChatTextModel model;
   final bool needToTpliceContent;
@@ -46,6 +47,7 @@ class ChatAtText extends StatelessWidget {
     this.model = ChatTextModel.match,
     this.senderSpan,
     this.faceReplySpan,
+    this.hasReadList,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -184,10 +186,38 @@ class ChatAtText extends StatelessWidget {
             String uid = matchText.replaceFirst("@", "").trim();
             value = uid;
             if (allAtMap.containsKey(uid)) {
-              matchText = '@${allAtMap[uid]!} ';
+              bool? hasRead = hasReadList?.contains(uid);
+              matchText = '@${allAtMap[uid]!}';
+              inlineSpan = ExtendedWidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: GestureDetector(
+                  onTap: () => mapping.onTap!(
+                      _getUrl(value, mapping.type), mapping.type),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$matchText',
+                        style: mapping.style != null ? mapping.style : style,
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.only(left: 2.w, right: 4.w, top: 4.w),
+                        child: ImageUtil.assetImage(
+                            hasRead == true ? "read_green" : "read_gray",
+                            width: 6.w,
+                            height: 6.w),
+                      ),
+                    ],
+                  ),
+                ),
+                style: _mapping[regexAt]?.style,
+                actualText: '$value',
+                start: match.start,
+              );
             }
-          }
-          if (mapping.type == PatternType.ATME) {
+          } else if (mapping.type == PatternType.ATME) {
             String uid = matchText.replaceFirst("@", "").trim();
             value = uid;
             if (allAtMap.containsKey(uid)) {

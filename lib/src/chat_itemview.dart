@@ -721,6 +721,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 allAtMap: {},
                 textStyle: widget.textStyle,
                 patterns: widget.patterns,
+                hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                    ?.hasReadUserIDList,
               ),
             );
           }
@@ -736,6 +738,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
               patterns: widget.patterns,
+              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                  ?.hasReadUserIDList,
             ),
           );
         }
@@ -846,6 +850,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               textStyle: widget.textStyle,
               patterns: widget.patterns,
               maxLines: widget.isExpanded == true ? null : 10,
+              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                  ?.hasReadUserIDList,
             ),
           );
         }
@@ -929,6 +935,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 textStyle: null != text
                     ? widget.hintTextStyle ?? _hintTextStyle
                     : widget.textStyle,
+                hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                    ?.hasReadUserIDList,
               ),
             );
           } catch (e) {
