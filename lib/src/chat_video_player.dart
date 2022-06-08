@@ -67,10 +67,14 @@ class _VideoAppState extends State<ChatVideoPlayer> {
                 onTap: () {
                   _controller.play();
                 },
-                child: ImageUtil.assetImage(
-                  "vedio_but_play_big",
-                  width: 46.w,
-                  height: 46.w,
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                  padding: EdgeInsets.all(10.w),
+                  child: ImageUtil.assetImage(
+                    "vedio_but_play_big",
+                    width: 46.w,
+                    height: 46.w,
+                  ),
                 ),
               ),
       ],
