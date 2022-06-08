@@ -102,6 +102,8 @@ class ChatQuoteView extends StatelessWidget {
           content = "[${UILocalizations.file}]${file?.fileName}";
         } else if (quoteMessage.contentType == MessageType.merger) {
           content = quoteMessage.mergeElem?.title ?? "";
+        }else if (quoteMessage.contentType == MessageType.voice) {
+          content = "[${UILocalizations.voice}]";
         }
       }
     }
