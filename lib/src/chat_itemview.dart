@@ -205,7 +205,7 @@ class ChatItemView extends StatefulWidget {
   final Function()? resendMsg;
   final Function(bool isTable, String? url, {String? content})? onTapMarkDown;
   final Function(String? url)? onTapMarkDownImg;
-  final Function()? setPermission;
+  final Function(int permission)? setPermission;
   final String? conversationName;
   final Function()? onTapCloudDoc;
   final int? memberCount;
@@ -1032,59 +1032,64 @@ class _ChatItemViewState extends State<ChatItemView> {
         model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
     Widget? permissionWidget;
-    if (permission == 0) {
-      return Container();
-    } else if (permission == 1) {
-      permissionStr = UILocalizations.you + UILocalizations.canRead;
-    } else if (permission == 2) {
-      permissionStr = UILocalizations.you + UILocalizations.canEdit;
-    } else {
-      permissionWidget = Row(
-        children: [
-          Flexible(
-            child: Text(
-              widget.isSingleChat
-                  ? widget.conversationName!
-                  : UILocalizations.grantThisSessionMemberPermissions,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: TextStyle(
-                color: Color(0xFF333333),
-                fontSize: 14.sp,
+    if(isSender){
+      if(permission == 0)return Container();
+      else if(permission == 1)permissionStr = UILocalizations.you + UILocalizations.canRead;
+      else if(permission == 2||permission == 3){
+        permissionWidget = Row(
+          children: [
+            Flexible(
+              child: Text(
+                widget.isSingleChat
+                    ? widget.conversationName!
+                    : UILocalizations.grantThisSessionMemberPermissions,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontSize: 14.sp,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 4.w,
-          ),
-          GestureDetector(
-            onTap: widget.setPermission,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  permisstionStr.isNotEmpty
-                      ? permisstionStr
-                      : permission == 1
-                          ? UILocalizations.canRead
-                          : UILocalizations.canEdit,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Color(0xFF006DFA),
-                    fontSize: 14.sp,
-                  ),
-                ),
-                ImageUtil.assetImage(
-                  "msg_but_unfold",
-                  width: 12.w,
-                  height: 12.w,
-                )
-              ],
+            SizedBox(
+              width: 4.w,
             ),
-          )
-        ],
-      );
+            GestureDetector(
+              onTap: ()=>widget.setPermission!(permission),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    permisstionStr.isNotEmpty
+                        ? permisstionStr
+                        : permission == 1
+                        ? UILocalizations.canRead
+                        : UILocalizations.canEdit,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Color(0xFF006DFA),
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  ImageUtil.assetImage(
+                    "msg_but_unfold",
+                    width: 12.w,
+                    height: 12.w,
+                  )
+                ],
+              ),
+            )
+          ],
+        );
+      }
+    }else{
+      if(permission == 0)return Container();
+      else if(permission == 1){
+        permissionStr = UILocalizations.you + UILocalizations.canRead;
+      }else{
+        permissionStr = UILocalizations.you + UILocalizations.canEdit;
+      }
     }
     return _buildCommonItemView(
       child: ConstrainedBox(
