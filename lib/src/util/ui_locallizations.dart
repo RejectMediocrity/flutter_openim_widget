@@ -42,7 +42,7 @@ class UILocalizations {
       "download": "Download",
       "pressSpeak": "Hold to Talk",
       "releaseSend": "Release to send",
-      "releaseCancel": "Release to cancel",
+      "releaseCancel": "Cancel to send",
       "soundToWord": "Convert",
       "converting": "Converting...",
       "cancelVoiceSend": "Cancel",
@@ -73,6 +73,9 @@ class UILocalizations {
       "addToGroup": "%s have added %s to the group chat",
       "canManage":"can manage",
       "cancel": "Cancel",
+      "lastTimeTip": "Recording will stop after %d",
+      "moveToCancel": "Slide your finger up to cancel sending",
+      "releaseFingerSend": "Release your finger and cancel sending",
     },
     'zh': {
       'top': '置顶',
@@ -103,7 +106,7 @@ class UILocalizations {
       "download": "下载",
       "pressSpeak": "按住说话",
       "releaseSend": "松开发送",
-      "releaseCancel": "松开取消",
+      "releaseCancel": "取消发送",
       "soundToWord": "转文字",
       "converting": "转换中...",
       "cancelVoiceSend": "取消",
@@ -133,6 +136,9 @@ class UILocalizations {
       "addToGroup": "%s 将 %s 加入群聊",
       "canManage":"可管理",
       "cancel": "取消",
+      "lastTimeTip": "%d''后将停止录音",
+      "moveToCancel": "手指上滑，取消发送",
+      "releaseFingerSend": "松开手指，取消发送",
     },
   };
 
@@ -256,4 +262,11 @@ class UILocalizations {
   static String get addToGroup => _value(key: "addToGroup");
 
   static String get cancel => _value(key: "cancel");
+
+  static String get lastTimeTip => _value(key: "lastTimeTip");
+
+  static String get moveToCancel => _value(key: "moveToCancel");
+
+  static String get releaseFingerSend => _value(key: "releaseFingerSend");
+
 }

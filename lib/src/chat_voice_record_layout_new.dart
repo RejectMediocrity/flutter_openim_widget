@@ -5,6 +5,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:record/record.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'chat_voice_record_circle.dart';
 
@@ -39,8 +40,8 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
   late VoiceRecord? _record;
   String? _path;
   int _sec = 0;
-  int maxDuration = 10 * 1000;
-  int _lastTime = 5 * 1000;
+  int maxDuration = 60 * 1000;
+  int _lastTime = 59 * 1000;
 
   @override
   void initState() {
@@ -116,6 +117,13 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
         backgroundColor: (!_startRecord || _selectedPressArea)
             ? Color(0xFF006DFA)
             : Color(0XFFFF4A4A),
+        textWidget: Text(
+          getCircleText(),
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: Color(0xFFFFFFFF),
+          ),
+        ),
       );
 
   @override
@@ -182,13 +190,17 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
     );
   }
 
+  getAmplitudeColor() {
+    return _selectedPressArea ? Color(0xFF006DFA) : Color(0xFFFF4A4A);
+  }
+
   buildAmplitude(bool show) {
     return Container(
       width: 2.w,
       height: 20.w,
       margin: EdgeInsets.symmetric(horizontal: 3.w),
       decoration: BoxDecoration(
-        color: show ? Color(0xFF006DFA) : Color(0xFFDDDDDD),
+        color: show ? getAmplitudeColor() : Color(0xFFDDDDDD),
         borderRadius: BorderRadius.all(Radius.circular(1.w)),
       ),
     );
@@ -226,22 +238,22 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
   getTipStr() {
     if (_selectedPressArea) {
       if (_lastTipTime > 0) {
-        return "${_lastTipTime / 1000}后将停止录音";
+        return sprintf(UILocalizations.lastTimeTip, [(_lastTipTime/ 1000).ceil()]);
       }
-      return "手指上滑，取消发送";
+      return UILocalizations.moveToCancel;
     } else {
-      return "松开手机，取消发送";
+      return UILocalizations.releaseFingerSend;
     }
   }
 
   getTimeStr() {
     Duration d = Duration(milliseconds: _recordTime);
     List<String> parts = d.toString().split(':');
-    return '${parts[1]}:${parts[2].substring(0, 5)}';
+    return '${parts[1]}:${parts[2].substring(0, 2)}';
   }
 
   getTextStyle() {
-    if (_lastTipTime > 0) {
+    if (_selectedPressArea == false) {
       return TextStyle(
           color: Color(0xFFFF4A4A),
           fontSize: 16.sp,
@@ -278,6 +290,7 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
   }
 
   cleanData() {
+    _recordTime = 0;
     _lastTipTime = 0;
     _startRecord = false;
   }
@@ -287,6 +300,18 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
       widget.onCompleted?.call(_sec, _path!);
     } else {
       widget.onCompleteFail?.call(_sec, _path!);
+    }
+  }
+
+  String getCircleText() {
+    if (_startRecord != true) {
+      return UILocalizations.pressSpeak;
+    } else {
+      if (_selectedPressArea) {
+        return UILocalizations.releaseSend;
+      } else {
+        return UILocalizations.releaseCancel;
+      }
     }
   }
 }

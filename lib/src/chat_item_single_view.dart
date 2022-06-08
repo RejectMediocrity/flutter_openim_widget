@@ -407,6 +407,10 @@ class ChatSingleLayout extends StatelessWidget {
     return Container(
       width: badgeWidth,
       height: badgeWidth,
+      margin: EdgeInsets.symmetric(
+        vertical: 15.w,
+        horizontal: 4.w,
+      ),
       decoration: BoxDecoration(
         color: Colors.red,
         borderRadius: BorderRadius.all(Radius.circular(badgeWidth / 2)),

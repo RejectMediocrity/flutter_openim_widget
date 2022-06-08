@@ -10,12 +10,14 @@ class ChatVoiceRecordCircle extends StatefulWidget {
     required this.onLongPressMoveUpdate,
     required this.onTap,
     this.backgroundColor,
+    this.textWidget,
   }) : super(key: key);
   final Function(LongPressStartDetails details) onLongPressStart;
   final Function(LongPressEndDetails details) onLongPressEnd;
   final Function(LongPressMoveUpdateDetails details) onLongPressMoveUpdate;
   final Function() onTap;
   final Color? backgroundColor;
+  final Widget? textWidget;
 
   @override
   _ChatVoiceRecordCircleState createState() => _ChatVoiceRecordCircleState();
@@ -65,15 +67,8 @@ class _ChatVoiceRecordCircleState extends State<ChatVoiceRecordCircle> {
                 ImageUtil.assetImage("ic_inputbox_but_recording_solid",
                     width: 24.w, height: 24.w),
                 SizedBox(height: 18.w,),
-                Text(
-                  _pressing
-                      ? UILocalizations.releaseSend
-                      : UILocalizations.pressSpeak,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                )
+                if (widget.textWidget != null)
+                  widget.textWidget!,
               ],
             ),
           ),
