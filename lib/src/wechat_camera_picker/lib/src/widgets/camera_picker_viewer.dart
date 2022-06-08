@@ -456,7 +456,7 @@ class _CameraPickerViewerState extends State<CameraPickerViewer> {
                     width: 30,
                   ),
                   IconButton(
-                    onPressed: Navigator.of(context).pop,
+                    onPressed: createAssetEntityAndPop,
                     iconSize: 66.w,
                     icon: ImageUtil.assetImage(
                       "video_confirm_bg",

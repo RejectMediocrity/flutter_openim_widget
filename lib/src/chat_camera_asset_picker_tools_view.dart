@@ -150,7 +150,7 @@ class _ChatCameraAssetPickerToolsViewState
                                         //     const ThumbnailSize.square(200),
                                         // thumbnailFormat: ThumbnailFormat.jpeg,
                                       ),
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
