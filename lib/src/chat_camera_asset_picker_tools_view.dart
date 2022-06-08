@@ -333,14 +333,14 @@ class _ChatCameraAssetPickerToolsViewState
                       // SizedBox(
                       //   width: 5,
                       // ),
-                      Text(
-                        '原图',
-                        style: TextStyle(
-                            color: _ps.isAuth
-                                ? Color(0xFF333333)
-                                : Color(0xFFCCCCCC),
-                            fontSize: 16.0),
-                      ),
+                      // Text(
+                      //   '原图',
+                      //   style: TextStyle(
+                      //       color: _ps.isAuth
+                      //           ? Color(0xFF333333)
+                      //           : Color(0xFFCCCCCC),
+                      //       fontSize: 16.0),
+                      // ),
                       SizedBox(
                         width: 20,
                       ),
