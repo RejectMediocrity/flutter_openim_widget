@@ -67,6 +67,10 @@ class _ChatPictureViewState extends State<ChatPictureView> {
       _trulyWidth = widget.widgetWidth;
       _trulyHeight = _trulyWidth * h / w;
     }
+    if (_trulyHeight > 226.w) {
+      // _trulyWidth = 226.w / _trulyHeight * _trulyWidth;
+      _trulyHeight = 226.w;
+    }
 
     //
     /*if (!_isNotNull(_snapshotPath) && _isNotNull(_sourcePath)) {
@@ -113,7 +117,7 @@ class _ChatPictureViewState extends State<ChatPictureView> {
         url: url,
         height: _trulyHeight,
         width: _trulyWidth,
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.fitWidth,
       );
 
   Widget _pathView({required String path}) => Stack(
@@ -122,7 +126,7 @@ class _ChatPictureViewState extends State<ChatPictureView> {
             image: FileImage(File(path)),
             height: _trulyHeight,
             width: _trulyWidth,
-            fit: BoxFit.scaleDown,
+            fit: BoxFit.fitWidth,
             errorBuilder: (_, error, stack) => _errorIcon(),
           ),
           ChatSendProgressView(
