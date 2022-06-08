@@ -996,7 +996,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         });
         return sprintf(UILocalizations.addToGroup, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
-        return _buildCloudDocChildItem(opData);
+        return _buildCloudDocChildItem(opData,
+            isSender: widget.message.sendID == OpenIM.iMManager.uid);
       } else if (type == "applet") {
       } else if (type == "webhook") {
         _isMarkDownFormat = isMarkDownFormat(opData["data"]);
@@ -1019,7 +1020,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     return Container();
   }
 
-  Widget _buildCloudDocChildItem(Map<String, dynamic> map) {
+  Widget _buildCloudDocChildItem(Map<String, dynamic> map,
+      {required bool isSender}) {
     CloudDocMessageModel model = CloudDocMessageModel.fromJson(map);
     Map params = json.decode(model.params!);
     String snapShot = params["textSnapshot"];
