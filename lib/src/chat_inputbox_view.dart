@@ -32,6 +32,8 @@ class ChatInputBoxView extends StatefulWidget {
     this.assetPickerViewState,
     this.voiceViewState,
     this.hideInputBox,
+    this.selectedRecentlyAssetCount,
+    this.onSubmittedAssets,
   }) : super(key: key);
   final Function() atAction;
   final Function()? picAction;
@@ -40,6 +42,7 @@ class ChatInputBoxView extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final ValueChanged<String>? onSubmitted;
+  final num? selectedRecentlyAssetCount;
   final Widget multiOpToolbox;
   final Widget emojiView;
   final Widget assetPickerView;
@@ -59,6 +62,8 @@ class ChatInputBoxView extends StatefulWidget {
 
   final Function(bool visible)? voiceViewState;
   final bool? hideInputBox;
+  final Function()? onSubmittedAssets;
+
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
 }
@@ -341,6 +346,14 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         ),
         GestureDetector(
           onTap: () {
+            if (_assetPickerVisible &&
+                (widget.selectedRecentlyAssetCount ?? 0) > 0) {
+              if (null != widget.onSubmittedAssets) {
+                widget.onSubmittedAssets!();
+                return;
+              }
+            }
+
             if (!_emojiVisible) focus();
             if (null != widget.onSubmitted &&
                 null != widget.controller &&
@@ -349,8 +362,9 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             }
           },
           child: ImageUtil.assetImage(
-            widget.controller!.text.isNotEmpty &&
-                    widget.controller!.text.trim().isNotEmpty
+            (widget.controller!.text.isNotEmpty &&
+                        widget.controller!.text.trim().isNotEmpty) ||
+                    (widget.selectedRecentlyAssetCount ?? 0) > 0
                 ? "Inputbox_but_send"
                 : "Inputbox_but_send_normal",
             width: 20,
