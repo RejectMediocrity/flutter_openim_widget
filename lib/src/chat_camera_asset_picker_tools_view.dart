@@ -195,7 +195,7 @@ class _ChatCameraAssetPickerToolsViewState
                                       ),
                                       child: Center(
                                         child: Text(
-                                          getVideoDurationFormat(entity.duration),
+                                          getVideoDurationFormat(entity.duration > 0 ? entity.duration:1),
                                           style: TextStyle(
                                               fontSize: 12.0,
                                               color: Colors.white),
