@@ -13,8 +13,10 @@ import '../flutter_openim_widget.dart';
 
 class ChatCameraAssetPickerToolsView extends StatefulWidget {
   final int selectedMaximumAssets;
-  final Function({List<AssetEntity>? selectedEntityList, bool? isNeedOrigin, bool? isSendDirectly})?
-      selectedCallback;
+  final Function(
+      {List<AssetEntity>? selectedEntityList,
+      bool? isNeedOrigin,
+      bool? isSendDirectly})? selectedCallback;
 
   const ChatCameraAssetPickerToolsView(
       {this.selectedCallback, this.selectedMaximumAssets = 9, Key? key})
@@ -39,7 +41,8 @@ class _ChatCameraAssetPickerToolsViewState
     if (_ps.isAuth) {
       // Granted.
       // PhotoManager.openSetting
-      final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(onlyAll: true);
+      final List<AssetPathEntity> paths =
+          await PhotoManager.getAssetPathList(onlyAll: true);
       final List<AssetEntity> entities =
           await paths[0].getAssetListRange(start: 0, end: 9007199254740992);
 
@@ -152,7 +155,7 @@ class _ChatCameraAssetPickerToolsViewState
                                     child: Image(
                                       image: AssetEntityImageProvider(
                                         entity,
-                                        isOriginal: false,
+                                        isOriginal: true,
                                         // isOriginal: entity.type != AssetType.video,
                                         // thumbnailSize:
                                         //     const ThumbnailSize.square(200),
@@ -163,11 +166,37 @@ class _ChatCameraAssetPickerToolsViewState
                                   ),
                                 ),
                                 if (selectedEntityList.length >=
-                                    widget.selectedMaximumAssets &&
+                                        widget.selectedMaximumAssets &&
                                     !selectedEntityList.contains(entity))
                                   Positioned.fill(
                                     child: Container(
                                       color: Colors.grey.withOpacity(0.8),
+                                    ),
+                                  )
+                                else
+                                  Container(),
+                                if (entity.type == AssetType.video)
+                                  Positioned(
+                                    bottom: 10.w,
+                                    left: 10.w,
+                                    width: 45.w,
+                                    height: 18.w,
+                                    // child: _appleOSSelectButton(context, true, entity),
+                                    child: Container(
+                                      width: 38.w,
+                                      height: 18.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.black?.withOpacity(0.5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          entity.duration.toString() + 's',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.white),
+                                        ),
+                                      ),
                                     ),
                                   )
                                 else
@@ -195,7 +224,8 @@ class _ChatCameraAssetPickerToolsViewState
                                         selectedEntityList.add(entity);
                                       }
                                       setState(() {});
-                                      sendSelectedEntityList(selectedEntityList, false);
+                                      sendSelectedEntityList(
+                                          selectedEntityList, false);
                                     },
                                     child: selectedEntityList.contains(entity)
                                         ? Badge(
@@ -222,7 +252,6 @@ class _ChatCameraAssetPickerToolsViewState
                                           ),
                                   ),
                                 ),
-
                               ],
                             ),
                           );
@@ -280,26 +309,26 @@ class _ChatCameraAssetPickerToolsViewState
                   highlightColor: Colors.transparent,
                   radius: 0.0,
                   onTap: () {
-                    if (_ps.isAuth) {
-                      isNeedOrigin = !isNeedOrigin;
-                      setState(() {});
-                    }
+                    // if (_ps.isAuth) {
+                    //   isNeedOrigin = !isNeedOrigin;
+                    //   setState(() {});
+                    // }
                   },
                   child: Row(
                     children: [
                       SizedBox(
                         width: 20,
                       ),
-                      ImageUtil.assetImage(
-                        isNeedOrigin
-                            ? "user_agreement_but_selected"
-                            : "user_agreement_but_unselected",
-                        width: 16.w,
-                        height: 16.w,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
+                      // ImageUtil.assetImage(
+                      //   isNeedOrigin
+                      //       ? "user_agreement_but_selected"
+                      //       : "user_agreement_but_unselected",
+                      //   width: 16.w,
+                      //   height: 16.w,
+                      // ),
+                      // SizedBox(
+                      //   width: 5,
+                      // ),
                       Text(
                         '原图',
                         style: TextStyle(
@@ -323,12 +352,14 @@ class _ChatCameraAssetPickerToolsViewState
     );
   }
 
-  sendSelectedEntityList(List<AssetEntity>? selectedEntityList, bool isSendDirectly) {
+  sendSelectedEntityList(
+      List<AssetEntity>? selectedEntityList, bool isSendDirectly) {
     if (widget.selectedCallback != null) {
       widget.selectedCallback!(
-          isSendDirectly: isSendDirectly,
-          selectedEntityList: selectedEntityList ?? [],
-          isNeedOrigin: isNeedOrigin,);
+        isSendDirectly: isSendDirectly,
+        selectedEntityList: selectedEntityList ?? [],
+        isNeedOrigin: isNeedOrigin,
+      );
     }
   }
 
@@ -390,7 +421,7 @@ class _ChatCameraAssetPickerToolsViewState
     // }
   }
 
-  showToast(String toastStr){
+  showToast(String toastStr) {
     Fluttertoast.showToast(
         msg: toastStr,
         toastLength: Toast.LENGTH_SHORT,
@@ -398,7 +429,6 @@ class _ChatCameraAssetPickerToolsViewState
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.grey[800],
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 }
