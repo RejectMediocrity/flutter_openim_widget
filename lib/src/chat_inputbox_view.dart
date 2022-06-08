@@ -317,11 +317,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
               width: 20,
               height: 20),
         ),
-        Visibility(
-          child: SizedBox(
-            width: 30,
-          ),
-          visible: widget.isGroupChat == true,
+        SizedBox(
+          width: 30,
         ),
         GestureDetector(
           onTap: () {

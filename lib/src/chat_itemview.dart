@@ -215,6 +215,7 @@ class ChatItemView extends StatefulWidget {
       onReplayWithFace;
   final Function(String uid)? onTapUser;
   final Function()? onTapUnShowReplyUser;
+  final bool isVoiceUnread;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -284,6 +285,7 @@ class ChatItemView extends StatefulWidget {
     this.onReplayWithFace,
     this.onTapUser,
     this.onTapUnShowReplyUser,
+    this.isVoiceUnread = false,
   }) : super(key: key);
 
   @override
@@ -1240,6 +1242,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         onTapReadView: widget.onTapReadView,
         isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
         faceReplyView: _buildFaceReplyView(),
+        isVoiceUnread: widget.isVoiceUnread,
       );
 
   Widget? _buildFaceReplyView() {
@@ -1485,7 +1488,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           widget.message.contentType == MessageType.video ||
           widget.message.contentType == MessageType.picture ||
           widget.message.contentType == MessageType.location ||
-          widget.message.contentType == MessageType.quote;
+          widget.message.contentType == MessageType.quote ||
+          widget.message.contentType == MessageType.voice;
 
   bool get _showRevokeMenu =>
       widget.enabledRevokeMenu ??

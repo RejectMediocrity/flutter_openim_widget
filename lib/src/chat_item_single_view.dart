@@ -130,7 +130,9 @@ class ChatSingleLayout extends StatelessWidget {
                     ChatRadio(
                       checked: checked,
                       showRadio: showRadio,
-                      enable: messageType != MessageType.revoke && messageType != MessageType.voice && !isHintMsg,
+                      enable: messageType != MessageType.revoke &&
+                          messageType != MessageType.voice &&
+                          !isHintMsg,
                     ),
                   if (!showRadio)
 
@@ -207,7 +209,8 @@ class ChatSingleLayout extends StatelessWidget {
                                               expandView!(
                                                 Padding(
                                                   child: child,
-                                                  padding: EdgeInsets.fromLTRB(10.w,6.w,10.w,10.w),
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10.w, 6.w, 10.w, 10.w),
                                                 ),
                                               ),
                                               if (faceReplyView != null)
@@ -258,8 +261,7 @@ class ChatSingleLayout extends StatelessWidget {
                                   !isSending &&
                                   enabledReadStatus)
                                 _buildGroupReadStatusView(),
-                              if(!isVoiceUnread)
-                                _buildVoiceUnread(),
+                              if (isVoiceUnread) _buildVoiceUnread(),
                             ],
                           ),
 
@@ -401,8 +403,17 @@ class ChatSingleLayout extends StatelessWidget {
   }
 
   Widget _buildVoiceUnread() {
-    return Container();
+    var badgeWidth = 8.w;
+    return Container(
+      width: badgeWidth,
+      height: badgeWidth,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.all(Radius.circular(badgeWidth / 2)),
+      ),
+    );
   }
+
   Widget _buildQuoteMsgView() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
