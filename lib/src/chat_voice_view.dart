@@ -12,6 +12,7 @@ class ChatVoiceView extends StatefulWidget {
   final String? soundPath;
   final String? soundUrl;
   final int? duration;
+  final bool? ownerRight;
 
   const ChatVoiceView({
     Key? key,
@@ -21,6 +22,7 @@ class ChatVoiceView extends StatefulWidget {
     this.soundPath,
     this.soundUrl,
     this.duration,
+    this.ownerRight,
   }) : super(key: key);
 
   @override
@@ -117,11 +119,13 @@ class _ChatVoiceViewState extends State<ChatVoiceView> {
 
   bool _isClickedLocation(i) => i == widget.index;
 
+  bool get isOwnerRight => widget.ownerRight == true;
+
   Widget _buildVoiceAnimView() {
     var anim;
     var png;
     var turns;
-    if (widget.isReceived) {
+    if (!isOwnerRight) {
       anim = 'assets/anim/voice_black.json';
       png = 'assets/images/ic_voice_black.webp';
       turns = 0;
@@ -130,45 +134,41 @@ class _ChatVoiceViewState extends State<ChatVoiceView> {
       png = 'assets/images/ic_voice_blue.webp';
       turns = 90;
     }
-    return Row(
-      children: [
-        Visibility(
-          visible: !widget.isReceived,
-          child: Text(
-            '${widget.duration ?? 0}``',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Color(0xFF333333),
-            ),
-          ),
-        ),
-        _isPlaying
-            ? RotatedBox(
-                quarterTurns: turns,
-                child: Lottie.asset(
-                  anim,
+    return Directionality(
+      textDirection: isOwnerRight ? TextDirection.rtl : TextDirection.ltr,
+      child: Row(
+        children: [
+          _isPlaying
+              ? RotatedBox(
+                  quarterTurns: turns,
+                  child: Lottie.asset(
+                    anim,
+                    height: 19.h,
+                    width: 18.w,
+                    package: 'flutter_openim_widget',
+                  ),
+                )
+              : Image.asset(
+                  png,
                   height: 19.h,
                   width: 18.w,
                   package: 'flutter_openim_widget',
                 ),
-              )
-            : Image.asset(
-                png,
-                height: 19.h,
-                width: 18.w,
-                package: 'flutter_openim_widget',
-              ),
-        Visibility(
-          visible: widget.isReceived,
-          child: Text(
-            '${widget.duration ?? 0}``',
+          SizedBox(
+            width: 12.w,
+          ),
+          Text(
+            "${widget.duration ?? 0}''",
             style: TextStyle(
               fontSize: 14.sp,
               color: Color(0xFF333333),
             ),
           ),
-        ),
-      ],
+          SizedBox(
+            width: 0.5.sw * widget.duration! / 60,
+          ),
+        ],
+      ),
     );
   }
 

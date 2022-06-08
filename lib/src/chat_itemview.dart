@@ -1494,7 +1494,8 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   bool get _showMultiChoiceMenu =>
       widget.enabledMultiMenu ??
-      widget.message.contentType != MessageType.revoke;
+      widget.message.contentType != MessageType.revoke &&
+          widget.message.contentType != MessageType.voice;
 
   bool get _showTranslationMenu =>
       widget.enabledTranslationMenu ??

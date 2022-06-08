@@ -72,6 +72,7 @@ class UILocalizations {
       "removeFromGroup": "%s have removed %s from the group chat",
       "addToGroup": "%s have added %s to the group chat",
       "canManage":"can manage",
+      "cancel": "Cancel",
     },
     'zh': {
       'top': '置顶',
@@ -131,6 +132,7 @@ class UILocalizations {
       "removeFromGroup": "%s 将 %s 移出群聊",
       "addToGroup": "%s 将 %s 加入群聊",
       "canManage":"可管理",
+      "cancel": "取消",
     },
   };
 
@@ -252,4 +254,6 @@ class UILocalizations {
   static String get removeFromGroup => _value(key: "removeFromGroup");
 
   static String get addToGroup => _value(key: "addToGroup");
+
+  static String get cancel => _value(key: "cancel");
 }

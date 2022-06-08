@@ -53,3 +53,5 @@ export 'src/util/image_util.dart';
 export 'src/util/permission_util.dart';
 export 'src/util/ui_locallizations.dart';
 export 'src/util/voice_record.dart';
+export 'src/chat_voice_record_layout_new.dart';
+export 'src/mind_im_dialog.dart';

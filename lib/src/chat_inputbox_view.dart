@@ -9,6 +9,7 @@ class ChatInputBoxView extends StatefulWidget {
     Key? key,
     required this.multiOpToolbox,
     required this.emojiView,
+    required this.voiceView,
     required this.atAction,
     required this.assetPickerView,
     this.picAction,
@@ -29,6 +30,8 @@ class ChatInputBoxView extends StatefulWidget {
     this.isGroupChat = false,
     this.emojiViewState,
     this.assetPickerViewState,
+    this.voiceViewState,
+    this.hideInputBox,
   }) : super(key: key);
   final Function() atAction;
   final Function()? picAction;
@@ -40,6 +43,7 @@ class ChatInputBoxView extends StatefulWidget {
   final Widget multiOpToolbox;
   final Widget emojiView;
   final Widget assetPickerView;
+  final Widget voiceView;
   final TextStyle? style;
   final TextStyle? atStyle;
   final TextStyle? atMeStyle;
@@ -53,6 +57,8 @@ class ChatInputBoxView extends StatefulWidget {
   final Function(bool visible)? emojiViewState;
   final Function(bool visible)? assetPickerViewState;
 
+  final Function(bool visible)? voiceViewState;
+  final bool? hideInputBox;
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
 }
@@ -62,6 +68,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   var _emojiVisible = false;
   var _assetPickerVisible = false;
 
+  var _voiceVisible = false;
+  var _startRecord = false;
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -92,6 +100,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
           widget.emojiViewState!(_emojiVisible);
           _assetPickerVisible = false;
           widget.assetPickerViewState!(_assetPickerVisible);
+          _voiceVisible = false;
+          widget.voiceViewState!(_voiceVisible);
         });
       }
     });
@@ -103,6 +113,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         widget.emojiViewState!(_emojiVisible);
         _assetPickerVisible = false;
         widget.assetPickerViewState!(_assetPickerVisible);
+        _voiceVisible = false;
+        widget.voiceViewState!(_voiceVisible);
       });
     });
 
@@ -142,7 +154,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
     setState(() {
       if (isForceHidden) {
         _assetPickerVisible = false;
-      }else {
+      } else {
         _assetPickerVisible = !_assetPickerVisible;
       }
       widget.assetPickerViewState!(_assetPickerVisible);
@@ -151,7 +163,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
       print('widget.picAction');
       print(widget.picAction);
 
-      if (_emojiVisible){
+      if (_emojiVisible) {
         _emojiVisible = !_emojiVisible;
         widget.emojiViewState!(_emojiVisible);
         unfocus();
@@ -162,57 +174,77 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
       } else {
         focus();
       }
+
+      if (_voiceVisible) {
+        _voiceVisible = !_voiceVisible;
+        widget.voiceViewState!(_voiceVisible);
+        unfocus();
+      }
     });
   }
 
   Widget buildView() {
-    return Column(
+    print('sssss${widget.hideInputBox}');
+    return Stack(
+      alignment: Alignment.bottomCenter,
       children: [
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(
-                  color: Color(0xFFDDDDDD),
-                  width: 1,
-                ),
-              )),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /// 引用（回复）消息
-              if (widget.quoteContent != null && "" != widget.quoteContent)
-                Padding(
-                  padding: EdgeInsets.fromLTRB(6, 6, 6, 0),
-                  child: buildQuoteView(),
-                ),
-
-              /// 输入框
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 10, 16, 0),
-                child: buildInputView(),
-              ),
-
-              /// bottomBar
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 20, 16, 10),
-                child: buildBottomBar(),
-              ),
-            ],
-          ),
-        ),
-        Stack(
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Visibility(
-              visible: _assetPickerVisible,
-              child: widget.assetPickerView,
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                      color: Color(0xFFDDDDDD),
+                      width: 1,
+                    ),
+                  )),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// 引用（回复）消息
+                  if (widget.quoteContent != null && "" != widget.quoteContent)
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(6, 6, 6, 0),
+                      child: buildQuoteView(),
+                    ),
+
+                  /// 输入框
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                    child: buildInputView(),
+                  ),
+
+                  /// bottomBar
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16, 20, 16, 10),
+                    child: buildBottomBar(),
+                  ),
+                ],
+              ),
             ),
-            Visibility(
-              visible: _emojiVisible,
-              child: widget.emojiView,
+            Stack(
+              children: [
+                Visibility(
+                  visible: _assetPickerVisible,
+                  child: widget.assetPickerView,
+                ),
+                Visibility(
+                  visible: _emojiVisible,
+                  child: widget.emojiView,
+                ),
+                Visibility(
+                  visible: _voiceVisible,
+                  child: SizedBox(
+                    height: 270.h,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
+        if (_voiceVisible) widget.voiceView,
       ],
     );
   }
@@ -227,6 +259,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
               _showOrHideAssetPickerView(true);
               _emojiVisible = !_emojiVisible;
               widget.emojiViewState!(_emojiVisible);
+              _voiceVisible = false;
+              widget.voiceViewState!(_voiceVisible);
               if (_emojiVisible) {
                 unfocus();
               } else {
@@ -262,14 +296,45 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         ),
         GestureDetector(
           onTap: () {
+            setState(() {
+              _emojiVisible = false;
+              widget.emojiViewState!(_emojiVisible);
+              _assetPickerVisible = false;
+              widget.assetPickerViewState!(_assetPickerVisible);
+              _voiceVisible = !_voiceVisible;
+              widget.voiceViewState!(_voiceVisible);
+              if (_voiceVisible) {
+                unfocus();
+              } else {
+                focus();
+              }
+            });
+          },
+          child: ImageUtil.assetImage(
+              _voiceVisible
+                  ? "ic_inputbox_but_recording_selected"
+                  : "ic_inputbox_but_recording",
+              width: 20,
+              height: 20),
+        ),
+        Visibility(
+          child: SizedBox(
+            width: 30,
+          ),
+          visible: widget.isGroupChat == true,
+        ),
+        GestureDetector(
+          onTap: () {
             if (widget.picAction == null) {
               _showOrHideAssetPickerView(false);
-            }else{
+            } else {
               widget.picAction!();
             }
           },
           child: ImageUtil.assetImage(
-            _assetPickerVisible ? "Inputbox_but_pic_highlight" : "Inputbox_but_pic",
+            _assetPickerVisible
+                ? "Inputbox_but_pic_highlight"
+                : "Inputbox_but_pic",
             width: 20,
             height: 20,
           ),

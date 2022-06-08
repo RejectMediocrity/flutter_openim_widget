@@ -51,6 +51,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Function()? onTapReadView;
   final bool? isSelfChat; // 自己和自己聊天
   final Widget? faceReplyView;
+  final bool isVoiceUnread;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -97,6 +98,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.onTapReadView,
     this.isSelfChat,
     this.faceReplyView,
+    this.isVoiceUnread = false,
   }) : super(key: key);
 
   @override
@@ -128,7 +130,7 @@ class ChatSingleLayout extends StatelessWidget {
                     ChatRadio(
                       checked: checked,
                       showRadio: showRadio,
-                      enable: messageType != MessageType.revoke && !isHintMsg,
+                      enable: messageType != MessageType.revoke && messageType != MessageType.voice && !isHintMsg,
                     ),
                   if (!showRadio)
 
@@ -256,6 +258,8 @@ class ChatSingleLayout extends StatelessWidget {
                                   !isSending &&
                                   enabledReadStatus)
                                 _buildGroupReadStatusView(),
+                              if(!isVoiceUnread)
+                                _buildVoiceUnread(),
                             ],
                           ),
 
@@ -396,6 +400,9 @@ class ChatSingleLayout extends StatelessWidget {
     // );
   }
 
+  Widget _buildVoiceUnread() {
+    return Container();
+  }
   Widget _buildQuoteMsgView() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
