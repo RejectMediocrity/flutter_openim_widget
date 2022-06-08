@@ -201,7 +201,7 @@ class ChatAtText extends StatelessWidget {
                         '$matchText',
                         style: mapping.style != null ? mapping.style : style,
                       ),
-                      Container(
+                      uid == "all"?Container():Container(
                         padding:
                             EdgeInsets.only(left: 2.w, right: 4.w, top: 4.w),
                         child: ImageUtil.assetImage(
