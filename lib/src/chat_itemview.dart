@@ -325,6 +325,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             permisstionStr = UILocalizations.canRead;
           } else if (permission == 2) {
             permisstionStr = UILocalizations.canEdit;
+          }else{
+            permisstionStr = UILocalizations.canManage;
           }
         });
       }
