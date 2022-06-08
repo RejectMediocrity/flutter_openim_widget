@@ -543,6 +543,7 @@ class _ChatCameraAssetPickerToolsViewState
         pickerTheme: theme,
         selectedAssets: selectedEntityList,
         maxAssets: widget.selectedMaximumAssets,
+        requestType: RequestType.common,
       );
       selectedEntityList = result ?? [];
       setState(() {});
