@@ -9,6 +9,7 @@ export 'src/chat_avatar_view.dart';
 export 'src/chat_bubble.dart';
 export 'src/chat_carte_view.dart';
 export 'src/chat_emoji_view.dart';
+export 'src/chat_camera_asset_picker_tools_view.dart';
 export 'src/chat_file_preview.dart';
 export 'src/chat_file_view.dart';
 export 'src/chat_inputbox_view.dart';

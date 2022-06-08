@@ -10,7 +10,8 @@ class ChatInputBoxView extends StatefulWidget {
     required this.multiOpToolbox,
     required this.emojiView,
     required this.atAction,
-    required this.picAction,
+    required this.assetPickerView,
+    this.picAction,
     this.allAtMap = const <String, String>{},
     this.atCallback,
     this.controller,
@@ -27,9 +28,10 @@ class ChatInputBoxView extends StatefulWidget {
     this.hintText,
     this.isGroupChat = false,
     this.emojiViewState,
+    this.assetPickerViewState,
   }) : super(key: key);
   final Function() atAction;
-  final Function() picAction;
+  final Function()? picAction;
   final AtTextCallback? atCallback;
   final Map<String, String> allAtMap;
   final TextEditingController? controller;
@@ -37,6 +39,7 @@ class ChatInputBoxView extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final Widget multiOpToolbox;
   final Widget emojiView;
+  final Widget assetPickerView;
   final TextStyle? style;
   final TextStyle? atStyle;
   final TextStyle? atMeStyle;
@@ -48,6 +51,8 @@ class ChatInputBoxView extends StatefulWidget {
   final String? hintText;
   final bool? isGroupChat;
   final Function(bool visible)? emojiViewState;
+  final Function(bool visible)? assetPickerViewState;
+
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
 }
@@ -55,6 +60,8 @@ class ChatInputBoxView extends StatefulWidget {
 class _ChatInputBoxViewState extends State<ChatInputBoxView>
     with TickerProviderStateMixin {
   var _emojiVisible = false;
+  var _assetPickerVisible = false;
+
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -73,14 +80,18 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
 
     _animation = Tween(begin: 1.0, end: 0.0).animate(_controller)
       ..addListener(() {
+        if (!mounted) return;
         setState(() {});
       });
 
     widget.focusNode?.addListener(() {
+      if (!mounted) return;
       if (widget.focusNode!.hasFocus) {
         setState(() {
           _emojiVisible = false;
           widget.emojiViewState!(_emojiVisible);
+          _assetPickerVisible = false;
+          widget.assetPickerViewState!(_assetPickerVisible);
         });
       }
     });
@@ -90,6 +101,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
       setState(() {
         _emojiVisible = false;
         widget.emojiViewState!(_emojiVisible);
+        _assetPickerVisible = false;
+        widget.assetPickerViewState!(_assetPickerVisible);
       });
     });
 
@@ -120,6 +133,37 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   focus() => FocusScope.of(context).requestFocus(widget.focusNode);
 
   unfocus() => FocusScope.of(context).requestFocus(FocusNode());
+
+  // 显示或隐藏资源选择工具栏(isForceHidden=true时为强制隐藏)
+  _showOrHideAssetPickerView(bool isForceHidden) {
+    print('_showOrHideAssetPickerView');
+    if (!mounted) return;
+    print('_showOrHideAssetPickerView');
+    setState(() {
+      if (isForceHidden) {
+        _assetPickerVisible = false;
+      }else {
+        _assetPickerVisible = !_assetPickerVisible;
+      }
+      widget.assetPickerViewState!(_assetPickerVisible);
+
+      print('_assetPickerVisible = $_assetPickerVisible');
+      print('widget.picAction');
+      print(widget.picAction);
+
+      if (_emojiVisible){
+        _emojiVisible = !_emojiVisible;
+        widget.emojiViewState!(_emojiVisible);
+        unfocus();
+      }
+
+      if (_assetPickerVisible) {
+        unfocus();
+      } else {
+        focus();
+      }
+    });
+  }
 
   Widget buildView() {
     return Column(
@@ -157,9 +201,17 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             ],
           ),
         ),
-        Visibility(
-          visible: _emojiVisible,
-          child: widget.emojiView,
+        Stack(
+          children: [
+            Visibility(
+              visible: _assetPickerVisible,
+              child: widget.assetPickerView,
+            ),
+            Visibility(
+              visible: _emojiVisible,
+              child: widget.emojiView,
+            ),
+          ],
         ),
       ],
     );
@@ -172,6 +224,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
         GestureDetector(
           onTap: () {
             setState(() {
+              _showOrHideAssetPickerView(true);
               _emojiVisible = !_emojiVisible;
               widget.emojiViewState!(_emojiVisible);
               if (_emojiVisible) {
@@ -208,9 +261,15 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
           visible: widget.isGroupChat == true,
         ),
         GestureDetector(
-          onTap: widget.picAction,
+          onTap: () {
+            if (widget.picAction == null) {
+              _showOrHideAssetPickerView(false);
+            }else{
+              widget.picAction!();
+            }
+          },
           child: ImageUtil.assetImage(
-            "Inputbox_but_pic",
+            _assetPickerVisible ? "Inputbox_but_pic_highlight" : "Inputbox_but_pic",
             width: 20,
             height: 20,
           ),

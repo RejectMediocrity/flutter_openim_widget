@@ -41,6 +41,15 @@ dependencies:
   flutter_markdown: ^0.6.9+1
   sp_util: ^2.0.3
 
+  # camera_picker_relations
+  bindings_compatible: ^1.0.1
+  camera: ^0.9.6
+  path: ^1.8.0
+  photo_manager: ^1.3.10
+  wechat_assets_picker: ^6.3.1
+  badges: ^2.0.3
+  #
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
