@@ -125,7 +125,8 @@ class ChatQuoteView extends StatelessWidget {
             ),
             Flexible(
               child: ChatAtText(
-                text: ' ${UILocalizations.reply} $name：${content ?? ''}',
+                text: ' ${UILocalizations.reply} $name：${CommonUtil.replaceAtMsgIdWithNickName(
+                    content: content, atUserNameMappingMap: allAtMap??{}) ?? ''}',
                 allAtMap: allAtMap ?? {},
                 textStyle: TextStyle(
                   fontSize: 14.sp,

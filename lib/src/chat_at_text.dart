@@ -30,6 +30,7 @@ class ChatAtText extends StatelessWidget {
   final bool needToTpliceContent;
   final InlineSpan? senderSpan;
   final TextSpan? faceReplySpan;
+  final bool? isSender;
   // final TextAlign textAlign;
   ChatAtText({
     Key? key,
@@ -48,6 +49,7 @@ class ChatAtText extends StatelessWidget {
     this.senderSpan,
     this.faceReplySpan,
     this.hasReadList,
+    this.isSender,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -201,7 +203,7 @@ class ChatAtText extends StatelessWidget {
                         '$matchText',
                         style: mapping.style != null ? mapping.style : style,
                       ),
-                      uid == "all"?Container():Container(
+                      (uid == "all"||isSender == false)?Container():Container(
                         padding:
                             EdgeInsets.only(left: 2.w, right: 4.w, top: 4.w),
                         child: ImageUtil.assetImage(
