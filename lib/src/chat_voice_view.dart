@@ -137,31 +137,38 @@ class _ChatVoiceViewState extends State<ChatVoiceView> {
     return Directionality(
       textDirection: isOwnerRight ? TextDirection.rtl : TextDirection.ltr,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _isPlaying
-              ? RotatedBox(
-                  quarterTurns: turns,
-                  child: Lottie.asset(
-                    anim,
+          Padding(
+            padding: EdgeInsets.only(top: 4.w),
+            child: _isPlaying
+                ? RotatedBox(
+                    quarterTurns: turns,
+                    child: Lottie.asset(
+                      anim,
+                      height: 19.h,
+                      width: 18.w,
+                      package: 'flutter_openim_widget',
+                    ),
+                  )
+                : Image.asset(
+                    png,
                     height: 19.h,
                     width: 18.w,
                     package: 'flutter_openim_widget',
                   ),
-                )
-              : Image.asset(
-                  png,
-                  height: 19.h,
-                  width: 18.w,
-                  package: 'flutter_openim_widget',
-                ),
+          ),
           SizedBox(
             width: 12.w,
           ),
-          Text(
-            "${widget.duration ?? 0}''",
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Color(0xFF333333),
+          Padding(
+            padding: EdgeInsets.only(top: 4.w),
+            child: Text(
+              "${widget.duration ?? 0}''",
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: Color(0xFF333333),
+              ),
             ),
           ),
           SizedBox(
