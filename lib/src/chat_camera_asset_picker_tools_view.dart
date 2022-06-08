@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:badges/badges.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/constants/config.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/widgets/camera_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../flutter_openim_widget.dart';
@@ -107,7 +109,7 @@ class _ChatCameraAssetPickerToolsViewState
                     height: 110.w,
                     color: Color(0xFF333333),
                     child: IconButton(
-                      onPressed: () => pickFromCamera(context),
+                      onPressed: () => checkCameraPermission(context),
                       color: Colors.white,
                       icon: ImageUtil.assetImage(
                         "file_but_camera",
@@ -121,7 +123,7 @@ class _ChatCameraAssetPickerToolsViewState
                     height: 110.w,
                     color: Color(0xFF333333),
                     child: IconButton(
-                      onPressed: () => pickFromAssets(context),
+                      onPressed: () => checkPhotosPermission(context),
                       color: Colors.white,
                       icon: ImageUtil.assetImage(
                         "file_but_album",
@@ -143,7 +145,9 @@ class _ChatCameraAssetPickerToolsViewState
                           //   print(entity.toString());
                           // }
                           return Container(
-                            width: 220.w,
+                            width: 220.w * (entity.width / entity.height) > 50.w
+                                ? 220.w * (entity.width / entity.height)
+                                : 50.w,
                             height: 220.w,
                             color: Colors.white,
                             child: Stack(
@@ -361,6 +365,155 @@ class _ChatCameraAssetPickerToolsViewState
         isNeedOrigin: isNeedOrigin,
       );
     }
+  }
+
+  checkMicrophonePermission(BuildContext context) {
+    PermissionUtil.microphone(
+      () async {
+        pickFromCamera(context);
+      },
+      onFailed: (PermissionStatus status) async {
+        await Permission.microphone.request();
+      },
+      onPermanently: () {
+        showDialog(
+          context: context!,
+          builder: (BuildContext context) => MindIMDialog(
+            title: Text("需获得麦克风权限"),
+            content: Text("请在“设置-Mind”中打开麦克风权限，以便发送语音消息"),
+            cancelWidget: CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            sureWidget: CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text(
+                '前往设置',
+                style: TextStyle(
+                  color: Color(0xFF006DFA),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                await openAppSettings();
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  checkCameraPermission(BuildContext context) {
+    PermissionUtil.camera(
+      () async {
+        checkMicrophonePermission(context);
+      },
+      onFailed: (PermissionStatus status) async {
+        if (status == PermissionStatus.permanentlyDenied) {
+          showDialog(
+            context: context!,
+            builder: (BuildContext context) => MindIMDialog(
+              title: Text("需获得相机权限"),
+              content: Text("请在“设置-Mind”中打开相机权限，以便使用拍照功能"),
+              cancelWidget: CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text(
+                  '取消',
+                  style: TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+              sureWidget: CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text(
+                  '前往设置',
+                  style: TextStyle(
+                    color: Color(0xFF006DFA),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  await openAppSettings();
+                },
+              ),
+            ),
+          );
+        } else {
+          await Permission.camera.request();
+        }
+      },
+    );
+  }
+
+  checkPhotosPermission(BuildContext context) {
+    PermissionUtil.photos(
+      () async {
+        pickFromAssets(context);
+      },
+      onFailed: (PermissionStatus status) async {
+        if (status == PermissionStatus.permanentlyDenied) {
+          showDialog(
+            context: context!,
+            builder: (BuildContext context) => MindIMDialog(
+              title: Text("无法访问相册中所有照片"),
+              content: Text("请前往设置，允许mind访问所有照片"),
+              cancelWidget: CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text(
+                  '取消',
+                  style: TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+              sureWidget: CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text(
+                  '前往设置',
+                  style: TextStyle(
+                    color: Color(0xFF006DFA),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  await openAppSettings();
+                },
+              ),
+            ),
+          );
+        } else {
+          await Permission.photos.request();
+        }
+      },
+    );
   }
 
   Future<void> pickFromCamera(BuildContext context) async {
