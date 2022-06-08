@@ -187,7 +187,7 @@ class CommonUtil {
       String des = element.group(0)!;
       String uid = des.replaceFirst("@", "").trim();
       if (atUserNameMappingMap.containsKey(uid)) {
-        content = content.replaceAll(des, '@${atUserNameMappingMap[uid]!}');
+        content = content.replaceAll(des, '@${atUserNameMappingMap[uid]!} ');
       }
     });
     return content;
