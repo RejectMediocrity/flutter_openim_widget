@@ -394,7 +394,7 @@ class _ChatCameraAssetPickerToolsViewState
     Fluttertoast.showToast(
         msg: toastStr,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
+        gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.grey[800],
         textColor: Colors.white,
