@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/constants/config.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/widgets/camera_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../flutter_openim_widget.dart';
 
 class ChatCameraAssetPickerToolsView extends StatefulWidget {
   final int selectedMaximumAssets;
-  final Function({List<AssetEntity>? selectedEntityList, bool? isNeedOrigin})?
+  final Function({List<AssetEntity>? selectedEntityList, bool? isNeedOrigin, bool? isSendDirectly})?
       selectedCallback;
 
   const ChatCameraAssetPickerToolsView(
@@ -38,7 +39,7 @@ class _ChatCameraAssetPickerToolsViewState
     if (_ps.isAuth) {
       // Granted.
       // PhotoManager.openSetting
-      final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList();
+      final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(onlyAll: true);
       final List<AssetEntity> entities =
           await paths[0].getAssetListRange(start: 0, end: 9007199254740992);
 
@@ -58,6 +59,13 @@ class _ChatCameraAssetPickerToolsViewState
   void initState() {
     super.initState();
     updatePhotosList();
+  }
+
+  @override
+  void dispose() {
+    entityList = [];
+    selectedEntityList = [];
+    super.dispose();
   }
 
   @override
@@ -154,11 +162,21 @@ class _ChatCameraAssetPickerToolsViewState
                                     ),
                                   ),
                                 ),
+                                if (selectedEntityList.length >=
+                                    widget.selectedMaximumAssets &&
+                                    !selectedEntityList.contains(entity))
+                                  Positioned.fill(
+                                    child: Container(
+                                      color: Colors.grey.withOpacity(0.8),
+                                    ),
+                                  )
+                                else
+                                  Container(),
                                 Positioned(
                                   top: 10.w,
                                   right: 10.w,
-                                  width: 24.w,
-                                  height: 24.w,
+                                  width: 26.w,
+                                  height: 26.w,
                                   // child: _appleOSSelectButton(context, true, entity),
                                   child: InkWell(
                                     onTap: () {
@@ -167,7 +185,8 @@ class _ChatCameraAssetPickerToolsViewState
                                           !selectedEntityList
                                               .contains(entity)) {
                                         int max = widget.selectedMaximumAssets;
-                                        print('最多只能选择$max张');
+                                        // print('最多只能选择$max张');
+                                        showToast('最多只能选择$max张');
                                         return;
                                       }
                                       if (selectedEntityList.contains(entity)) {
@@ -176,6 +195,7 @@ class _ChatCameraAssetPickerToolsViewState
                                         selectedEntityList.add(entity);
                                       }
                                       setState(() {});
+                                      sendSelectedEntityList(selectedEntityList, false);
                                     },
                                     child: selectedEntityList.contains(entity)
                                         ? Badge(
@@ -202,16 +222,7 @@ class _ChatCameraAssetPickerToolsViewState
                                           ),
                                   ),
                                 ),
-                                if (selectedEntityList.length >=
-                                        widget.selectedMaximumAssets &&
-                                    !selectedEntityList.contains(entity))
-                                  Positioned.fill(
-                                    child: Container(
-                                      color: Colors.grey.withOpacity(0.8),
-                                    ),
-                                  )
-                                else
-                                  Container(),
+
                               ],
                             ),
                           );
@@ -312,11 +323,12 @@ class _ChatCameraAssetPickerToolsViewState
     );
   }
 
-  sendSelectedEntityList(List<AssetEntity>? selectedEntityList) {
+  sendSelectedEntityList(List<AssetEntity>? selectedEntityList, bool isSendDirectly) {
     if (widget.selectedCallback != null) {
       widget.selectedCallback!(
+          isSendDirectly: isSendDirectly,
           selectedEntityList: selectedEntityList ?? [],
-          isNeedOrigin: isNeedOrigin);
+          isNeedOrigin: isNeedOrigin,);
     }
   }
 
@@ -333,10 +345,11 @@ class _ChatCameraAssetPickerToolsViewState
       entityList.add(result);
       selectedEntityList = entityList;
       setState(() {});
-      sendSelectedEntityList(selectedEntityList);
+      sendSelectedEntityList(selectedEntityList, true);
     } else {
-      sendSelectedEntityList([]);
+      sendSelectedEntityList([], true);
     }
+    selectedEntityList = [];
   }
 
   Future<void> pickFromAssets(BuildContext context) async {
@@ -349,30 +362,43 @@ class _ChatCameraAssetPickerToolsViewState
       );
       selectedEntityList = result ?? [];
       setState(() {});
-      sendSelectedEntityList(selectedEntityList);
+      sendSelectedEntityList(selectedEntityList, true);
+      selectedEntityList = [];
     } else {
-      print('未开启权限');
+      showToast('未开启权限');
     }
   }
 
   Future<void> previewSelectedAssets(BuildContext context, int index) async {
-    final List<AssetEntity> selected = selectedEntityList;
+    // final List<AssetEntity> selected = selectedEntityList;
+    //
+    // final List<AssetEntity>? result = await AssetPickerViewer.pushToViewer(
+    //   context,
+    //   previewAssets: entityList,
+    //   currentIndex: index,
+    //   selectedAssets: selected,
+    //   themeData: theme,
+    //   maxAssets: widget.selectedMaximumAssets,
+    // );
+    // if (result != null) {
+    //   selectedEntityList = [];
+    //   setState(() {});
+    //   Navigator.of(context).maybePop(result);
+    // } else {
+    //   selectedEntityList = result!;
+    //   setState(() {});
+    // }
+  }
 
-    final List<AssetEntity>? result = await AssetPickerViewer.pushToViewer(
-      context,
-      previewAssets: entityList,
-      currentIndex: index,
-      selectedAssets: selected,
-      themeData: theme,
-      maxAssets: widget.selectedMaximumAssets,
+  showToast(String toastStr){
+    Fluttertoast.showToast(
+        msg: toastStr,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey[800],
+        textColor: Colors.white,
+        fontSize: 16.0
     );
-    if (result != null) {
-      selectedEntityList = [];
-      setState(() {});
-      Navigator.of(context).maybePop(result);
-    } else {
-      selectedEntityList = result!;
-      setState(() {});
-    }
   }
 }
