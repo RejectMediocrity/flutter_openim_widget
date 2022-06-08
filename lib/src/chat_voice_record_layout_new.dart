@@ -41,7 +41,7 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
   String? _path;
   int _sec = 0;
   int maxDuration = 60 * 1000;
-  int _lastTime = 59 * 1000;
+  int _lastTime = 10 * 1000;
 
   @override
   void initState() {
