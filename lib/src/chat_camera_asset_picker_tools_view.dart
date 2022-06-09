@@ -313,34 +313,34 @@ class _ChatCameraAssetPickerToolsViewState
                   highlightColor: Colors.transparent,
                   radius: 0.0,
                   onTap: () {
-                    // if (_ps.isAuth) {
-                    //   isNeedOrigin = !isNeedOrigin;
-                    //   setState(() {});
-                    // }
+                    if (_ps.isAuth) {
+                      isNeedOrigin = !isNeedOrigin;
+                      setState(() {});
+                    }
                   },
                   child: Row(
                     children: [
                       SizedBox(
                         width: 20,
                       ),
-                      // ImageUtil.assetImage(
-                      //   isNeedOrigin
-                      //       ? "user_agreement_but_selected"
-                      //       : "user_agreement_but_unselected",
-                      //   width: 16.w,
-                      //   height: 16.w,
-                      // ),
-                      // SizedBox(
-                      //   width: 5,
-                      // ),
-                      // Text(
-                      //   '原图',
-                      //   style: TextStyle(
-                      //       color: _ps.isAuth
-                      //           ? Color(0xFF333333)
-                      //           : Color(0xFFCCCCCC),
-                      //       fontSize: 16.0),
-                      // ),
+                      ImageUtil.assetImage(
+                        isNeedOrigin
+                            ? "user_agreement_but_selected"
+                            : "user_agreement_but_unselected",
+                        width: 16.w,
+                        height: 16.w,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '原图',
+                        style: TextStyle(
+                            color: _ps.isAuth
+                                ? Color(0xFF333333)
+                                : Color(0xFFCCCCCC),
+                            fontSize: 16.0),
+                      ),
                       SizedBox(
                         width: 20,
                       ),
