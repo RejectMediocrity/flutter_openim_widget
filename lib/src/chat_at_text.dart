@@ -218,6 +218,11 @@ class ChatAtText extends StatelessWidget {
                 actualText: '$value',
                 start: match.start,
               );
+            }else{
+              inlineSpan = TextSpan(
+                text: "$matchText",
+                style: style,
+              );
             }
           } else if (mapping.type == PatternType.ATME) {
             String uid = matchText.replaceFirst("@", "").trim();
