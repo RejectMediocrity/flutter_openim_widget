@@ -361,8 +361,8 @@ class _ChatCameraAssetPickerToolsViewState
     // var hours = d.inHours > 10 ? d.inHours : '0${d.inHours}';
     // var minute =
     //     d.inMinutes % 60 > 10 ? d.inMinutes % 60 : '0${d.inMinutes % 60}';
-    var minute = d.inMinutes > 10 ? d.inMinutes : '0${d.inMinutes}';
-    var sec = d.inSeconds % 60 > 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
+    var minute = d.inMinutes >= 10 ? d.inMinutes : '0${d.inMinutes}';
+    var sec = d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
     return '$minute:$sec';
   }
 
