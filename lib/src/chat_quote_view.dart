@@ -42,21 +42,21 @@ class ChatQuoteView extends StatelessWidget {
               url: url1,
               width: 42.h,
               height: 42.h,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             );
           } else if (url2 != null && url2.isNotEmpty) {
             child = ImageUtil.networkImage(
               url: url2,
               width: 42.h,
               height: 42.h,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             );
           } else if (path != null && path.isNotEmpty) {
             child = Image(
               image: FileImage(File(path)),
               height: 42.h,
               width: 42.h,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             );
           }
         } else if (quoteMessage.contentType == MessageType.video) {
@@ -107,7 +107,11 @@ class ChatQuoteView extends StatelessWidget {
         }
       }
     }
-
+    String uidString = "";
+    if(content!=null&&content.isNotEmpty){
+      uidString = '${CommonUtil.replaceAtMsgIdWithNickName(
+          content: content, atUserNameMappingMap: allAtMap??{}) ?? ''}';
+    }
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
@@ -116,6 +120,7 @@ class ChatQuoteView extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               margin: EdgeInsets.only(right: 4.w, top: 3.w),
@@ -125,8 +130,7 @@ class ChatQuoteView extends StatelessWidget {
             ),
             Flexible(
               child: ChatAtText(
-                text: ' ${UILocalizations.reply} $name：${CommonUtil.replaceAtMsgIdWithNickName(
-                    content: content, atUserNameMappingMap: allAtMap??{}) ?? ''}',
+                text: ' ${UILocalizations.reply} $name：$uidString',
                 allAtMap: allAtMap ?? {},
                 textStyle: TextStyle(
                   fontSize: 14.sp,
