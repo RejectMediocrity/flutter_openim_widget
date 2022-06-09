@@ -191,7 +191,7 @@ class _ChatCameraAssetPickerToolsViewState
                                       height: 18.w,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
-                                        color: Colors.black?.withOpacity(0.5),
+                                        color: Colors.black.withOpacity(0.5),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -387,7 +387,7 @@ class _ChatCameraAssetPickerToolsViewState
       },
       onPermanently: () {
         showDialog(
-          context: context!,
+          context: context,
           builder: (BuildContext context) => MindIMDialog(
             title: Text("需获得麦克风权限"),
             content: Text("请在“设置-Mind”中打开麦克风权限，以便发送语音消息"),
@@ -434,7 +434,7 @@ class _ChatCameraAssetPickerToolsViewState
       onFailed: (PermissionStatus status) async {
         if (status == PermissionStatus.permanentlyDenied) {
           showDialog(
-            context: context!,
+            context: context,
             builder: (BuildContext context) => MindIMDialog(
               title: Text("需获得相机权限"),
               content: Text("请在“设置-Mind”中打开相机权限，以便使用拍照功能"),
@@ -484,7 +484,7 @@ class _ChatCameraAssetPickerToolsViewState
       onFailed: (PermissionStatus status) async {
         if (status == PermissionStatus.permanentlyDenied) {
           showDialog(
-            context: context!,
+            context: context,
             builder: (BuildContext context) => MindIMDialog(
               title: Text("无法访问相册中所有照片"),
               content: Text("请前往设置，允许mind访问所有照片"),
