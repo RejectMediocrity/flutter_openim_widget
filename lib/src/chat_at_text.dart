@@ -189,7 +189,7 @@ class ChatAtText extends StatelessWidget {
             value = uid;
             if (allAtMap.containsKey(uid)) {
               bool? hasRead = hasReadList?.contains(uid);
-              matchText = '@${allAtMap[uid]!} ';
+              matchText = isSender == true?'@${allAtMap[uid]!}':'@${allAtMap[uid]!} ';
               inlineSpan = ExtendedWidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: GestureDetector(
