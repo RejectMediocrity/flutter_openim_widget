@@ -21,7 +21,7 @@ dependencies:
   just_audio: ^0.9.20
   lottie: ^1.2.2
   permission_handler: ^9.1.0
-  extended_text_field: ^10.1.0
+  extended_text_field: ^10.0.0
   focus_detector: ^2.0.1
   sprintf: ^6.0.0
   flutter_inappwebview: ^5.3.2
