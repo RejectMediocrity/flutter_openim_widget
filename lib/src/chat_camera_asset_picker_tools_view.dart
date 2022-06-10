@@ -154,6 +154,8 @@ class _ChatCameraAssetPickerToolsViewState
                               children: [
                                 Positioned.fill(
                                   child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    radius: 0.0,
                                     onTap: () =>
                                         previewSelectedAssets(context, index),
                                     child: Image(
@@ -195,7 +197,10 @@ class _ChatCameraAssetPickerToolsViewState
                                       ),
                                       child: Center(
                                         child: Text(
-                                          getVideoDurationFormat(entity.duration > 0 ? entity.duration:1),
+                                          getVideoDurationFormat(
+                                              entity.duration > 0
+                                                  ? entity.duration
+                                                  : 1),
                                           style: TextStyle(
                                               fontSize: 12.0,
                                               color: Colors.white),
@@ -212,6 +217,8 @@ class _ChatCameraAssetPickerToolsViewState
                                   height: 26.w,
                                   // child: _appleOSSelectButton(context, true, entity),
                                   child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    radius: 0.0,
                                     onTap: () {
                                       if (selectedEntityList.length >=
                                               widget.selectedMaximumAssets &&
@@ -362,7 +369,8 @@ class _ChatCameraAssetPickerToolsViewState
     // var minute =
     //     d.inMinutes % 60 > 10 ? d.inMinutes % 60 : '0${d.inMinutes % 60}';
     var minute = d.inMinutes >= 10 ? d.inMinutes : '0${d.inMinutes}';
-    var sec = d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
+    var sec =
+        d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
     return '$minute:$sec';
   }
 
@@ -482,41 +490,101 @@ class _ChatCameraAssetPickerToolsViewState
         pickFromAssets(context);
       },
       onFailed: (PermissionStatus status) async {
-        if (status == PermissionStatus.permanentlyDenied) {
+        if (status == PermissionStatus.permanentlyDenied ||
+            status == PermissionStatus.limited) {
           showDialog(
             context: context,
-            builder: (BuildContext context) => MindIMDialog(
-              title: Text("无法访问相册中所有照片"),
-              content: Text("请前往设置，允许mind访问所有照片"),
-              cancelWidget: CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Color(0xFF333333),
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
+            useSafeArea: false,
+            builder: (BuildContext context) => Stack(
+              children: [
+                Positioned.fill(
+                    child: Container(
+                  color: Color(0xFF333333),
+                )),
+                Positioned(
+                  top: 45.w,
+                  left: 10.w,
+                  width: 40.w,
+                  height: 40.w,
+                  child: InkWell(
+                    highlightColor: Colors.transparent,
+                    radius: 0.0,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                    child: Container(
+                      width: 40.w,
+                      height: 40.w,
+                      child: Center(
+                        child: ImageUtil.assetImage(
+                          "title_but_close_white",
+                          width: 20.w,
+                          height: 20.w,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              ),
-              sureWidget: CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text(
-                  '前往设置',
-                  style: TextStyle(
-                    color: Color(0xFF006DFA),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                Positioned(
+                  top: 228.w,
+                  left: 0,
+                  right: 0,
+                  height: 34,
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        '无法访问相册中所有照片',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  await openAppSettings();
-                },
-              ),
+                Positioned(
+                  top: 282.w,
+                  left: 0,
+                  right: 0,
+                  height: 22,
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        '请前往设置，允许mind访问所有照片',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 160.w,
+                  left: 0,
+                  right: 0,
+                  height: 46.w,
+                  child: Container(
+                    child: Center(
+                      child: MaterialButton(
+                        elevation: 0,
+                        minWidth: 250.w,
+                        height: 46.w,
+                        padding: const EdgeInsets.symmetric(horizontal: 27),
+                        color: Color(0xFF006DFA),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Container(
+                          child: Text(
+                            '前往设置',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        onPressed: openAppSettings,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         } else {
@@ -535,7 +603,13 @@ class _ChatCameraAssetPickerToolsViewState
       ),
     );
 
+    print(
+        '======================== pickFromCamera start ==============================');
+    print(DateTime.now().toString());
     if (result != null) {
+      if (result.type == AssetType.video) {
+        result.loadFile();
+      }
       entityList.add(result);
       selectedEntityList = entityList;
       setState(() {});
@@ -544,6 +618,9 @@ class _ChatCameraAssetPickerToolsViewState
       sendSelectedEntityList([], true);
     }
     selectedEntityList = [];
+    print(DateTime.now().toString());
+    print(
+        '======================== pickFromCamera end ==============================');
   }
 
   Future<void> pickFromAssets(BuildContext context) async {
@@ -560,7 +637,7 @@ class _ChatCameraAssetPickerToolsViewState
       sendSelectedEntityList(selectedEntityList, true);
       selectedEntityList = [];
     } else {
-      showToast('未开启权限');
+      // showToast('未开启权限');
     }
   }
 
