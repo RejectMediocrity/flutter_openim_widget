@@ -110,7 +110,7 @@ class ChatQuoteView extends StatelessWidget {
     String uidString = "";
     if(content!=null&&content.isNotEmpty){
       uidString = '${CommonUtil.replaceAtMsgIdWithNickName(
-          content: content, atUserNameMappingMap: allAtMap??{}) ?? ''}';
+          content: content, atUserNameMappingMap: allAtMap??{})}';
     }
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
