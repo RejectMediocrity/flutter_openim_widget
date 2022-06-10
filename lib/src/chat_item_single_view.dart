@@ -302,7 +302,13 @@ class ChatSingleLayout extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
           child: child,
         ),
-        onTap: () => _onItemClick?.add(index),
+        onTap: () {
+          try{
+            _onItemClick?.add(index);
+          }catch(e){
+            print(e.toString());
+          }
+        } ,
       ),
     );
     if (faceReplyView == null) return widget;
