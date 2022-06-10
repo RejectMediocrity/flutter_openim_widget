@@ -603,13 +603,10 @@ class _ChatCameraAssetPickerToolsViewState
       ),
     );
 
-    print(
-        '======================== pickFromCamera start ==============================');
-    print(DateTime.now().toString());
+    // print(
+    //     '======================== pickFromCamera start ==============================');
+    // print(DateTime.now().toString());
     if (result != null) {
-      if (result.type == AssetType.video) {
-        result.loadFile();
-      }
       entityList.add(result);
       selectedEntityList = entityList;
       setState(() {});
@@ -618,9 +615,9 @@ class _ChatCameraAssetPickerToolsViewState
       sendSelectedEntityList([], true);
     }
     selectedEntityList = [];
-    print(DateTime.now().toString());
-    print(
-        '======================== pickFromCamera end ==============================');
+    // print(DateTime.now().toString());
+    // print(
+    //     '======================== pickFromCamera end ==============================');
   }
 
   Future<void> pickFromAssets(BuildContext context) async {
