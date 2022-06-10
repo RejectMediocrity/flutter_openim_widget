@@ -279,11 +279,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             height: 20,
           ),
         ),
-        Visibility(
-          visible: widget.isGroupChat == true,
-          child: SizedBox(
-            width: 30,
-          ),
+        SizedBox(
+          width: 30,
         ),
         Visibility(
           child: GestureDetector(
@@ -296,35 +293,35 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
           ),
           visible: widget.isGroupChat == true,
         ),
-        // Visibility(
-        //   child: SizedBox(
-        //     width: 30,
-        //   ),
-        //   visible: widget.isGroupChat == true,
-        // ),
-        // GestureDetector(
-        //   onTap: () {
-        //     setState(() {
-        //       _emojiVisible = false;
-        //       widget.emojiViewState!(_emojiVisible);
-        //       _assetPickerVisible = false;
-        //       widget.assetPickerViewState!(_assetPickerVisible);
-        //       _voiceVisible = !_voiceVisible;
-        //       widget.voiceViewState!(_voiceVisible);
-        //       if (_voiceVisible) {
-        //         unfocus();
-        //       } else {
-        //         focus();
-        //       }
-        //     });
-        //   },
-        //   child: ImageUtil.assetImage(
-        //       _voiceVisible
-        //           ? "ic_inputbox_but_recording_selected"
-        //           : "ic_inputbox_but_recording",
-        //       width: 20,
-        //       height: 20),
-        // ),
+        Visibility(
+          child: SizedBox(
+            width: 30,
+          ),
+          visible: widget.isGroupChat == true,
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _emojiVisible = false;
+              widget.emojiViewState!(_emojiVisible);
+              _assetPickerVisible = false;
+              widget.assetPickerViewState!(_assetPickerVisible);
+              _voiceVisible = !_voiceVisible;
+              widget.voiceViewState!(_voiceVisible);
+              if (_voiceVisible) {
+                unfocus();
+              } else {
+                focus();
+              }
+            });
+          },
+          child: ImageUtil.assetImage(
+              _voiceVisible
+                  ? "ic_inputbox_but_recording_selected"
+                  : "ic_inputbox_but_recording",
+              width: 20,
+              height: 20),
+        ),
         SizedBox(
           width: 30,
         ),
