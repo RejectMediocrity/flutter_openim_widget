@@ -18,6 +18,7 @@ class ConversationItemView extends StatelessWidget {
   final TextStyle titleStyle;
   final String content;
   final TextStyle contentStyle;
+  final TextStyle senderNameStyle;
   final String? contentPrefix;
   final TextSpan? faceReplySpan;
   final TextStyle? contentPrefixStyle;
@@ -73,6 +74,11 @@ class ConversationItemView extends StatelessWidget {
       color: Color(0xFF666666),
       fontWeight: FontWeight.w600,
     ),
+    this.senderNameStyle = const TextStyle(
+      fontSize: 12,
+      color: Color(0xFF666666),
+      fontWeight: FontWeight.w600,
+    ),
     this.timeStyle = const TextStyle(
       fontSize: 12,
       color: Color(0xFF999999),
@@ -109,6 +115,7 @@ class ConversationItemView extends StatelessWidget {
         patterns: patterns,
         titleStyle: titleStyle,
         contentStyle: contentStyle,
+        senderNameStyle: senderNameStyle,
         timeStyle: timeStyle,
         onTap: onTap,
         notDisturb: notDisturb,
@@ -144,6 +151,7 @@ class _ConversationView extends StatelessWidget {
     // this.isPinned = false,
     required this.titleStyle,
     required this.contentStyle,
+    required this.senderNameStyle,
     required this.timeStyle,
     this.avatarUrl,
     this.isCircleAvatar,
@@ -166,6 +174,7 @@ class _ConversationView extends StatelessWidget {
   final TextStyle titleStyle;
   final String content;
   final TextStyle contentStyle;
+  final TextStyle senderNameStyle;
   final String? contentPrefix;
   final TextSpan? faceReplySpan;
   final TextStyle? contentPrefixStyle;
@@ -214,7 +223,7 @@ class _ConversationView extends StatelessWidget {
     }
     return TextSpan(
       text: senderName,
-      style: contentStyle,
+      style: senderNameStyle,
     );
   }
 
@@ -331,7 +340,9 @@ class _ConversationView extends StatelessWidget {
                 allAtMap: allAtMap,
                 text: CommonUtil.replaceAtMsgIdWithNickName(
                     content: newStr, atUserNameMappingMap: allAtMap),
-                textStyle: contentStyle,
+                textStyle: TextStyle(
+                  color: Colors.red
+                ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 prefixSpan: _buildImgSpan(contentPrefix),
