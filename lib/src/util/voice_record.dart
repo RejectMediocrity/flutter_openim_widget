@@ -39,6 +39,7 @@ class VoiceRecord {
         _updateDuration = updateDuration;
 
   start() async {
+    await AudioController.instance.stop();
     PermissionUtil.microphone(
       () async {
         var path = (await getApplicationDocumentsDirectory()).path;
