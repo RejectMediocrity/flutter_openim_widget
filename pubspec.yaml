@@ -37,7 +37,7 @@ dependencies:
     git:
       url: https://github.com/RejectMediocrity/Open-IM-SDK-Flutter.git
       ref: dev
-      tag: 2.0.9+5.4
+#      tag: 2.0.9+5.4
 #    path: ../Open-IM-SDK-Flutter
   flutter_markdown: ^0.6.9+1
   sp_util: ^2.0.3
