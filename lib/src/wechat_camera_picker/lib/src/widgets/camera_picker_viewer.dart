@@ -234,7 +234,7 @@ class _CameraPickerViewerState extends State<CameraPickerViewer> {
               title: path.basename(previewFile.path),
             );
             // 20220610 add video previewFile relativePath
-            entity?.relativePath = previewFile.path;
+            // entity?.relativePath = previewFile.path;
             break;
         }
         if (shouldDeletePreviewFile && previewFile.existsSync()) {

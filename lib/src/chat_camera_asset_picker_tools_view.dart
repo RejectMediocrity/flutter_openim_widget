@@ -624,10 +624,12 @@ class _ChatCameraAssetPickerToolsViewState
     if (_ps.isAuth) {
       final List<AssetEntity>? result = await AssetPicker.pickAssets(
         context,
-        pickerTheme: theme,
-        selectedAssets: selectedEntityList,
-        maxAssets: widget.selectedMaximumAssets,
-        requestType: RequestType.common,
+        pickerConfig: AssetPickerConfig(
+          pickerTheme: theme,
+          selectedAssets: selectedEntityList,
+          maxAssets: widget.selectedMaximumAssets,
+          requestType: RequestType.common,
+        ),
       );
       selectedEntityList = result ?? [];
       setState(() {});
