@@ -34,11 +34,11 @@ dependencies:
   chewie: ^1.3.1
 #  flutter_openim_sdk: 2.0.8
   flutter_openim_sdk:
-    git:
-      url: https://github.com/RejectMediocrity/Open-IM-SDK-Flutter.git
-      ref: dev
+#    git:
+#      url: https://github.com/RejectMediocrity/Open-IM-SDK-Flutter.git
+#      ref: dev
 #      tag: 2.0.9+5.4
-#    path: ../Open-IM-SDK-Flutter
+    path: ../Open-IM-SDK-Flutter
   flutter_markdown: ^0.6.9+1
   sp_util: ^2.0.3
 
