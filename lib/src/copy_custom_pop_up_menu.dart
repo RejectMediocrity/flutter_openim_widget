@@ -158,7 +158,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
     _controller = widget.controller;
     if (_controller == null) _controller = CustomPopupMenuController();
     _controller?.addListener(_updateView);
-    WidgetsBinding.instance?.addPostFrameCallback((call) {
+    WidgetsBinding.instance.addPostFrameCallback((call) {
       if (!mounted) return;
       _childBox = context.findRenderObject() as RenderBox?;
       _parentBox =

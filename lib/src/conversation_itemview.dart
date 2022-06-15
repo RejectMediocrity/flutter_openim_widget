@@ -340,9 +340,7 @@ class _ConversationView extends StatelessWidget {
                 allAtMap: allAtMap,
                 text: CommonUtil.replaceAtMsgIdWithNickName(
                     content: newStr, atUserNameMappingMap: allAtMap),
-                textStyle: TextStyle(
-                  color: Colors.red
-                ),
+                textStyle: contentStyle,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 prefixSpan: _buildImgSpan(contentPrefix),

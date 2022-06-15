@@ -200,7 +200,7 @@ class CommonUtil {
     required TextStyle style,
   }) {
     TextPainter painter = TextPainter(
-      locale: WidgetsBinding.instance!.window.locale,
+      locale: WidgetsBinding.instance.window.locale,
       maxLines: maxLine,
       textDirection: TextDirection.ltr,
       textScaleFactor: 1.0,

@@ -28,7 +28,7 @@ class AudioController extends NavigatorObserver with WidgetsBindingObserver {
   static AudioController get instance {
     if (_instance == null) {
       _instance = AudioController();
-      WidgetsBinding.instance?.addObserver(_instance!);
+      WidgetsBinding.instance.addObserver(_instance!);
     }
 
     return _instance!;
