@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sp_util/sp_util.dart';
 
 class PicInfo {
   final String? thumbUrl; // 视频或者图片的缩略图
@@ -52,7 +53,11 @@ class ChatPicturePreview extends StatefulWidget {
   final Function()? showMenu;
 
   @override
-  State<ChatPicturePreview> createState() => _ChatPicturePreviewState();
+  State<ChatPicturePreview> createState(){
+    PicInfo info = picList.elementAt(index);
+    SpUtil.putBool("autoPlay", info.isVideo == true);
+    return _ChatPicturePreviewState();
+  }
 }
 
 class _ChatPicturePreviewState extends State<ChatPicturePreview> {
