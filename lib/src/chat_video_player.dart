@@ -44,7 +44,7 @@ class _VideoAppState extends State<ChatVideoPlayer> {
         setState(() {});
       });
     bool? auto = SpUtil.getBool("autoPlay");
-    if(auto == true) _controller.play();
+    if (auto == true) _controller.play();
     SpUtil.putBool("autoPlay", false);
   }
 
@@ -82,6 +82,7 @@ class _VideoAppState extends State<ChatVideoPlayer> {
                       (BuildContext context, String url, dynamic error) {
                     return _errorView();
                   },
+                  width: 1.sw,
                   fit: BoxFit.contain,
                 ),
         ),

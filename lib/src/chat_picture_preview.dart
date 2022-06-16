@@ -158,8 +158,6 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
       );
   Widget _buildChildView(int index) {
     var info = picList.elementAt(index);
-    String? url = info.showSourcePic == true ? info.url : info.thumbUrl;
-    if (info.thumbUrl == null || info.thumbUrl!.isEmpty) url = info.url;
     if (info.isVideo == true) {
       return ChatVideoPlayer(
         url: info.url ?? "",
@@ -181,9 +179,19 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         loadStateChanged: _buildLoadStateChangedView,
         initGestureConfigHandler: _buildGestureConfig,
       );
-    } else if (url != null) {
+    } else if (info.url != null) {
       return ExtendedImage.network(
-        url,
+        info.url!,
+        fit: BoxFit.contain,
+        mode: ExtendedImageMode.gesture,
+        clearMemoryCacheWhenDispose: false,
+        handleLoadingProgress: true,
+        loadStateChanged: _buildLoadStateChangedView,
+        initGestureConfigHandler: _buildGestureConfig,
+      );
+    }else if (info.thumbUrl != null) {
+      return ExtendedImage.network(
+        info.thumbUrl!,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
         clearMemoryCacheWhenDispose: false,
