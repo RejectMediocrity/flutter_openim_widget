@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -114,8 +115,46 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
     );
   }
 
+  Widget _errorView() {
+    return ImageUtil.assetImage(
+      'ic_load_error',
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _placeholderImage() {
+    return ImageUtil.assetImage(
+      "pic_place",
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _urlView({required String url}) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      placeholder: (BuildContext context, String url) {
+        return _placeholderImage();
+      },
+      errorWidget: (BuildContext context, String url, dynamic error) {
+        return _errorView();
+      },
+      fit: BoxFit.fitWidth,
+    );
+  }
+
+  Widget _pathView({required File file}) => Stack(
+        children: [
+          Image(
+            image: FileImage(file),
+            fit: BoxFit.fitWidth,
+            errorBuilder: (_, error, stack) => _errorView(),
+          ),
+        ],
+      );
   Widget _buildChildView(int index) {
     var info = picList.elementAt(index);
+    String? url = info.showSourcePic == true ? info.url : info.thumbUrl;
+    if (info.thumbUrl == null || info.thumbUrl!.isEmpty) url = info.url;
     if (info.isVideo == true) {
       return ChatVideoPlayer(
         url: info.url ?? "",
@@ -128,13 +167,12 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         },
       );
     }
-    String? url = info.url;
     if (info.file != null) {
       return ExtendedImage.file(
         info.file!,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
-        clearMemoryCacheWhenDispose: true,
+        clearMemoryCacheWhenDispose: false,
         loadStateChanged: _buildLoadStateChangedView,
         initGestureConfigHandler: _buildGestureConfig,
       );
@@ -143,7 +181,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         url,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
-        clearMemoryCacheWhenDispose: true,
+        clearMemoryCacheWhenDispose: false,
         handleLoadingProgress: true,
         loadStateChanged: _buildLoadStateChangedView,
         initGestureConfigHandler: _buildGestureConfig,
@@ -202,7 +240,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
   Widget _buildPageView() => GestureDetector(
         onTap: widget.onTap ?? close,
         child: ExtendedImageGesturePageView.builder(
-          reverse: widget.showMenu==null?true:false,
+          reverse: widget.showMenu == null ? true : false,
           controller: widget.controller,
           itemCount: picList.length,
           itemBuilder: (BuildContext context, int index) {
@@ -217,11 +255,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
       );
   String _getVideoDurationFormat(int seconds) {
     var d = Duration(seconds: seconds);
-    // var hours = d.inHours > 10 ? d.inHours : '0${d.inHours}';
-    // var minute =
-    //     d.inMinutes % 60 > 10 ? d.inMinutes % 60 : '0${d.inMinutes % 60}';
     var minute = d.inMinutes >= 10 ? d.inMinutes : '0${d.inMinutes}';
-    var sec = d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
+    var sec =
+        d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
     return '$minute:$sec';
   }
 
@@ -285,11 +321,28 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                       ],
                     ),
                   )
-                : Container(
-                    width: 140.w,
-                    height: 32.w,
-                    color: Colors.transparent,
-                  ),
+                : info.showSourcePic == true
+                    ? Container(
+                        width: 140.w,
+                        height: 32.w,
+                      )
+                    : GestureDetector(
+                        onTap: onViewOriginImg,
+                        child: Container(
+                          width: 140.w,
+                          height: 32.w,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF999999).withAlpha(76),
+                            borderRadius: BorderRadius.circular(100.w),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "查看原图($sizeStr)",
+                            style:
+                                TextStyle(fontSize: 12.sp, color: Colors.white),
+                          ),
+                        ),
+                      ),
             widget.showMenu != null
                 ? SizedBox(
                     width: 20.w,

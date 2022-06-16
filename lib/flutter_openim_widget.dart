@@ -56,3 +56,4 @@ export 'src/util/voice_record.dart';
 export 'src/chat_voice_record_layout_new.dart';
 export 'src/mind_im_dialog.dart';
 export 'src/controller/audio_controller.dart';
+export 'package:extended_image/extended_image.dart';
