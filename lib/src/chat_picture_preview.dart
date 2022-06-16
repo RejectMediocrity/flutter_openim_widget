@@ -53,7 +53,7 @@ class ChatPicturePreview extends StatefulWidget {
   final Function()? showMenu;
 
   @override
-  State<ChatPicturePreview> createState(){
+  State<ChatPicturePreview> createState() {
     PicInfo info = picList.elementAt(index);
     SpUtil.putBool("autoPlay", info.isVideo == true);
     return _ChatPicturePreviewState();
@@ -179,6 +179,17 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         loadStateChanged: _buildLoadStateChangedView,
         initGestureConfigHandler: _buildGestureConfig,
       );
+    } else if (info.thumbUrl != null && info.showSourcePic == false) {
+      return ExtendedImage.network(
+        info.thumbUrl!,
+        fit: BoxFit.contain,
+        mode: ExtendedImageMode.gesture,
+        clearMemoryCacheWhenDispose: false,
+        handleLoadingProgress: true,
+        cache: true,
+        loadStateChanged: _buildLoadStateChangedView,
+        initGestureConfigHandler: _buildGestureConfig,
+      );
     } else if (info.url != null) {
       return ExtendedImage.network(
         info.url!,
@@ -186,16 +197,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         mode: ExtendedImageMode.gesture,
         clearMemoryCacheWhenDispose: false,
         handleLoadingProgress: true,
-        loadStateChanged: _buildLoadStateChangedView,
-        initGestureConfigHandler: _buildGestureConfig,
-      );
-    }else if (info.thumbUrl != null) {
-      return ExtendedImage.network(
-        info.thumbUrl!,
-        fit: BoxFit.contain,
-        mode: ExtendedImageMode.gesture,
-        clearMemoryCacheWhenDispose: false,
-        handleLoadingProgress: true,
+        cache: true,
         loadStateChanged: _buildLoadStateChangedView,
         initGestureConfigHandler: _buildGestureConfig,
       );
