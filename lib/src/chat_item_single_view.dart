@@ -210,7 +210,7 @@ class ChatSingleLayout extends StatelessWidget {
                                                 Padding(
                                                   child: child,
                                                   padding: EdgeInsets.fromLTRB(
-                                                      10.w, 6.w, 10.w, 10.w),
+                                                      10.w, 10.w, 10.w, 10.w),
                                                 ),
                                               ),
                                               if (faceReplyView != null)

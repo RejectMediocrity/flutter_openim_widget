@@ -133,7 +133,7 @@ class ChatQuoteView extends StatelessWidget {
                 text: ' ${UILocalizations.reply} $name：$uidString',
                 allAtMap: allAtMap ?? {},
                 textStyle: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 13.sp,
                   color: Color(0xFF666666),
                 ),
                 patterns: patterns ?? [],
