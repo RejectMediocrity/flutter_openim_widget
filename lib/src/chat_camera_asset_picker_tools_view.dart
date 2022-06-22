@@ -145,6 +145,10 @@ class _ChatCameraAssetPickerToolsViewState
                           //   print(entity.toString());
                           // }
                           return Container(
+                            // constraints: BoxConstraints(
+                            //   minWidth: 50.w,
+                            //   minHeight: 220.w,
+                            // ),
                             width: 220.w * (entity.width / entity.height) > 50.w
                                 ? 220.w * (entity.width / entity.height)
                                 : 50.w,
@@ -167,7 +171,12 @@ class _ChatCameraAssetPickerToolsViewState
                                         //     const ThumbnailSize.square(200),
                                         // thumbnailFormat: ThumbnailFormat.jpeg,
                                       ),
-                                      fit: BoxFit.cover,
+                                      fit: 220.w *
+                                                  (entity.width /
+                                                      entity.height) <
+                                              50.w
+                                          ? BoxFit.fitWidth
+                                          : BoxFit.fitHeight,
                                     ),
                                   ),
                                 ),

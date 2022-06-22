@@ -24,6 +24,7 @@ class ChatSendProgressView extends StatefulWidget {
 
 class _ChatSendProgressViewState extends State<ChatSendProgressView> {
   int _progress = 0;
+  int _oldProgress = 0;
 
   @override
   void initState() {
@@ -31,9 +32,17 @@ class _ChatSendProgressViewState extends State<ChatSendProgressView> {
     widget.stream?.listen((event) {
       if (!mounted) return;
       if (widget.msgId == event.msgId) {
-        setState(() {
-          _progress = event.value;
-        });
+        if (event.value >= 99) {
+          setState(() {
+            _progress = 100;
+          });
+        }
+        if (_oldProgress < _progress) {
+          setState(() {
+            _progress = event.value;
+          });
+          _oldProgress = _progress;
+        }
       }
     });
     super.initState();
