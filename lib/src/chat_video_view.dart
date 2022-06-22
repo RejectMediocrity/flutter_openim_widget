@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
@@ -84,10 +85,24 @@ class _ChatVideoViewState extends State<ChatVideoView> {
   Widget _buildThumbView() {
     if (widget.isReceived) {
       if (null != snapshotUrl && snapshotUrl!.isNotEmpty) {
-        return ImageUtil.networkImage(
-          url: snapshotUrl!,
+        return CachedNetworkImage(
+          imageUrl: snapshotUrl!,
           width: _trulyWidth,
           height: _trulyHeight,
+          placeholder: (BuildContext context, String url) {
+            return Container(
+              width: _trulyWidth,
+              height: _trulyHeight,
+              color: Color(0xFFF9F9F9),
+            );
+          },
+          errorWidget: (BuildContext context, String url, dynamic error) {
+            return Container(
+              width: _trulyWidth,
+              height: _trulyHeight,
+              color: Color(0xFFF9F9F9),
+            );
+          },
           fit: BoxFit.fitWidth,
         );
       }
@@ -104,16 +119,34 @@ class _ChatVideoViewState extends State<ChatVideoView> {
         );
       } else {
         if (null != snapshotUrl && snapshotUrl!.isNotEmpty) {
-          return ImageUtil.networkImage(
-            url: snapshotUrl!,
+          return CachedNetworkImage(
+            imageUrl: snapshotUrl!,
             width: _trulyWidth,
             height: _trulyHeight,
+            placeholder: (BuildContext context, String url) {
+              return Container(
+                width: _trulyWidth,
+                height: _trulyHeight,
+                color: Color(0xFFF9F9F9),
+              );
+            },
+            errorWidget: (BuildContext context, String url, dynamic error) {
+              return Container(
+                width: _trulyWidth,
+                height: _trulyHeight,
+                color: Color(0xFFF9F9F9),
+              );
+            },
             fit: BoxFit.fitWidth,
           );
         }
       }
     }
-    return Container(width: _trulyWidth, height: _trulyHeight);
+    return Container(
+      width: _trulyWidth,
+      height: _trulyHeight,
+      color: Color(0xFFF9F9F9),
+    );
   }
 
   @override
@@ -128,7 +161,7 @@ class _ChatVideoViewState extends State<ChatVideoView> {
             alignment: Alignment.center,
             children: [
               _buildThumbView(),
-              ImageUtil.play(),
+              ImageUtil.assetImage("vedio_but_play_small",width: 38,height: 38),
               ChatSendProgressView(
                 height: _trulyHeight,
                 width: _trulyWidth,
