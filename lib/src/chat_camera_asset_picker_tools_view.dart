@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/constants/config.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/widgets/camera_picker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';

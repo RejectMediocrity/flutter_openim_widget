@@ -9,7 +9,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
 import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
 import 'package:flutter_openim_widget/src/util/event_bus.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:rxdart/rxdart.dart';

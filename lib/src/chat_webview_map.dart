@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sprintf/sprintf.dart';
 
 ///

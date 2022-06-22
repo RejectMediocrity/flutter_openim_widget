@@ -4,7 +4,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_loading.dart';
 import 'package:flutter_openim_widget/src/custom_circular_progress.dart';
 import 'package:flutter_openim_widget/src/timing_view.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatSingleLayout extends StatelessWidget {
   final CustomPopupMenuController popupCtrl;

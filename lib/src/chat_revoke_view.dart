@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/revoke_message_helper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatRevokeView extends StatefulWidget {
   ChatRevokeView({Key? key, required this.message, this.onTap})

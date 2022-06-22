@@ -1,7 +1,8 @@
 import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_openim_widget/src/util/screen_util.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 final pinColors = [Color(0xFF87C0FF), Color(0xFF0060E7)];
