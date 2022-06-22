@@ -234,6 +234,27 @@ class _CameraPickerViewerState extends State<CameraPickerViewer> {
               title: path.basename(previewFile.path),
             );
             // 20220610 add video previewFile relativePath
+            if (entity != null) {
+              AssetEntity? tempEntity;
+              tempEntity = AssetEntity(
+                id: entity.id,
+                typeInt: entity.typeInt,
+                width: entity.width,
+                height: entity.height,
+                duration: entity.duration,
+                orientation: entity.orientation,
+                isFavorite: entity.isFavorite,
+                title: entity.title,
+                createDateSecond: entity.createDateSecond,
+                modifiedDateSecond: entity.modifiedDateSecond,
+                relativePath: previewFile.path,
+                latitude: entity.latitude,
+                longitude: entity.longitude,
+                mimeType: entity.mimeType,
+                subtype: entity.subtype,
+              );
+              entity = tempEntity;
+            }
             // entity?.relativePath = previewFile.path;
             break;
         }
