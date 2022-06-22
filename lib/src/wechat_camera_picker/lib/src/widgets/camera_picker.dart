@@ -446,8 +446,15 @@ class CameraPickerState extends State<CameraPicker>
   /// of cameras, start from the beginning.
   /// 按顺序切换相机。当达到相机数量时从头开始。
   void switchCameras() {
-    ++currentCameraIndex;
-    if (currentCameraIndex == cameras.length) {
+    // 解决iPhone Pro机型多于2个摄像头不能正确切换前后摄像头的情况
+    // ++currentCameraIndex;
+    // if (currentCameraIndex == cameras.length) {
+    //   currentCameraIndex = 0;
+    // }
+    if (currentCameraIndex == 0) {
+      currentCameraIndex = 1;
+    }
+    if (currentCameraIndex == 1) {
       currentCameraIndex = 0;
     }
     initCameras(currentCamera);
