@@ -451,12 +451,16 @@ class CameraPickerState extends State<CameraPicker>
     // if (currentCameraIndex == cameras.length) {
     //   currentCameraIndex = 0;
     // }
-    if (currentCameraIndex == 0) {
-      currentCameraIndex = 1;
-    }
-    if (currentCameraIndex == 1) {
+    if (cameras.length > 1) {
+      if (currentCameraIndex == 0) {
+        currentCameraIndex = 1;
+      } else if (currentCameraIndex == 1) {
+        currentCameraIndex = 0;
+      }
+    } else {
       currentCameraIndex = 0;
     }
+
     initCameras(currentCamera);
   }
 
@@ -985,21 +989,21 @@ class CameraPickerState extends State<CameraPicker>
       onPressed: Navigator.of(context).pop,
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       icon:
-      // Container(
-      //   alignment: Alignment.center,
-      //   width: 24.w,
-      //   height: 24.w,
-      //   decoration: const BoxDecoration(
-      //     color: Colors.white,
-      //     shape: BoxShape.circle,
-      //   ),
-      //   child:
-        ImageUtil.assetImage(
-          "camera_dismiss",
-          width: 24.w,
-          height: 24.w,
-        ),
-        // child: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
+          // Container(
+          //   alignment: Alignment.center,
+          //   width: 24.w,
+          //   height: 24.w,
+          //   decoration: const BoxDecoration(
+          //     color: Colors.white,
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child:
+          ImageUtil.assetImage(
+        "camera_dismiss",
+        width: 24.w,
+        height: 24.w,
+      ),
+      // child: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
       // ),
     );
   }
