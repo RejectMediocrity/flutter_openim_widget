@@ -176,5 +176,6 @@ class AudioController extends NavigatorObserver with WidgetsBindingObserver {
 
   clear() async {
     await stop();
+    listeners.clear();
   }
 }
