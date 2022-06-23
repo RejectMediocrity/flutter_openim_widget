@@ -51,7 +51,8 @@ class _ChatVoiceViewState extends State<ChatVoiceView>{
   @override
   void dispose() {
     String key = widget.soundPath ?? widget.soundUrl ?? "";
-    AudioController.instance.removeListener(key, this.voicePlayingState);
+    /// FIXME 当修复未知原因，频繁刷新dispose后需要执行此代码
+    // AudioController.instance.removeListener(key, this.voicePlayingState);
     super.dispose();
   }
 
@@ -76,36 +77,30 @@ class _ChatVoiceViewState extends State<ChatVoiceView>{
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 4.w),
-            child: _isPlaying
-                ? RotatedBox(
-                    quarterTurns: turns,
-                    child: Lottie.asset(
-                      anim,
-                      height: 19.h,
-                      width: 18.w,
-                      package: 'flutter_openim_widget',
-                    ),
-                  )
-                : Image.asset(
-                    png,
+          _isPlaying
+              ? RotatedBox(
+                  quarterTurns: turns,
+                  child: Lottie.asset(
+                    anim,
                     height: 19.h,
                     width: 18.w,
                     package: 'flutter_openim_widget',
                   ),
-          ),
+                )
+              : Image.asset(
+                  png,
+                  height: 19.h,
+                  width: 18.w,
+                  package: 'flutter_openim_widget',
+                ),
           SizedBox(
             width: 12.w,
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 4.w),
-            child: Text(
-              "${widget.duration ?? 0}''",
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: Color(0xFF333333),
-              ),
+          Text(
+            "${widget.duration ?? 0}''",
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Color(0xFF333333),
             ),
           ),
           SizedBox(

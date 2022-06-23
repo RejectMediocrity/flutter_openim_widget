@@ -151,10 +151,15 @@ class AudioController extends NavigatorObserver with WidgetsBindingObserver {
   }
 
   emitListener(bool event) {
-    listeners.forEach((key, value) {
-      value.call(event && _isPlaying(key));
-      print('AudioController key : $key event: $event');
-    });
+    if (listeners.isNotEmpty) {
+      listeners.forEach((key, value) {
+        try {
+          value.call(event && _isPlaying(key));
+        } catch(e) {
+          print('AudioController key : $key event: $event');
+        }
+      });
+    }
   }
 
   stop() async {
@@ -162,9 +167,11 @@ class AudioController extends NavigatorObserver with WidgetsBindingObserver {
     pressKeyLast = "";
     pressKey = "";
     emitListener(false);
-    await _voicePlayer?.stop();
-    await _voicePlayer?.dispose();
-    _voicePlayer = null;
+    if (_voicePlayer != null) {
+      await _voicePlayer?.stop();
+      await _voicePlayer?.dispose();
+      _voicePlayer = null;
+    }
   }
 
   clear() async {
