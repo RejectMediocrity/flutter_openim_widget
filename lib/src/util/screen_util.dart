@@ -25,7 +25,7 @@ extension ScreenUtilSizeExtension on num {
 
   ///屏幕宽度的倍数
   ///Multiple of screen width
-  double get sw => ScreenUtil().screenWidth * this;
+  double get sw => DeviceUtil.instance.isPadOrTablet ? ScreenUtil().screenWidth * (this - 0.17) : ScreenUtil().screenWidth * this;
 
   ///屏幕高度的倍数
   ///Multiple of screen height
