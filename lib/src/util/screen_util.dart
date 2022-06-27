@@ -16,7 +16,7 @@ extension ScreenUtilSizeExtension on num {
   double get r => ScreenUtil().radius(this);
 
   ///[ScreenUtil.setSp]
-  double get sp => DeviceUtil.instance.isPadOrTablet ? (min(toDouble(), ScreenUtil().setSp(this)) + 3.0) : ScreenUtil().setSp(this);
+  double get sp => DeviceUtil.instance.isPadOrTablet ? (min(toDouble(), ScreenUtil().setSp(this))) : ScreenUtil().setSp(this);
 
   ///smart size :  it check your value - if it is bigger than your value it will set your value
   ///for example, you have set 16.sm() , if for your screen 16.sp() is bigger than 16 , then it will set 16 not 16.sp()
