@@ -137,8 +137,11 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   @override
   void dispose() {
     _controller.dispose();
-    widget.controller?.dispose();
-    widget.focusNode?.dispose();
+    if (!DeviceUtil.instance.isPadOrTablet) {
+      widget.controller?.dispose();
+      widget.focusNode?.dispose();
+    }
+
     super.dispose();
   }
 
