@@ -192,7 +192,6 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   }
 
   Widget buildView() {
-    print('sssss${widget.hideInputBox}');
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [

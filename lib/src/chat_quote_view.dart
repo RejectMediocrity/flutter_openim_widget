@@ -104,6 +104,8 @@ class ChatQuoteView extends StatelessWidget {
           content = quoteMessage.mergeElem?.title ?? "";
         }else if (quoteMessage.contentType == MessageType.voice) {
           content = "[${UILocalizations.voice}]";
+        }else if (quoteMessage.contentType == MessageType.revoke) {
+          content = "${UILocalizations.revokedAMsg}";
         }
       }
     }
