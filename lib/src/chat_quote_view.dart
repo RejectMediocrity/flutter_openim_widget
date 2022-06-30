@@ -33,7 +33,7 @@ class ChatQuoteView extends StatelessWidget {
           content = CommonUtil.replaceAtMsgIdWithNickName(
               content: quoteMessage.atElem?.text ?? "",
               atUserNameMappingMap: allAtMap ?? {},
-              atUserInfo: quoteMessage?.atElem?.atUsersInfo);
+              atUserInfo: quoteMessage.atElem?.atUsersInfo);
         } else if (quoteMessage.contentType == MessageType.picture) {
           var url1 = quoteMessage.pictureElem?.snapshotPicture?.url;
           var url2 = quoteMessage.pictureElem?.sourcePicture?.url;
