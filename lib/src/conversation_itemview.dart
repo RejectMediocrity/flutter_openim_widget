@@ -41,6 +41,7 @@ class ConversationItemView extends StatelessWidget {
   final String nickName;
   final bool isGroupChat;
   final String? senderName;
+  final List<AtUserInfo>? atUserInfo;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -90,6 +91,7 @@ class ConversationItemView extends StatelessWidget {
     this.isGroupChat = false,
     this.senderName,
     this.faceReplySpan,
+    this.atUserInfo,
   }) : super(key: key);
 
   @override
@@ -124,6 +126,7 @@ class ConversationItemView extends StatelessWidget {
         isGroupChat: isGroupChat,
         senderName: senderName,
         faceReplySpan: faceReplySpan,
+        atUserInfo: atUserInfo,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -166,6 +169,7 @@ class _ConversationView extends StatelessWidget {
     this.isGroupChat = false,
     this.senderName,
     this.faceReplySpan,
+    this.atUserInfo,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -195,6 +199,7 @@ class _ConversationView extends StatelessWidget {
   final String nickName;
   final bool isGroupChat;
   final String? senderName;
+  final List<AtUserInfo>? atUserInfo;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -332,7 +337,9 @@ class _ConversationView extends StatelessWidget {
 
   Widget buildChatAtText() {
     List<String> noMatchUids = CommonUtil.checkHasNoMatchUids(
-        content: content, atUserNameMappingMap: allAtMap);
+        content: content,
+        atUserNameMappingMap: allAtMap,
+        atUserInfo: atUserInfo);
     return noMatchUids.length > 0
         ? FutureBuilder(
             builder: (context, AsyncSnapshot<String> snapshot) {
@@ -340,7 +347,9 @@ class _ConversationView extends StatelessWidget {
               return ChatAtText(
                 allAtMap: allAtMap,
                 text: CommonUtil.replaceAtMsgIdWithNickName(
-                    content: newStr, atUserNameMappingMap: allAtMap),
+                    content: newStr,
+                    atUserNameMappingMap: allAtMap,
+                    atUserInfo: atUserInfo),
                 textStyle: contentStyle,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -359,7 +368,9 @@ class _ConversationView extends StatelessWidget {
         : ChatAtText(
             allAtMap: allAtMap,
             text: CommonUtil.replaceAtMsgIdWithNickName(
-                content: content, atUserNameMappingMap: allAtMap),
+                content: content,
+                atUserNameMappingMap: allAtMap,
+                atUserInfo: atUserInfo),
             textStyle: contentStyle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
