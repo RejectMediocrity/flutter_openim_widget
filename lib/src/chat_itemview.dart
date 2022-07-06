@@ -1329,7 +1329,12 @@ class _ChatItemViewState extends State<ChatItemView> {
     ];
     String userStr = '';
     int showCount = 0;
-
+    List<User> userList = users.where((element) => element.id == OpenIM.iMManager.uid).toList();
+    if(userList.isNotEmpty){
+      User user = userList.first;
+      users.remove(user);
+      users.insert(0, user);
+    }
     for (int i = 0; i < users.length; i++) {
       User e = users[i];
       String name = e == users.last ? e.name! : "${e.name!}，";
