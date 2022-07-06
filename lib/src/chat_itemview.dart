@@ -1251,8 +1251,15 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
 
   Widget? _buildFaceReplyView() {
-    ChatFaceReplyListModel listModel =
-        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
+    if(widget.message.ex!=null){
+      var obj = json.decode(widget.message.ex??"");
+      if(obj is Map){
+        listModel = ChatFaceReplyListModel.fromJson(obj["quick_reply"]);
+      }else{
+        listModel = ChatFaceReplyListModel.fromJson(obj);
+      }
+    }
     if (listModel.dataList.length <= 0) return null;
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: .65.sw),
