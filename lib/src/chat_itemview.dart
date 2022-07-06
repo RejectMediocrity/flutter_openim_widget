@@ -325,7 +325,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             permisstionStr = UILocalizations.canRead;
           } else if (permission == 2) {
             permisstionStr = UILocalizations.canEdit;
-          }else{
+          } else {
             permisstionStr = UILocalizations.canManage;
           }
         });
@@ -727,7 +727,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 patterns: widget.patterns,
                 hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                     ?.hasReadUserIDList,
-                isSender:widget.message.sendID == OpenIM.iMManager.uid,
+                isSender: widget.message.sendID == OpenIM.iMManager.uid,
               ),
             );
           }
@@ -745,7 +745,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               patterns: widget.patterns,
               hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                   ?.hasReadUserIDList,
-              isSender:widget.message.sendID == OpenIM.iMManager.uid,
+              isSender: widget.message.sendID == OpenIM.iMManager.uid,
             ),
           );
         }
@@ -858,7 +858,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               maxLines: widget.isExpanded == true ? null : 10,
               hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                   ?.hasReadUserIDList,
-              isSender:widget.message.sendID == OpenIM.iMManager.uid,
+              isSender: widget.message.sendID == OpenIM.iMManager.uid,
             ),
           );
         }
@@ -1039,10 +1039,12 @@ class _ChatItemViewState extends State<ChatItemView> {
         model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
     Widget? permissionWidget;
-    if(isSender){
-      if(permission == 0)return Container();
-      else if(permission == 1)permissionStr = UILocalizations.you + UILocalizations.canRead;
-      else if(permission == 2||permission == 3){
+    if (isSender) {
+      if (permission == 0)
+        return Container();
+      else if (permission == 1)
+        permissionStr = UILocalizations.you + UILocalizations.canRead;
+      else if (permission == 2 || permission == 3) {
         permissionWidget = Row(
           children: [
             Flexible(
@@ -1062,7 +1064,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               width: 4.w,
             ),
             GestureDetector(
-              onTap: ()=>widget.setPermission!(permission),
+              onTap: () => widget.setPermission!(permission),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1070,8 +1072,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                     permisstionStr.isNotEmpty
                         ? permisstionStr
                         : permission == 1
-                        ? UILocalizations.canRead
-                        : UILocalizations.canEdit,
+                            ? UILocalizations.canRead
+                            : UILocalizations.canEdit,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
@@ -1090,11 +1092,12 @@ class _ChatItemViewState extends State<ChatItemView> {
           ],
         );
       }
-    }else{
-      if(permission == 0)return Container();
-      else if(permission == 1){
+    } else {
+      if (permission == 0)
+        return Container();
+      else if (permission == 1) {
         permissionStr = UILocalizations.you + UILocalizations.canRead;
-      }else{
+      } else {
         permissionStr = UILocalizations.you + UILocalizations.canEdit;
       }
     }
@@ -1252,13 +1255,16 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   Widget? _buildFaceReplyView() {
     ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
-    if(widget.message.ex!=null){
-      var obj = json.decode(widget.message.ex??"");
-      if(obj is Map){
-        listModel = ChatFaceReplyListModel.fromJson(obj["quick_reply"]);
-      }else{
-        listModel = ChatFaceReplyListModel.fromJson(obj);
-      }
+    if (widget.message.ex != null) {
+      try {
+        var obj = json.decode(widget.message.ex ?? "");
+        if (obj is Map) {
+          if (obj.keys.contains("quick_reply"))
+            listModel = ChatFaceReplyListModel.fromJson(obj["quick_reply"]);
+        } else {
+          listModel = ChatFaceReplyListModel.fromJson(obj);
+        }
+      } catch (e) {}
     }
     if (listModel.dataList.length <= 0) return null;
     return ConstrainedBox(
