@@ -306,7 +306,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   var _isHintMsg = false;
   String? imageDirectory;
   String? markDownContent;
-  String permisstionStr = "";
+  // String permisstionStr = "";
 
   bool isFullGroup = false;
   var _hintTextStyle = TextStyle(
@@ -316,27 +316,27 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   @override
   void initState() {
-    bus.on("doc_permisstion", (arg) {
-      int permission = arg["p"];
-      String id = arg["id"];
-      if (id == widget.message.clientMsgID) {
-        setState(() {
-          if (permission == 1) {
-            permisstionStr = UILocalizations.canRead;
-          } else if (permission == 2) {
-            permisstionStr = UILocalizations.canEdit;
-          } else {
-            permisstionStr = UILocalizations.canManage;
-          }
-        });
-      }
-    });
+    // bus.on("doc_permisstion", (arg) {
+    //   int permission = arg["p"];
+    //   String id = arg["id"];
+    //   if (id == widget.message.clientMsgID) {
+    //     setState(() {
+    //       if (permission == 1) {
+    //         permisstionStr = UILocalizations.canRead;
+    //       } else if (permission == 2) {
+    //         permisstionStr = UILocalizations.canEdit;
+    //       } else {
+    //         permisstionStr = UILocalizations.canManage;
+    //       }
+    //     });
+    //   }
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
-    bus.off("doc_permisstion");
+    // bus.off("doc_permisstion");
     _popupCtrl.dispose();
     super.dispose();
   }
@@ -1035,23 +1035,31 @@ class _ChatItemViewState extends State<ChatItemView> {
     String remark = params['remark'] ?? "";
     int permission =
         model.permission?.permission ?? 0; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
+    int recvPermission = model.recieverPermission ?? 0;
     int shareType =
         model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
     Widget? permissionWidget;
     if (isSender) {
-      if (permission == 0)
+      String recieverDes = widget.isSingleChat
+          ? widget.conversationName!
+          : UILocalizations.grantThisSessionMemberPermissions;
+      if (permission == 0){
         return Container();
-      else if (permission == 1)
-        permissionStr = UILocalizations.you + UILocalizations.canRead;
-      else if (permission == 2 || permission == 3) {
+      } else if (permission == 1){
+        if (recvPermission == 0)
+          return Container();
+        else if (recvPermission == 1) {
+          permissionStr = recieverDes + UILocalizations.canRead;
+        } else {
+          permissionStr = recieverDes + UILocalizations.canEdit;
+        }
+      } else if (permission == 2 || permission == 3) {
         permissionWidget = Row(
           children: [
             Flexible(
               child: Text(
-                widget.isSingleChat
-                    ? widget.conversationName!
-                    : UILocalizations.grantThisSessionMemberPermissions,
+                recieverDes,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(
@@ -1069,9 +1077,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    permisstionStr.isNotEmpty
-                        ? permisstionStr
-                        : permission == 1
+                    recvPermission == 1
                             ? UILocalizations.canRead
                             : UILocalizations.canEdit,
                     overflow: TextOverflow.ellipsis,
@@ -1093,9 +1099,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         );
       }
     } else {
-      if (permission == 0)
+      if (recvPermission == 0)
         return Container();
-      else if (permission == 1) {
+      else if (recvPermission == 1) {
         permissionStr = UILocalizations.you + UILocalizations.canRead;
       } else {
         permissionStr = UILocalizations.you + UILocalizations.canEdit;
