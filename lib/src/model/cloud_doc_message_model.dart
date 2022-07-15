@@ -1,6 +1,8 @@
 class CloudDocMessageModel {
   String? id;
   String? params;
+  int? recieverPermission;
+  String? title;
   CloudDocPermission? permission;
 
   CloudDocMessageModel({this.id, this.params, this.permission});
@@ -8,6 +10,8 @@ class CloudDocMessageModel {
   CloudDocMessageModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     params = json['params'];
+    recieverPermission = json['recieverPermission'];
+    title = json['title'];
     permission = json['permission'] != null
         ? new CloudDocPermission.fromJson(json['permission'])
         : null;
@@ -17,6 +21,8 @@ class CloudDocMessageModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['params'] = this.params;
+    data["recieverPermission"] = this.recieverPermission;
+    data['title'] = this.title;
     if (this.permission != null) {
       data['permission'] = this.permission!.toJson();
     }

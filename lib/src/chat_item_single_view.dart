@@ -371,6 +371,7 @@ class ChatSingleLayout extends StatelessWidget {
   /// 群聊
   Widget _buildGroupReadStatusView() {
     bool isAllRead = groupHaveReadCount >= groupMemberCount - 1;
+    double progress = groupHaveReadCount / (groupMemberCount - 1);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTapReadView,
@@ -381,9 +382,9 @@ class ChatSingleLayout extends StatelessWidget {
                 width: 20.w, height: 20.w)
             : CustomCircularProgress(
                 size: 16.w,
-                activeColor: Color.fromARGB(255, 0, 192, 155),
+                activeColor: progress<=0?Color(0xFFDDDDDD):Color.fromARGB(255, 0, 192, 155),
                 backColor: Colors.white,
-                progress: groupHaveReadCount / (groupMemberCount - 1),
+                progress: progress,
               ),
       ),
     );
