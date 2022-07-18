@@ -19,6 +19,7 @@ class PopMenuInfo {
 class PopButton extends StatelessWidget {
   final List<PopMenuInfo> menus;
   final Widget child;
+  final Widget? popupChild;
 
   final CustomPopupMenuController? popCtrl;
 
@@ -49,6 +50,7 @@ class PopButton extends StatelessWidget {
     required this.menus,
     required this.child,
     // required this.builder,
+    this.popupChild,
     this.popCtrl,
     this.arrowColor = const Color(0xFF1B72EC),
     this.showArrow = true,
@@ -86,10 +88,11 @@ class PopButton extends StatelessWidget {
       pressType: pressType,
       child: child,
       menuBuilder: () => _buildPopBgView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: menus.map((e) => _buildPopItemView(e)).toList(),
-        ),
+        child: popupChild ??
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: menus.map((e) => _buildPopItemView(e)).toList(),
+            ),
       ),
     );
   }
@@ -159,6 +162,88 @@ class PopButton extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      );
+}
+
+class PopupView extends StatelessWidget {
+  final Widget child;
+  final Widget popupChild;
+
+  final CustomPopupMenuController? popCtrl;
+
+  // final PopupMenuItemBuilder builder;
+  final PressType pressType;
+  final bool showArrow;
+  final Color arrowColor;
+  final Color barrierColor;
+  final double horizontalMargin;
+  final double verticalMargin;
+  final double arrowSize;
+
+  final Color menuBgColor;
+  final double menuBgRadius;
+  final Color? menuBgShadowColor;
+  final Offset? menuBgShadowOffset;
+  final double? menuBgShadowBlurRadius;
+  final double? menuBgShadowSpreadRadius;
+
+  PopupView({
+    Key? key,
+    required this.child,
+    required this.popupChild,
+    this.popCtrl,
+    this.arrowColor = const Color(0xFF1B72EC),
+    this.showArrow = true,
+    this.barrierColor = Colors.transparent,
+    this.arrowSize = 10.0,
+    this.horizontalMargin = 10.0,
+    this.verticalMargin = 10.0,
+    this.pressType = PressType.singleClick,
+    this.menuBgColor = const Color(0xFF1B72EC),
+    this.menuBgRadius = 10.0,
+    this.menuBgShadowColor,
+    this.menuBgShadowOffset,
+    this.menuBgShadowBlurRadius,
+    this.menuBgShadowSpreadRadius,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CopyCustomPopupMenu(
+      controller: popCtrl,
+      arrowColor: arrowColor,
+      showArrow: showArrow,
+      barrierColor: barrierColor,
+      arrowSize: arrowSize,
+      verticalMargin: verticalMargin,
+      horizontalMargin: horizontalMargin,
+      pressType: pressType,
+      child: child,
+      menuBuilder: () => _buildPopBgView(
+        child: popupChild,
+      ),
+    );
+  }
+
+  _clickArea(double dy) {
+    popCtrl?.hideMenu();
+  }
+
+  Widget _buildPopBgView({Widget? child}) => Container(
+        child: child,
+        padding: EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          color: menuBgColor,
+          borderRadius: BorderRadius.circular(menuBgRadius),
+          boxShadow: [
+            BoxShadow(
+              color: menuBgShadowColor ?? Color(0xFF000000).withOpacity(0.5),
+              offset: menuBgShadowOffset ?? Offset(0, 2),
+              blurRadius: menuBgShadowBlurRadius ?? 6,
+              spreadRadius: menuBgShadowSpreadRadius ?? 0,
+            )
+          ],
         ),
       );
 }
