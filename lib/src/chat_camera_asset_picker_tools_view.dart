@@ -165,7 +165,7 @@ class _ChatCameraAssetPickerToolsViewState
                                     child: Image(
                                       image: AssetEntityImageProvider(
                                         entity,
-                                        isOriginal: true,
+                                        isOriginal: !Platform.isAndroid,
                                         // isOriginal: entity.type != AssetType.video,
                                         // thumbnailSize:
                                         //     const ThumbnailSize.square(200),
