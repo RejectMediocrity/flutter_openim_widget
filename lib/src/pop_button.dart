@@ -139,6 +139,7 @@ class PopButton extends StatelessWidget {
                 info.onTap?.call();
               }
             : null,
+        onDoubleTap: null,
         behavior: HitTestBehavior.translucent,
         child: Container(
           height: menuItemHeight,
