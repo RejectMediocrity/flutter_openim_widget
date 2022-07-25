@@ -59,3 +59,4 @@ export 'src/controller/audio_controller.dart';
 export 'package:extended_image/extended_image.dart';
 export 'src/util/device_util.dart';
 export 'src/util/screen_util.dart';
+export 'src/util/event_bus.dart';
