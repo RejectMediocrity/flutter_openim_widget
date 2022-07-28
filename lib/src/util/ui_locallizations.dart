@@ -35,6 +35,8 @@ class UILocalizations {
       "forward": "Forward",
       "mergeForward": "Merge forward",
       "mergeOneByOne": "Merge one by one",
+      "addMemo": "Add memo",
+      "addMergedMemo": "Add merged memo",
       "reply": "Quote",
       "revoke": "Revoke",
       "memo": "Memo",
@@ -101,6 +103,8 @@ class UILocalizations {
       "forward": "转发",
       "mergeForward": "合并转发",
       "mergeOneByOne": "逐条转发",
+      "addMemo": "添加备忘",
+      "addMergedMemo": "合并备忘",
       "reply": "回复",
       "revoke": "撤回",
       "memo": "备忘",
@@ -187,6 +191,10 @@ class UILocalizations {
   static String get mergeForward => _value(key: 'mergeForward');
 
   static String get mergeOneByOne => _value(key: 'mergeOneByOne');
+
+  static String get addMemo => _value(key: 'addMemo');
+
+  static String get addMergedMemo => _value(key: 'addMergedMemo');
 
   static String get reply => _value(key: 'reply');
 
