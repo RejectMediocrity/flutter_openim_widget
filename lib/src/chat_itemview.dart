@@ -155,6 +155,9 @@ class ChatItemView extends StatefulWidget {
   /// Click the revoke button event on the menu
   final Function()? onTapRevokeMenu;
 
+  /// Click the memo button event on the menu
+  final Function()? onTapMemoMenu;
+
   ///
   final Function()? onTapMultiMenu;
 
@@ -175,6 +178,9 @@ class ChatItemView extends StatefulWidget {
 
   /// Click the revoke button event on the menu
   final bool? enabledRevokeMenu;
+
+  /// Click the memo button event on the menu
+  final bool? enabledMemoMenu;
 
   ///
   final bool? enabledMultiMenu;
@@ -255,6 +261,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapForwardMenu,
     this.onTapReplyMenu,
     this.onTapRevokeMenu,
+    this.onTapMemoMenu,
     this.onTapMultiMenu,
     this.onTapTranslationMenu,
     this.enabledCopyMenu,
@@ -263,6 +270,7 @@ class ChatItemView extends StatefulWidget {
     this.enabledForwardMenu,
     this.enabledReplyMenu,
     this.enabledRevokeMenu,
+    this.enabledMemoMenu,
     this.enabledTranslationMenu,
     this.multiSelMode = false,
     this.onMultiSelChanged,
@@ -1044,9 +1052,9 @@ class _ChatItemViewState extends State<ChatItemView> {
       String recieverDes = widget.isSingleChat
           ? widget.conversationName!
           : UILocalizations.grantThisSessionMemberPermissions;
-      if (permission == 0){
+      if (permission == 0) {
         return Container();
-      } else if (permission == 1){
+      } else if (permission == 1) {
         if (recvPermission == 0)
           return Container();
         else if (recvPermission == 1) {
@@ -1078,8 +1086,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 children: [
                   Text(
                     recvPermission == 1
-                            ? UILocalizations.canRead
-                            : UILocalizations.canEdit,
+                        ? UILocalizations.canRead
+                        : UILocalizations.canEdit,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
@@ -1335,8 +1343,9 @@ class _ChatItemViewState extends State<ChatItemView> {
     ];
     String userStr = '';
     int showCount = 0;
-    List<User> userList = users.where((element) => element.id == OpenIM.iMManager.uid).toList();
-    if(userList.isNotEmpty){
+    List<User> userList =
+        users.where((element) => element.id == OpenIM.iMManager.uid).toList();
+    if (userList.isNotEmpty) {
       User user = userList.first;
       users.remove(user);
       users.insert(0, user);
@@ -1470,6 +1479,12 @@ class _ChatItemViewState extends State<ChatItemView> {
             textStyle: menuTextStyle,
             onTap: widget.onTapRevokeMenu),
         MenuInfo(
+            icon: ImageUtil.menuMemo(),
+            text: UILocalizations.memo,
+            enabled: _showMemoMenu,
+            textStyle: menuTextStyle,
+            onTap: widget.onTapMemoMenu),
+        MenuInfo(
           icon: ImageUtil.menuMultiChoice(),
           text: UILocalizations.multiChoice,
           enabled: _showMultiChoiceMenu,
@@ -1524,6 +1539,21 @@ class _ChatItemViewState extends State<ChatItemView> {
       widget.enabledRevokeMenu ??
       widget.message.sendID == OpenIM.iMManager.uid &&
           widget.message.contentType != MessageType.revoke;
+
+  bool get _showMemoMenu =>
+      widget.enabledMemoMenu ??
+      (widget.message.groupID != null &&
+          (widget.message.contentType == MessageType.text ||
+              widget.message.contentType == MessageType.at_text ||
+              widget.message.contentType == MessageType.video ||
+              widget.message.contentType == MessageType.picture ||
+              widget.message.contentType == MessageType.location ||
+              widget.message.contentType == MessageType.quote ||
+              widget.message.contentType == MessageType.file ||
+              widget.message.contentType == MessageType.merger ||
+              widget.message.contentType == MessageType.card ||
+              widget.message.contentType == MessageType.custom ||
+              widget.message.contentType == MessageType.custom_face));
 
   bool get _showMultiChoiceMenu =>
       widget.enabledMultiMenu ??

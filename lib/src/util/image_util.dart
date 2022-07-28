@@ -187,6 +187,12 @@ class ImageUtil {
         height: 20.w,
       );
 
+  static Widget menuMemo() => assetImage(
+        'msgpopup_but_memo',
+        width: 20.w,
+        height: 20.w,
+      );
+
   static Widget menuMultiChoice() => assetImage(
         'msgpopup_but_multiple',
         width: 20.w,

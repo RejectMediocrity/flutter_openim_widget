@@ -37,6 +37,7 @@ class UILocalizations {
       "mergeOneByOne": "Merge one by one",
       "reply": "Quote",
       "revoke": "Revoke",
+      "memo": "Memo",
       "multiChoice": "Choice",
       "translation": "Translate",
       "download": "Download",
@@ -52,6 +53,7 @@ class UILocalizations {
       "you": "You",
       "revokeAMsg": "revoke a message",
       "revokedAMsg": "Message retracted",
+      "memoSaved": "Memo saved",
       "reEdit": "Re-edit",
       "picLoadError": "Image failed to load",
       "fileSize": "File size: %s",
@@ -101,6 +103,7 @@ class UILocalizations {
       "mergeOneByOne": "逐条转发",
       "reply": "回复",
       "revoke": "撤回",
+      "memo": "备忘",
       "multiChoice": "多选",
       "translation": "翻译",
       "download": "下载",
@@ -116,6 +119,7 @@ class UILocalizations {
       "you": "你",
       "revokeAMsg": "撤回了一条消息",
       "revokedAMsg": "消息已撤回",
+      "memoSaved": "已备忘",
       "reEdit": "重新编辑",
       "picLoadError": "图片加载失败",
       "fileSize": "文件大小：%s",
@@ -188,6 +192,8 @@ class UILocalizations {
 
   static String get revoke => _value(key: 'revoke');
 
+  static String get memo => _value(key: 'memo');
+
   static String get multiChoice => _value(key: 'multiChoice');
 
   static String get translation => _value(key: 'translation');
@@ -215,6 +221,8 @@ class UILocalizations {
   static String get you => _value(key: 'you');
 
   static String get revokeAMsg => _value(key: 'revokeAMsg');
+
+  static String get memoSaved => _value(key: 'memoSaved');
 
   static String get picLoadError => _value(key: 'picLoadError');
 
