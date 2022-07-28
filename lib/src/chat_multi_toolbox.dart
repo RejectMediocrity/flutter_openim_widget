@@ -4,7 +4,11 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 
 class ChatMultiSelToolbox extends StatelessWidget {
   const ChatMultiSelToolbox(
-      {Key? key, this.onDelete, this.onMergeForward, this.onForwardOneByOne, this.onAddMemo})
+      {Key? key,
+      this.onDelete,
+      this.onMergeForward,
+      this.onForwardOneByOne,
+      this.onAddMemo})
       : super(key: key);
   final Function()? onDelete;
   final Function()? onMergeForward;
@@ -69,30 +73,32 @@ class ChatMultiSelToolbox extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: onAddMemo,
-            behavior: HitTestBehavior.translucent,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 19.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ImageUtil.assetImage(
-                    'msgpopup_btn_memo_bg',
-                    width: 46.w,
-                    height: 46.w,
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Text(
-                    UILocalizations.addMemo,
-                    style: TextStyle(color: Color(0xFF333333), fontSize: 12.sp),
-                  ),
-                ],
+          if (onAddMemo != null)
+            GestureDetector(
+              onTap: onAddMemo,
+              behavior: HitTestBehavior.translucent,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 19.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ImageUtil.assetImage(
+                      'msgpopup_btn_memo_bg',
+                      width: 46.w,
+                      height: 46.w,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Text(
+                      UILocalizations.addMemo,
+                      style:
+                          TextStyle(color: Color(0xFF333333), fontSize: 12.sp),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
           GestureDetector(
             onTap: onDelete,
             behavior: HitTestBehavior.translucent,
