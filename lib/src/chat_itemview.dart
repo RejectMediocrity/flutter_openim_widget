@@ -1552,7 +1552,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               widget.message.contentType == MessageType.file ||
               widget.message.contentType == MessageType.merger ||
               widget.message.contentType == MessageType.card ||
-              widget.message.contentType == MessageType.custom ||
+              // widget.message.contentType == MessageType.custom ||
               widget.message.contentType == MessageType.custom_face));
 
   bool get _showMultiChoiceMenu =>
