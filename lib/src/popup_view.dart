@@ -441,7 +441,7 @@ class PopupView extends StatelessWidget {
   }
 
   _clickArea(double dy) {
-    popCtrl?.hideMenu();
+    popCtrl.hideMenu();
   }
 
   Widget _buildPopBgView({Widget? child}) => Container(
