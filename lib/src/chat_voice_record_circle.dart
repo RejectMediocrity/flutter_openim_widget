@@ -43,6 +43,12 @@ class _ChatVoiceRecordCircleState extends State<ChatVoiceRecordCircle> {
           _pressing = false;
         });
       },
+      onLongPressCancel: () {
+        widget.onLongPressEnd(LongPressEndDetails());
+        setState(() {
+          _pressing = false;
+        });
+      },
       onLongPressMoveUpdate: (details) {
         widget.onLongPressMoveUpdate(details);
         // Offset global = details.globalPosition;

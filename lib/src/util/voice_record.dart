@@ -39,6 +39,7 @@ class VoiceRecord {
         _updateDuration = updateDuration;
 
   start() async {
+    _long = _now();
     await AudioController.instance.stop();
     PermissionStatus permissionStatus = await Permission.microphone.status;
     PermissionUtil.microphone(
@@ -46,6 +47,10 @@ class VoiceRecord {
         if (!permissionStatus.isGranted) {
           await stop();
           return;
+        }
+        if (_timer != null) {
+          _timer?.cancel();
+          _timer = null;
         }
         var path = (await getApplicationDocumentsDirectory()).path;
         _path = '$path/$_dir/$_tag$_ext';
@@ -67,6 +72,7 @@ class VoiceRecord {
             _updateDuration?.call(duration, amplitude);
           } catch (e) {
             _updateDuration?.call(duration, null);
+            timer.cancel();
           }
         });
       },
@@ -118,13 +124,13 @@ class VoiceRecord {
   stop() async {
     if (await _audioRecorder.isRecording()) {
       _audioRecorder.stop();
+      int duration = (_now() - _long) ~/ 1000;
+      _callback(duration, _path);
     }
-    _long = (_now() - _long) ~/ 1000;
     if (_timer != null) {
       _timer?.cancel();
       _timer = null;
     }
-    _callback(_long, _path);
   }
 
   static int _now() => DateTime.now().millisecondsSinceEpoch;
