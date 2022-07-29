@@ -105,7 +105,7 @@ class _ChatVoiceViewState extends State<ChatVoiceView>{
             ),
           ),
           SizedBox(
-            width: 132.w * widget.duration! / 60,
+            width: 132.w * (widget.duration! > 60 ? 60 : widget.duration!) / 60,
           ),
         ],
       ),
