@@ -18,6 +18,9 @@ class PicInfo {
   final int? duration;
   final bool? isVideo; // 是否是视频
   final int? sendTime;
+  final int width;
+  final int height;
+
   PicInfo({
     this.url,
     this.file,
@@ -27,7 +30,10 @@ class PicInfo {
     this.isVideo = false,
     this.duration,
     this.sendTime,
-  });
+    int? width,
+    int? height,
+  })  : this.width = width ?? 1,
+        this.height = height ?? 1;
 }
 
 class ChatPicturePreview extends StatefulWidget {
@@ -177,7 +183,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         mode: ExtendedImageMode.gesture,
         clearMemoryCacheWhenDispose: false,
         loadStateChanged: _buildLoadStateChangedView,
-        initGestureConfigHandler: _buildGestureConfig,
+        initGestureConfigHandler: (ExtendedImageState state) {
+          return _buildGestureConfig(state, info: info);
+        },
       );
     } else if (info.thumbUrl != null && info.showSourcePic == false) {
       return ExtendedImage.network(
@@ -188,7 +196,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         handleLoadingProgress: true,
         cache: true,
         loadStateChanged: _buildLoadStateChangedView,
-        initGestureConfigHandler: _buildGestureConfig,
+        initGestureConfigHandler: (ExtendedImageState state) {
+          return _buildGestureConfig(state, info: info);
+        },
       );
     } else if (info.url != null) {
       return ExtendedImage.network(
@@ -199,21 +209,31 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         handleLoadingProgress: true,
         cache: true,
         loadStateChanged: _buildLoadStateChangedView,
-        initGestureConfigHandler: _buildGestureConfig,
+        initGestureConfigHandler: (ExtendedImageState state) {
+          return _buildGestureConfig(state, info: info);
+        },
       );
     } else {
       return _buildErrorView();
     }
   }
 
-  GestureConfig _buildGestureConfig(ExtendedImageState state) => GestureConfig(
-        //you must set inPageView true if you want to use ExtendedImageGesturePageView
-        inPageView: true,
-        initialScale: 1.0,
-        maxScale: 10.0,
-        animationMaxScale: 12.0,
-        initialAlignment: InitialAlignment.center,
-      );
+  GestureConfig _buildGestureConfig(ExtendedImageState state,
+      {required PicInfo info}) {
+    double scale = 1;
+    if (info.width < info.height) {
+      double realWidth = 1.sh / info.height * info.width;
+      scale = 1.sw / realWidth;
+    }
+    return GestureConfig(
+      //you must set inPageView true if you want to use ExtendedImageGesturePageView
+      inPageView: true,
+      initialScale: scale,
+      maxScale: 10.0,
+      animationMaxScale: 12.0,
+      initialAlignment: InitialAlignment.topCenter,
+    );
+  }
 
   Widget? _buildLoadStateChangedView(ExtendedImageState state) {
     switch (state.extendedImageLoadState) {
