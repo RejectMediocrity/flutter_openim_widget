@@ -1540,20 +1540,34 @@ class _ChatItemViewState extends State<ChatItemView> {
       widget.message.sendID == OpenIM.iMManager.uid &&
           widget.message.contentType != MessageType.revoke;
 
-  bool get _showMemoMenu =>
-      widget.enabledMemoMenu ??
-      (widget.message.groupID != null &&
-          (widget.message.contentType == MessageType.text ||
-              widget.message.contentType == MessageType.at_text ||
-              widget.message.contentType == MessageType.video ||
-              widget.message.contentType == MessageType.picture ||
-              widget.message.contentType == MessageType.location ||
-              widget.message.contentType == MessageType.quote ||
-              widget.message.contentType == MessageType.file ||
-              widget.message.contentType == MessageType.merger ||
-              widget.message.contentType == MessageType.card ||
-              // widget.message.contentType == MessageType.custom ||
-              widget.message.contentType == MessageType.custom_face));
+  bool get _showMemoMenu {
+    bool isCustomTypeNeedShow = false;
+    if (widget.message.contentType == MessageType.custom) {
+      Map msgContentMap = json.decode(widget.message.content ?? '');
+      if (msgContentMap.containsKey('data')) {
+        Map contentDataMap = json.decode(msgContentMap['data'] ?? '');
+        if (contentDataMap['type'] == 'cloud_doc') {
+          isCustomTypeNeedShow = true;
+        }
+      }
+
+    }
+
+    return widget.enabledMemoMenu ??
+        (widget.message.groupID != null &&
+            (widget.message.contentType == MessageType.text ||
+                widget.message.contentType == MessageType.at_text ||
+                widget.message.contentType == MessageType.video ||
+                widget.message.contentType == MessageType.picture ||
+                widget.message.contentType == MessageType.location ||
+                widget.message.contentType == MessageType.quote ||
+                widget.message.contentType == MessageType.file ||
+                widget.message.contentType == MessageType.merger ||
+                widget.message.contentType == MessageType.card ||
+                // widget.message.contentType == MessageType.voice ||
+                isCustomTypeNeedShow ||
+                widget.message.contentType == MessageType.custom_face));
+  }
 
   bool get _showMultiChoiceMenu =>
       widget.enabledMultiMenu ??

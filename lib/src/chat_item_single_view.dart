@@ -206,13 +206,18 @@ class ChatSingleLayout extends StatelessWidget {
                                                 ),
 
                                               /// 消息体
-                                              expandView!(
-                                                Padding(
-                                                  child: child,
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10.w, 10.w, 10.w, 10.w),
+                                              if (expandView != null)
+                                                expandView!(
+                                                  Padding(
+                                                    child: child,
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10.w,
+                                                            10.w,
+                                                            10.w,
+                                                            10.w),
+                                                  ),
                                                 ),
-                                              ),
                                               if (faceReplyView != null)
                                                 Padding(
                                                   padding: EdgeInsets.fromLTRB(
@@ -303,12 +308,12 @@ class ChatSingleLayout extends StatelessWidget {
           child: child,
         ),
         onTap: () {
-          try{
+          try {
             _onItemClick?.add(index);
-          }catch(e){
+          } catch (e) {
             print(e.toString());
           }
-        } ,
+        },
       ),
     );
     if (faceReplyView == null) return widget;
@@ -382,7 +387,9 @@ class ChatSingleLayout extends StatelessWidget {
                 width: 20.w, height: 20.w)
             : CustomCircularProgress(
                 size: 16.w,
-                activeColor: progress<=0?Color(0xFFDDDDDD):Color.fromARGB(255, 0, 192, 155),
+                activeColor: progress <= 0
+                    ? Color(0xFFDDDDDD)
+                    : Color.fromARGB(255, 0, 192, 155),
                 backColor: Colors.white,
                 progress: progress,
               ),
