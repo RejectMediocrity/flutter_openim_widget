@@ -1028,6 +1028,9 @@ class _ChatItemViewState extends State<ChatItemView> {
       } else if (type.startsWith('goal_')) {
         String nickName1 = opData["opUser"]["nickname"];
         return nickName1 + " " + opData["msg"];
+      } else if (type.startsWith('memo_')) {
+        String nickName1 = widget.message.senderNickname ?? '';
+        return nickName1 + " " + opData["noticeValue"]["memo_notice"];
       }
     } catch (e) {
       print(e.toString());
