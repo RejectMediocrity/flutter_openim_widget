@@ -41,6 +41,9 @@ class ChatMergeMsgView extends StatelessWidget {
         ),
       );
     for (var s in summaryList) {
+      if (summaryList.length > 4 && summaryList.elementAt(4) == s) {
+        break;
+      }
       Map? map;
       try {
         map = json.decode(s);
