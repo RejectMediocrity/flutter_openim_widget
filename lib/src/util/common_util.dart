@@ -200,7 +200,10 @@ class CommonUtil {
           ?.where((element) =>
               element.atUserID == uid && element.groupNickname != null)
           .toList();
-      AtUserInfo? userInfo = currentUser?.first;
+      AtUserInfo? userInfo;
+      if (currentUser != null && currentUser.length > 0) {
+        userInfo = currentUser.first;
+      }
       if (userInfo != null) {
         content = content.replaceAll(des, '@${userInfo.groupNickname} ');
       } else if (atUserNameMappingMap.containsKey(uid)) {
