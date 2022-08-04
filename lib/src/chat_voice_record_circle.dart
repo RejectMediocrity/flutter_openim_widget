@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatVoiceRecordCircle extends StatefulWidget {
   const ChatVoiceRecordCircle({
@@ -39,6 +39,12 @@ class _ChatVoiceRecordCircleState extends State<ChatVoiceRecordCircle> {
       },
       onLongPressEnd: (details) {
         widget.onLongPressEnd(details);
+        setState(() {
+          _pressing = false;
+        });
+      },
+      onLongPressCancel: () {
+        widget.onLongPressEnd(LongPressEndDetails());
         setState(() {
           _pressing = false;
         });

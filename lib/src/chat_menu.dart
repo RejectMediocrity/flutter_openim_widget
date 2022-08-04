@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/util/recently_used_emoji_manager.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MenuInfo {
   Widget icon;
@@ -89,7 +89,7 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
       ),
       child: Column(
         children: [
-          // if (!openEmoji) _buildMenuGridView(),
+          if (!openEmoji) _buildMenuGridView(),
           // Container(
           //   margin: EdgeInsets.symmetric(horizontal: 16.w),
           //   color: Color(0xFFF2F2F2),
@@ -97,8 +97,6 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
           // ),
           // if (openEmoji) _buildEmojiBox(),
           // _buildLatestEmojiBox(),
-
-          _buildMenuGridView(),
         ],
       ),
     );

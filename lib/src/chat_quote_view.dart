@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatQuoteView extends StatelessWidget {
   ChatQuoteView(
@@ -32,7 +32,8 @@ class ChatQuoteView extends StatelessWidget {
         } else if (quoteMessage.contentType == MessageType.at_text) {
           content = CommonUtil.replaceAtMsgIdWithNickName(
               content: quoteMessage.atElem?.text ?? "",
-              atUserNameMappingMap: allAtMap ?? {});
+              atUserNameMappingMap: allAtMap ?? {},
+              atUserInfo: quoteMessage.atElem?.atUsersInfo);
         } else if (quoteMessage.contentType == MessageType.picture) {
           var url1 = quoteMessage.pictureElem?.snapshotPicture?.url;
           var url2 = quoteMessage.pictureElem?.sourcePicture?.url;
@@ -102,15 +103,17 @@ class ChatQuoteView extends StatelessWidget {
           content = "[${UILocalizations.file}]${file?.fileName}";
         } else if (quoteMessage.contentType == MessageType.merger) {
           content = quoteMessage.mergeElem?.title ?? "";
-        }else if (quoteMessage.contentType == MessageType.voice) {
+        } else if (quoteMessage.contentType == MessageType.voice) {
           content = "[${UILocalizations.voice}]";
+        } else if (quoteMessage.contentType == MessageType.revoke) {
+          content = "${UILocalizations.revokedAMsg}";
         }
       }
     }
     String uidString = "";
-    if(content!=null&&content.isNotEmpty){
-      uidString = '${CommonUtil.replaceAtMsgIdWithNickName(
-          content: content, atUserNameMappingMap: allAtMap??{}) ?? ''}';
+    if (content != null && content.isNotEmpty) {
+      uidString =
+          '${CommonUtil.replaceAtMsgIdWithNickName(content: content, atUserNameMappingMap: allAtMap ?? {},atUserInfo: message.atElem?.atUsersInfo)}';
     }
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -133,7 +136,7 @@ class ChatQuoteView extends StatelessWidget {
                 text: ' ${UILocalizations.reply} $name：$uidString',
                 allAtMap: allAtMap ?? {},
                 textStyle: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 13.sp,
                   color: Color(0xFF666666),
                 ),
                 patterns: patterns ?? [],

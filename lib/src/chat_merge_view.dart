@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatMergeMsgView extends StatelessWidget {
   const ChatMergeMsgView(
@@ -40,6 +41,9 @@ class ChatMergeMsgView extends StatelessWidget {
         ),
       );
     for (var s in summaryList) {
+      if (summaryList.length > 4 && summaryList.elementAt(4) == s) {
+        break;
+      }
       Map? map;
       try {
         map = json.decode(s);

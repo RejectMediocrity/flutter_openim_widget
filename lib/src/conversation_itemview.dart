@@ -1,7 +1,8 @@
 import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_openim_widget/src/util/screen_util.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 final pinColors = [Color(0xFF87C0FF), Color(0xFF0060E7)];
@@ -18,6 +19,7 @@ class ConversationItemView extends StatelessWidget {
   final TextStyle titleStyle;
   final String content;
   final TextStyle contentStyle;
+  final TextStyle senderNameStyle;
   final String? contentPrefix;
   final TextSpan? faceReplySpan;
   final TextStyle? contentPrefixStyle;
@@ -39,6 +41,7 @@ class ConversationItemView extends StatelessWidget {
   final String nickName;
   final bool isGroupChat;
   final String? senderName;
+  final List<AtUserInfo>? atUserInfo;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -73,6 +76,11 @@ class ConversationItemView extends StatelessWidget {
       color: Color(0xFF666666),
       fontWeight: FontWeight.w600,
     ),
+    this.senderNameStyle = const TextStyle(
+      fontSize: 12,
+      color: Color(0xFF666666),
+      fontWeight: FontWeight.w600,
+    ),
     this.timeStyle = const TextStyle(
       fontSize: 12,
       color: Color(0xFF999999),
@@ -83,6 +91,7 @@ class ConversationItemView extends StatelessWidget {
     this.isGroupChat = false,
     this.senderName,
     this.faceReplySpan,
+    this.atUserInfo,
   }) : super(key: key);
 
   @override
@@ -109,6 +118,7 @@ class ConversationItemView extends StatelessWidget {
         patterns: patterns,
         titleStyle: titleStyle,
         contentStyle: contentStyle,
+        senderNameStyle: senderNameStyle,
         timeStyle: timeStyle,
         onTap: onTap,
         notDisturb: notDisturb,
@@ -116,6 +126,7 @@ class ConversationItemView extends StatelessWidget {
         isGroupChat: isGroupChat,
         senderName: senderName,
         faceReplySpan: faceReplySpan,
+        atUserInfo: atUserInfo,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -144,6 +155,7 @@ class _ConversationView extends StatelessWidget {
     // this.isPinned = false,
     required this.titleStyle,
     required this.contentStyle,
+    required this.senderNameStyle,
     required this.timeStyle,
     this.avatarUrl,
     this.isCircleAvatar,
@@ -157,6 +169,7 @@ class _ConversationView extends StatelessWidget {
     this.isGroupChat = false,
     this.senderName,
     this.faceReplySpan,
+    this.atUserInfo,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -166,6 +179,7 @@ class _ConversationView extends StatelessWidget {
   final TextStyle titleStyle;
   final String content;
   final TextStyle contentStyle;
+  final TextStyle senderNameStyle;
   final String? contentPrefix;
   final TextSpan? faceReplySpan;
   final TextStyle? contentPrefixStyle;
@@ -185,6 +199,7 @@ class _ConversationView extends StatelessWidget {
   final String nickName;
   final bool isGroupChat;
   final String? senderName;
+  final List<AtUserInfo>? atUserInfo;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -214,7 +229,7 @@ class _ConversationView extends StatelessWidget {
     }
     return TextSpan(
       text: senderName,
-      style: contentStyle,
+      style: senderNameStyle,
     );
   }
 
@@ -322,7 +337,9 @@ class _ConversationView extends StatelessWidget {
 
   Widget buildChatAtText() {
     List<String> noMatchUids = CommonUtil.checkHasNoMatchUids(
-        content: content, atUserNameMappingMap: allAtMap);
+        content: content,
+        atUserNameMappingMap: allAtMap,
+        atUserInfo: atUserInfo);
     return noMatchUids.length > 0
         ? FutureBuilder(
             builder: (context, AsyncSnapshot<String> snapshot) {
@@ -330,7 +347,9 @@ class _ConversationView extends StatelessWidget {
               return ChatAtText(
                 allAtMap: allAtMap,
                 text: CommonUtil.replaceAtMsgIdWithNickName(
-                    content: newStr, atUserNameMappingMap: allAtMap),
+                    content: newStr,
+                    atUserNameMappingMap: allAtMap,
+                    atUserInfo: atUserInfo),
                 textStyle: contentStyle,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -349,7 +368,9 @@ class _ConversationView extends StatelessWidget {
         : ChatAtText(
             allAtMap: allAtMap,
             text: CommonUtil.replaceAtMsgIdWithNickName(
-                content: content, atUserNameMappingMap: allAtMap),
+                content: content,
+                atUserNameMappingMap: allAtMap,
+                atUserInfo: atUserInfo),
             textStyle: contentStyle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,

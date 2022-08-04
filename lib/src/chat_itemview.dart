@@ -9,7 +9,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
 import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
 import 'package:flutter_openim_widget/src/util/event_bus.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:rxdart/rxdart.dart';
@@ -155,6 +155,9 @@ class ChatItemView extends StatefulWidget {
   /// Click the revoke button event on the menu
   final Function()? onTapRevokeMenu;
 
+  /// Click the memo button event on the menu
+  final Function()? onTapMemoMenu;
+
   ///
   final Function()? onTapMultiMenu;
 
@@ -175,6 +178,9 @@ class ChatItemView extends StatefulWidget {
 
   /// Click the revoke button event on the menu
   final bool? enabledRevokeMenu;
+
+  /// Click the memo button event on the menu
+  final bool? enabledMemoMenu;
 
   ///
   final bool? enabledMultiMenu;
@@ -255,6 +261,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapForwardMenu,
     this.onTapReplyMenu,
     this.onTapRevokeMenu,
+    this.onTapMemoMenu,
     this.onTapMultiMenu,
     this.onTapTranslationMenu,
     this.enabledCopyMenu,
@@ -263,6 +270,7 @@ class ChatItemView extends StatefulWidget {
     this.enabledForwardMenu,
     this.enabledReplyMenu,
     this.enabledRevokeMenu,
+    this.enabledMemoMenu,
     this.enabledTranslationMenu,
     this.multiSelMode = false,
     this.onMultiSelChanged,
@@ -306,7 +314,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   var _isHintMsg = false;
   String? imageDirectory;
   String? markDownContent;
-  String permisstionStr = "";
+  // String permisstionStr = "";
 
   bool isFullGroup = false;
   var _hintTextStyle = TextStyle(
@@ -316,27 +324,27 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   @override
   void initState() {
-    bus.on("doc_permisstion", (arg) {
-      int permission = arg["p"];
-      String id = arg["id"];
-      if (id == widget.message.clientMsgID) {
-        setState(() {
-          if (permission == 1) {
-            permisstionStr = UILocalizations.canRead;
-          } else if (permission == 2) {
-            permisstionStr = UILocalizations.canEdit;
-          }else{
-            permisstionStr = UILocalizations.canManage;
-          }
-        });
-      }
-    });
+    // bus.on("doc_permisstion", (arg) {
+    //   int permission = arg["p"];
+    //   String id = arg["id"];
+    //   if (id == widget.message.clientMsgID) {
+    //     setState(() {
+    //       if (permission == 1) {
+    //         permisstionStr = UILocalizations.canRead;
+    //       } else if (permission == 2) {
+    //         permisstionStr = UILocalizations.canEdit;
+    //       } else {
+    //         permisstionStr = UILocalizations.canManage;
+    //       }
+    //     });
+    //   }
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
-    bus.off("doc_permisstion");
+    // bus.off("doc_permisstion");
     _popupCtrl.dispose();
     super.dispose();
   }
@@ -727,7 +735,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 patterns: widget.patterns,
                 hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                     ?.hasReadUserIDList,
-                isSender:widget.message.sendID == OpenIM.iMManager.uid,
+                isSender: widget.message.sendID == OpenIM.iMManager.uid,
               ),
             );
           }
@@ -745,7 +753,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               patterns: widget.patterns,
               hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                   ?.hasReadUserIDList,
-              isSender:widget.message.sendID == OpenIM.iMManager.uid,
+              isSender: widget.message.sendID == OpenIM.iMManager.uid,
             ),
           );
         }
@@ -761,7 +769,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               msgId: widget.message.clientMsgID!,
               isReceived: _isFromMsg,
               snapshotPath: null,
-              snapshotUrl: picture?.sourcePicture?.url,
+              snapshotUrl: picture?.snapshotPicture?.url,
               sourcePath: picture?.sourcePath,
               sourceUrl: picture?.sourcePicture?.url,
               width: width.toDouble(),
@@ -858,7 +866,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               maxLines: widget.isExpanded == true ? null : 10,
               hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                   ?.hasReadUserIDList,
-              isSender:widget.message.sendID == OpenIM.iMManager.uid,
+              isSender: widget.message.sendID == OpenIM.iMManager.uid,
             ),
           );
         }
@@ -937,7 +945,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 allAtMap: {},
                 textAlign: TextAlign.center,
                 // enabled: false,
-                maxLines: 1,
+                maxLines: 10,
                 overflow: TextOverflow.ellipsis,
                 textStyle: null != text
                     ? widget.hintTextStyle ?? _hintTextStyle
@@ -1020,6 +1028,9 @@ class _ChatItemViewState extends State<ChatItemView> {
       } else if (type.startsWith('goal_')) {
         String nickName1 = opData["opUser"]["nickname"];
         return nickName1 + " " + opData["msg"];
+      } else if (type.startsWith('memo_')) {
+        String nickName1 = widget.message.senderNickname ?? '';
+        return nickName1 + " " + opData["noticeValue"]["memo_notice"];
       }
     } catch (e) {
       print(e.toString());
@@ -1035,21 +1046,31 @@ class _ChatItemViewState extends State<ChatItemView> {
     String remark = params['remark'] ?? "";
     int permission =
         model.permission?.permission ?? 0; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
+    int recvPermission = model.recieverPermission ?? 0;
     int shareType =
         model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
     Widget? permissionWidget;
-    if(isSender){
-      if(permission == 0)return Container();
-      else if(permission == 1)permissionStr = UILocalizations.you + UILocalizations.canRead;
-      else if(permission == 2||permission == 3){
+    if (isSender) {
+      String recieverDes = widget.isSingleChat
+          ? widget.conversationName!
+          : UILocalizations.grantThisSessionMemberPermissions;
+      if (permission == 0) {
+        return Container();
+      } else if (permission == 1) {
+        if (recvPermission == 0)
+          return Container();
+        else if (recvPermission == 1) {
+          permissionStr = recieverDes + UILocalizations.canRead;
+        } else {
+          permissionStr = recieverDes + UILocalizations.canEdit;
+        }
+      } else if (permission == 2 || permission == 3) {
         permissionWidget = Row(
           children: [
             Flexible(
               child: Text(
-                widget.isSingleChat
-                    ? widget.conversationName!
-                    : UILocalizations.grantThisSessionMemberPermissions,
+                recieverDes,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(
@@ -1062,14 +1083,12 @@ class _ChatItemViewState extends State<ChatItemView> {
               width: 4.w,
             ),
             GestureDetector(
-              onTap: ()=>widget.setPermission!(permission),
+              onTap: () => widget.setPermission!(permission),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    permisstionStr.isNotEmpty
-                        ? permisstionStr
-                        : permission == 1
+                    recvPermission == 1
                         ? UILocalizations.canRead
                         : UILocalizations.canEdit,
                     overflow: TextOverflow.ellipsis,
@@ -1090,11 +1109,12 @@ class _ChatItemViewState extends State<ChatItemView> {
           ],
         );
       }
-    }else{
-      if(permission == 0)return Container();
-      else if(permission == 1){
+    } else {
+      if (recvPermission == 0)
+        return Container();
+      else if (recvPermission == 1) {
         permissionStr = UILocalizations.you + UILocalizations.canRead;
-      }else{
+      } else {
         permissionStr = UILocalizations.you + UILocalizations.canEdit;
       }
     }
@@ -1251,8 +1271,18 @@ class _ChatItemViewState extends State<ChatItemView> {
       );
 
   Widget? _buildFaceReplyView() {
-    ChatFaceReplyListModel listModel =
-        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
+    if (widget.message.ex != null) {
+      try {
+        var obj = json.decode(widget.message.ex ?? "");
+        if (obj is Map) {
+          if (obj.keys.contains("quick_reply"))
+            listModel = ChatFaceReplyListModel.fromJson(obj["quick_reply"]);
+        } else {
+          listModel = ChatFaceReplyListModel.fromJson(obj);
+        }
+      } catch (e) {}
+    }
     if (listModel.dataList.length <= 0) return null;
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: .65.sw),
@@ -1316,7 +1346,13 @@ class _ChatItemViewState extends State<ChatItemView> {
     ];
     String userStr = '';
     int showCount = 0;
-
+    List<User> userList =
+        users.where((element) => element.id == OpenIM.iMManager.uid).toList();
+    if (userList.isNotEmpty) {
+      User user = userList.first;
+      users.remove(user);
+      users.insert(0, user);
+    }
     for (int i = 0; i < users.length; i++) {
       User e = users[i];
       String name = e == users.last ? e.name! : "${e.name!}，";
@@ -1446,6 +1482,12 @@ class _ChatItemViewState extends State<ChatItemView> {
             textStyle: menuTextStyle,
             onTap: widget.onTapRevokeMenu),
         MenuInfo(
+            icon: ImageUtil.menuMemo(),
+            text: UILocalizations.memo,
+            enabled: _showMemoMenu,
+            textStyle: menuTextStyle,
+            onTap: widget.onTapMemoMenu),
+        MenuInfo(
           icon: ImageUtil.menuMultiChoice(),
           text: UILocalizations.multiChoice,
           enabled: _showMultiChoiceMenu,
@@ -1500,6 +1542,35 @@ class _ChatItemViewState extends State<ChatItemView> {
       widget.enabledRevokeMenu ??
       widget.message.sendID == OpenIM.iMManager.uid &&
           widget.message.contentType != MessageType.revoke;
+
+  bool get _showMemoMenu {
+    bool isCustomTypeNeedShow = false;
+    if (widget.message.contentType == MessageType.custom) {
+      Map msgContentMap = json.decode(widget.message.content ?? '');
+      if (msgContentMap.containsKey('data')) {
+        Map contentDataMap = json.decode(msgContentMap['data'] ?? '');
+        if (contentDataMap['type'] == 'cloud_doc') {
+          isCustomTypeNeedShow = true;
+        }
+      }
+
+    }
+
+    return widget.enabledMemoMenu ??
+        (widget.message.groupID != null &&
+            (widget.message.contentType == MessageType.text ||
+                widget.message.contentType == MessageType.at_text ||
+                widget.message.contentType == MessageType.video ||
+                widget.message.contentType == MessageType.picture ||
+                widget.message.contentType == MessageType.location ||
+                widget.message.contentType == MessageType.quote ||
+                widget.message.contentType == MessageType.file ||
+                widget.message.contentType == MessageType.merger ||
+                widget.message.contentType == MessageType.card ||
+                // widget.message.contentType == MessageType.voice ||
+                isCustomTypeNeedShow ||
+                widget.message.contentType == MessageType.custom_face));
+  }
 
   bool get _showMultiChoiceMenu =>
       widget.enabledMultiMenu ??

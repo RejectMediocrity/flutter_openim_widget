@@ -150,7 +150,10 @@ class CommonUtil {
 
   /// Text 在中英文混排是会出现截取不完整的问题
   static String breakWord(String text) {
-    if (text.isEmpty) {
+    RegExp regexp = RegExp(
+        "[^\\u0020-\\u007E\\u00A0-\\u00BE\\u2E80-\\uA4CF\\uF900-\\uFAFF\\uFE30-\\uFE4F\\uFF00-\\uFFEF\\u0080-\\u009F\\u2000-\\u201f\r\n]");
+    bool hasMatch = regexp.hasMatch(text);
+    if (text.isEmpty || hasMatch) {
       return text;
     }
     String breakWord = '';
@@ -159,18 +162,24 @@ class CommonUtil {
       breakWord += '\u200B';
     });
     return breakWord;
+    return text;
   }
 
   static List<String> checkHasNoMatchUids(
       {required String content,
-      required Map<String, String> atUserNameMappingMap}) {
+      required Map<String, String> atUserNameMappingMap,
+      List<AtUserInfo>? atUserInfo}) {
     final atReg = RegExp('$regexAt|$regexAtMe');
     List<RegExpMatch> match = atReg.allMatches(content).toList();
     List<String> noMatchUids = [];
     for (RegExpMatch element in match) {
       String des = element.group(0)!;
       String uid = des.replaceFirst("@", "").trim();
-      if (!atUserNameMappingMap.containsKey(uid)) {
+      List<AtUserInfo>? currentUser = atUserInfo
+          ?.where((element) =>
+      element.atUserID == uid && element.groupNickname != null)
+          .toList();
+      if (!atUserNameMappingMap.containsKey(uid)&&(currentUser == null||currentUser.isEmpty)) {
         noMatchUids.add(uid);
       }
     }
@@ -179,14 +188,25 @@ class CommonUtil {
 
   static String replaceAtMsgIdWithNickName(
       {required String content,
-      required Map<String, String> atUserNameMappingMap}) {
+      required Map<String, String> atUserNameMappingMap,
+      List<AtUserInfo>? atUserInfo}) {
     final atReg = RegExp('$regexAt|$regexAtMe');
     List<RegExpMatch> match = atReg.allMatches(content).toList();
     String temp = '';
     match.forEach((element) {
       String des = element.group(0)!;
       String uid = des.replaceFirst("@", "").trim();
-      if (atUserNameMappingMap.containsKey(uid)) {
+      List<AtUserInfo>? currentUser = atUserInfo
+          ?.where((element) =>
+              element.atUserID == uid && element.groupNickname != null)
+          .toList();
+      AtUserInfo? userInfo;
+      if (currentUser != null && currentUser.length > 0) {
+        userInfo = currentUser.first;
+      }
+      if (userInfo != null) {
+        content = content.replaceAll(des, '@${userInfo.groupNickname} ');
+      } else if (atUserNameMappingMap.containsKey(uid)) {
         content = content.replaceAll(des, '@${atUserNameMappingMap[uid]!} ');
       }
     });
@@ -200,7 +220,7 @@ class CommonUtil {
     required TextStyle style,
   }) {
     TextPainter painter = TextPainter(
-      locale: WidgetsBinding.instance!.window.locale,
+      locale: WidgetsBinding.instance.window.locale,
       maxLines: maxLine,
       textDirection: TextDirection.ltr,
       textScaleFactor: 1.0,

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sp_util/sp_util.dart';
 import 'package:video_player/video_player.dart';
 
 class ChatVideoPlayer extends StatefulWidget {
@@ -41,6 +43,23 @@ class _VideoAppState extends State<ChatVideoPlayer> {
         }
         setState(() {});
       });
+    bool? auto = SpUtil.getBool("autoPlay");
+    if (auto == true) _controller.play();
+    SpUtil.putBool("autoPlay", false);
+  }
+
+  Widget _errorView() {
+    return ImageUtil.assetImage(
+      'ic_load_error',
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _placeholderImage() {
+    return ImageUtil.assetImage(
+      "pic_place",
+      fit: BoxFit.cover,
+    );
   }
 
   @override
@@ -54,11 +73,17 @@ class _VideoAppState extends State<ChatVideoPlayer> {
                   aspectRatio: _controller.value.aspectRatio,
                   child: VideoPlayer(_controller),
                 )
-              : Image.network(
-                  widget.thumbUrl!,
+              : CachedNetworkImage(
+                  imageUrl: widget.thumbUrl!,
+                  placeholder: (BuildContext context, String url) {
+                    return _placeholderImage();
+                  },
+                  errorWidget:
+                      (BuildContext context, String url, dynamic error) {
+                    return _errorView();
+                  },
                   width: 1.sw,
                   fit: BoxFit.contain,
-                  alignment: Alignment.center,
                 ),
         ),
         _isPlaying

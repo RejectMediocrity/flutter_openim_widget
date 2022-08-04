@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
+
+import 'controller/audio_controller.dart';
 
 class ChatVoiceView extends StatefulWidget {
   final int index;
@@ -29,95 +32,31 @@ class ChatVoiceView extends StatefulWidget {
   _ChatVoiceViewState createState() => _ChatVoiceViewState();
 }
 
-class _ChatVoiceViewState extends State<ChatVoiceView> {
+class _ChatVoiceViewState extends State<ChatVoiceView>{
   bool _isPlaying = false;
-  bool _isExistSource = false;
-  var _voicePlayer = AudioPlayer();
 
   @override
   void initState() {
-    _voicePlayer.playerStateStream.listen((state) {
-      if (!mounted) return;
-      switch (state.processingState) {
-        case ProcessingState.idle:
-        case ProcessingState.loading:
-        case ProcessingState.buffering:
-        case ProcessingState.ready:
-          break;
-        case ProcessingState.completed:
-          setState(() {
-            if (_isPlaying) {
-              _isPlaying = false;
-              // _voicePlayer.stop();
-            }
-          });
-          break;
-      }
-    });
-    _initSource();
-    widget.clickStream?.listen((i) {
-      if (!mounted) return;
-      print('click:$i    $_isExistSource');
-      if (_isExistSource) {
-        print('sound click:$i');
-        if (_isClickedLocation(i)) {
-          setState(() {
-            if (_isPlaying) {
-              print('sound stop:$i');
-              _isPlaying = false;
-              _voicePlayer.stop();
-            } else {
-              print('sound start:$i');
-              _isPlaying = true;
-              _voicePlayer.seek(Duration.zero);
-              _voicePlayer.play();
-            }
-          });
-        } else {
-          if (_isPlaying) {
-            setState(() {
-              print('sound stop:$i');
-              _isPlaying = false;
-              _voicePlayer.stop();
-            });
-          }
-        }
-      }
-    });
     super.initState();
+    String key = widget.soundPath ?? widget.soundUrl ?? "";
+    AudioController.instance.addListener(key, this.voicePlayingState);
   }
 
-  void _initSource() async {
-    String? path = widget.soundPath;
-    String? url = widget.soundUrl;
-    if (widget.isReceived) {
-      if (null != url && url.trim().isNotEmpty) {
-        _isExistSource = true;
-        _voicePlayer.setUrl(url);
-      }
-    } else {
-      var _existFile = false;
-      if (path != null && path.trim().isNotEmpty) {
-        var file = File(path);
-        _existFile = await file.exists();
-      }
-      if (_existFile) {
-        _isExistSource = true;
-        _voicePlayer.setFilePath(path!);
-      } else if (null != url && url.trim().isNotEmpty) {
-        _isExistSource = true;
-        _voicePlayer.setUrl(url);
-      }
-    }
+  void voicePlayingState(event) {
+    setState(() {
+      print("AudioController voice view $event");
+      _isPlaying = event;
+    });
   }
 
   @override
   void dispose() {
-    _voicePlayer.dispose();
+    String key = widget.soundPath ?? widget.soundUrl ?? "";
+    /// FIXME 当修复未知原因，频繁刷新dispose后需要执行此代码
+    // AudioController.instance.removeListener(key, this.voicePlayingState);
     super.dispose();
   }
 
-  bool _isClickedLocation(i) => i == widget.index;
 
   bool get isOwnerRight => widget.ownerRight == true;
 
@@ -139,40 +78,34 @@ class _ChatVoiceViewState extends State<ChatVoiceView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 4.w),
-            child: _isPlaying
-                ? RotatedBox(
-                    quarterTurns: turns,
-                    child: Lottie.asset(
-                      anim,
-                      height: 19.h,
-                      width: 18.w,
-                      package: 'flutter_openim_widget',
-                    ),
-                  )
-                : Image.asset(
-                    png,
+          _isPlaying
+              ? RotatedBox(
+                  quarterTurns: turns,
+                  child: Lottie.asset(
+                    anim,
                     height: 19.h,
                     width: 18.w,
                     package: 'flutter_openim_widget',
                   ),
-          ),
+                )
+              : Image.asset(
+                  png,
+                  height: 19.h,
+                  width: 18.w,
+                  package: 'flutter_openim_widget',
+                ),
           SizedBox(
             width: 12.w,
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 4.w),
-            child: Text(
-              "${widget.duration ?? 0}''",
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: Color(0xFF333333),
-              ),
+          Text(
+            "${widget.duration ?? 0}''",
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Color(0xFF333333),
             ),
           ),
           SizedBox(
-            width: 132.w * widget.duration! / 60,
+            width: 132.w * (widget.duration! > 60 ? 60 : widget.duration!) / 60,
           ),
         ],
       ),

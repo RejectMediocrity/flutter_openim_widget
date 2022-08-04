@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // typedef PopupMenuItemBuilder = Widget Function(PopMenuInfo info);
 
@@ -19,6 +19,7 @@ class PopMenuInfo {
 class PopButton extends StatelessWidget {
   final List<PopMenuInfo> menus;
   final Widget child;
+  final Widget? popupChild;
 
   final CustomPopupMenuController? popCtrl;
 
@@ -49,6 +50,7 @@ class PopButton extends StatelessWidget {
     required this.menus,
     required this.child,
     // required this.builder,
+    this.popupChild,
     this.popCtrl,
     this.arrowColor = const Color(0xFF1B72EC),
     this.showArrow = true,
@@ -86,10 +88,11 @@ class PopButton extends StatelessWidget {
       pressType: pressType,
       child: child,
       menuBuilder: () => _buildPopBgView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: menus.map((e) => _buildPopItemView(e)).toList(),
-        ),
+        child: popupChild ??
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: menus.map((e) => _buildPopItemView(e)).toList(),
+            ),
       ),
     );
   }
@@ -136,6 +139,7 @@ class PopButton extends StatelessWidget {
                 info.onTap?.call();
               }
             : null,
+        onDoubleTap: null,
         behavior: HitTestBehavior.translucent,
         child: Container(
           height: menuItemHeight,

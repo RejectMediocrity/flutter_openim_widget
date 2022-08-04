@@ -1,13 +1,14 @@
+/// author: dongjunjie
+/// created on: 2022/7/26 16:56
+/// description:
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-enum PressType {
-  longPress,
-  singleClick,
-}
+import 'copy_custom_pop_up_menu.dart';
 
-class CustomPopupMenuController extends ChangeNotifier {
+class PopupViewController extends ChangeNotifier {
   bool menuIsShowing = false;
 
   void showMenu() {
@@ -26,12 +27,12 @@ class CustomPopupMenuController extends ChangeNotifier {
   }
 }
 
-class CopyCustomPopupMenu extends StatefulWidget {
-  CopyCustomPopupMenu({
+class CustomPopupView extends StatefulWidget {
+  CustomPopupView({
     required this.child,
     required this.menuBuilder,
     required this.pressType,
-    this.controller,
+    required this.controller,
     this.arrowColor = const Color(0xFF4C4C4C),
     this.showArrow = true,
     this.barrierColor = Colors.black12,
@@ -48,38 +49,37 @@ class CopyCustomPopupMenu extends StatefulWidget {
   final double horizontalMargin;
   final double verticalMargin;
   final double arrowSize;
-  final CustomPopupMenuController? controller;
+  final PopupViewController controller;
   final Widget Function() menuBuilder;
 
   @override
-  _CopyCustomPopupMenuState createState() => _CopyCustomPopupMenuState();
+  _CustomPopupViewState createState() => _CustomPopupViewState();
 }
 
-class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
+class _CustomPopupViewState extends State<CustomPopupView> {
   RenderBox? _childBox;
   RenderBox? _parentBox;
   OverlayEntry? _overlayEntry;
-  CustomPopupMenuController? _controller;
+  late PopupViewController _controller;
+  bool menuIsShowing = false;
 
   _showMenu() {
-    Widget arrow = ClipPath(
-      child: Container(
-        width: widget.arrowSize,
-        height: widget.arrowSize,
-        color: widget.arrowColor,
-      ),
-      clipper: _ArrowClipper(),
-    );
-
     _overlayEntry = OverlayEntry(
       builder: (context) {
         return Stack(
           children: <Widget>[
             GestureDetector(
-              // onTap: () => _hideMenu(),
               onPanDown: (detail) => _hideMenu(),
               behavior: HitTestBehavior.translucent,
               child: Container(
+                margin: EdgeInsets.only(
+                    top: _childBox!
+                            .localToGlobal(
+                              Offset(0, 0),
+                            )
+                            .dy +
+                        widget.verticalMargin +
+                        _childBox!.size.height),
                 color: widget.barrierColor,
               ),
             ),
@@ -99,19 +99,6 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                     verticalMargin: widget.verticalMargin,
                   ),
                   children: <Widget>[
-                    // if (widget.showArrow)
-                    //   LayoutId(
-                    //     id: _MenuLayoutId.arrow,
-                    //     child: arrow,
-                    //   ),
-                    // if (widget.showArrow)
-                    //   LayoutId(
-                    //     id: _MenuLayoutId.downArrow,
-                    //     child: Transform.rotate(
-                    //       angle: math.pi,
-                    //       child: arrow,
-                    //     ),
-                    //   ),
                     LayoutId(
                       id: _MenuLayoutId.content,
                       child: Column(
@@ -134,6 +121,10 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
     );
     if (_overlayEntry != null) {
       Overlay.of(context)!.insert(_overlayEntry!);
+      setState(() {
+        menuIsShowing = true;
+        _controller.menuIsShowing = true;
+      });
     }
   }
 
@@ -141,11 +132,15 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
     if (_overlayEntry != null) {
       _overlayEntry?.remove();
       _overlayEntry = null;
+      setState(() {
+        menuIsShowing = false;
+        _controller.menuIsShowing = false;
+      });
     }
   }
 
   _updateView() {
-    if (_controller?.menuIsShowing ?? false) {
+    if (_controller.menuIsShowing) {
       _showMenu();
     } else {
       _hideMenu();
@@ -156,8 +151,8 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
   void initState() {
     super.initState();
     _controller = widget.controller;
-    if (_controller == null) _controller = CustomPopupMenuController();
-    _controller?.addListener(_updateView);
+    if (_controller == null) _controller = PopupViewController();
+    _controller.addListener(_updateView);
     WidgetsBinding.instance.addPostFrameCallback((call) {
       if (!mounted) return;
       _childBox = context.findRenderObject() as RenderBox?;
@@ -169,20 +164,17 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
   @override
   void dispose() {
     _hideMenu();
-    _controller?.removeListener(_updateView);
+    _controller.removeListener(_updateView);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var child = Material(
-      child: InkWell(
-        hoverColor: Colors.transparent,
-        focusColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
+      child: GestureDetector(
         child: widget.child,
-        onTap: widget.pressType == PressType.singleClick
+        onPanDown: _controller.menuIsShowing ? (d) => _hideMenu() : null,
+        onTap: !_controller.menuIsShowing &&widget.pressType == PressType.singleClick
             ? () {
                 if (widget.pressType == PressType.singleClick) {
                   _showMenu();
@@ -386,4 +378,86 @@ class _ArrowClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return true;
   }
+}
+
+class PopupView extends StatelessWidget {
+  final Widget child;
+  final Widget popupChild;
+
+  final PopupViewController popCtrl;
+
+  // final PopupMenuItemBuilder builder;
+  final PressType pressType;
+  final bool showArrow;
+  final Color arrowColor;
+  final Color barrierColor;
+  final double horizontalMargin;
+  final double verticalMargin;
+  final double arrowSize;
+
+  final Color menuBgColor;
+  final double menuBgRadius;
+  final Color? menuBgShadowColor;
+  final Offset? menuBgShadowOffset;
+  final double? menuBgShadowBlurRadius;
+  final double? menuBgShadowSpreadRadius;
+
+  PopupView({
+    Key? key,
+    required this.child,
+    required this.popupChild,
+    required this.popCtrl,
+    this.arrowColor = const Color(0xFF1B72EC),
+    this.showArrow = true,
+    this.barrierColor = Colors.transparent,
+    this.arrowSize = 10.0,
+    this.horizontalMargin = 10.0,
+    this.verticalMargin = 10.0,
+    this.pressType = PressType.singleClick,
+    this.menuBgColor = const Color(0xFF1B72EC),
+    this.menuBgRadius = 10.0,
+    this.menuBgShadowColor,
+    this.menuBgShadowOffset,
+    this.menuBgShadowBlurRadius,
+    this.menuBgShadowSpreadRadius,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPopupView(
+      controller: popCtrl,
+      arrowColor: arrowColor,
+      showArrow: showArrow,
+      barrierColor: barrierColor,
+      arrowSize: arrowSize,
+      verticalMargin: verticalMargin,
+      horizontalMargin: horizontalMargin,
+      pressType: pressType,
+      child: child,
+      menuBuilder: () => _buildPopBgView(
+        child: popupChild,
+      ),
+    );
+  }
+
+  _clickArea(double dy) {
+    popCtrl.hideMenu();
+  }
+
+  Widget _buildPopBgView({Widget? child}) => Container(
+        child: child,
+        // padding: EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          color: menuBgColor,
+          borderRadius: BorderRadius.circular(menuBgRadius),
+          boxShadow: [
+            BoxShadow(
+              color: menuBgShadowColor ?? Color(0xFF000000).withOpacity(0.5),
+              offset: menuBgShadowOffset ?? Offset(0, 2),
+              blurRadius: menuBgShadowBlurRadius ?? 6,
+              spreadRadius: menuBgShadowSpreadRadius ?? 0,
+            )
+          ],
+        ),
+      );
 }

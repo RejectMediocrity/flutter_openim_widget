@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_video_player.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sp_util/sp_util.dart';
 
 class PicInfo {
   final String? thumbUrl; // 视频或者图片的缩略图
@@ -16,6 +18,9 @@ class PicInfo {
   final int? duration;
   final bool? isVideo; // 是否是视频
   final int? sendTime;
+  final int width;
+  final int height;
+
   PicInfo({
     this.url,
     this.file,
@@ -25,7 +30,10 @@ class PicInfo {
     this.isVideo = false,
     this.duration,
     this.sendTime,
-  });
+    int? width,
+    int? height,
+  })  : this.width = width ?? 1,
+        this.height = height ?? 1;
 }
 
 class ChatPicturePreview extends StatefulWidget {
@@ -51,7 +59,11 @@ class ChatPicturePreview extends StatefulWidget {
   final Function()? showMenu;
 
   @override
-  State<ChatPicturePreview> createState() => _ChatPicturePreviewState();
+  State<ChatPicturePreview> createState() {
+    PicInfo info = picList.elementAt(index);
+    SpUtil.putBool("autoPlay", info.isVideo == true);
+    return _ChatPicturePreviewState();
+  }
 }
 
 class _ChatPicturePreviewState extends State<ChatPicturePreview> {
@@ -114,6 +126,42 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
     );
   }
 
+  Widget _errorView() {
+    return ImageUtil.assetImage(
+      'ic_load_error',
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _placeholderImage() {
+    return ImageUtil.assetImage(
+      "pic_place",
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _urlView({required String url}) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      placeholder: (BuildContext context, String url) {
+        return _placeholderImage();
+      },
+      errorWidget: (BuildContext context, String url, dynamic error) {
+        return _errorView();
+      },
+      fit: BoxFit.fitWidth,
+    );
+  }
+
+  Widget _pathView({required File file}) => Stack(
+        children: [
+          Image(
+            image: FileImage(file),
+            fit: BoxFit.fitWidth,
+            errorBuilder: (_, error, stack) => _errorView(),
+          ),
+        ],
+      );
   Widget _buildChildView(int index) {
     var info = picList.elementAt(index);
     if (info.isVideo == true) {
@@ -128,39 +176,64 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         },
       );
     }
-    String? url = info.url;
     if (info.file != null) {
       return ExtendedImage.file(
         info.file!,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
-        clearMemoryCacheWhenDispose: true,
+        clearMemoryCacheWhenDispose: false,
         loadStateChanged: _buildLoadStateChangedView,
-        initGestureConfigHandler: _buildGestureConfig,
+        initGestureConfigHandler: (ExtendedImageState state) {
+          return _buildGestureConfig(state, info: info);
+        },
       );
-    } else if (url != null) {
+    } else if (info.thumbUrl != null && info.showSourcePic == false) {
       return ExtendedImage.network(
-        url,
+        info.thumbUrl!,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
-        clearMemoryCacheWhenDispose: true,
+        clearMemoryCacheWhenDispose: false,
         handleLoadingProgress: true,
+        cache: true,
         loadStateChanged: _buildLoadStateChangedView,
-        initGestureConfigHandler: _buildGestureConfig,
+        initGestureConfigHandler: (ExtendedImageState state) {
+          return _buildGestureConfig(state, info: info);
+        },
+      );
+    } else if (info.url != null) {
+      return ExtendedImage.network(
+        info.url!,
+        fit: BoxFit.contain,
+        mode: ExtendedImageMode.gesture,
+        clearMemoryCacheWhenDispose: false,
+        handleLoadingProgress: true,
+        cache: true,
+        loadStateChanged: _buildLoadStateChangedView,
+        initGestureConfigHandler: (ExtendedImageState state) {
+          return _buildGestureConfig(state, info: info);
+        },
       );
     } else {
       return _buildErrorView();
     }
   }
 
-  GestureConfig _buildGestureConfig(ExtendedImageState state) => GestureConfig(
-        //you must set inPageView true if you want to use ExtendedImageGesturePageView
-        inPageView: true,
-        initialScale: 1.0,
-        maxScale: 10.0,
-        animationMaxScale: 12.0,
-        initialAlignment: InitialAlignment.center,
-      );
+  GestureConfig _buildGestureConfig(ExtendedImageState state,
+      {required PicInfo info}) {
+    double scale = 1;
+    if (info.width < info.height) {
+      double realWidth = 1.sh / info.height * info.width;
+      scale = 1.sw / realWidth;
+    }
+    return GestureConfig(
+      //you must set inPageView true if you want to use ExtendedImageGesturePageView
+      inPageView: true,
+      initialScale: scale < 1 ? 1 : scale,
+      maxScale: 10.0,
+      animationMaxScale: 12.0,
+      initialAlignment: InitialAlignment.topCenter,
+    );
+  }
 
   Widget? _buildLoadStateChangedView(ExtendedImageState state) {
     switch (state.extendedImageLoadState) {
@@ -202,7 +275,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
   Widget _buildPageView() => GestureDetector(
         onTap: widget.onTap ?? close,
         child: ExtendedImageGesturePageView.builder(
-          reverse: widget.showMenu==null?true:false,
+          reverse: widget.showMenu == null ? true : false,
           controller: widget.controller,
           itemCount: picList.length,
           itemBuilder: (BuildContext context, int index) {
@@ -217,11 +290,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
       );
   String _getVideoDurationFormat(int seconds) {
     var d = Duration(seconds: seconds);
-    // var hours = d.inHours > 10 ? d.inHours : '0${d.inHours}';
-    // var minute =
-    //     d.inMinutes % 60 > 10 ? d.inMinutes % 60 : '0${d.inMinutes % 60}';
     var minute = d.inMinutes >= 10 ? d.inMinutes : '0${d.inMinutes}';
-    var sec = d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
+    var sec =
+        d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
     return '$minute:$sec';
   }
 
@@ -285,11 +356,28 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                       ],
                     ),
                   )
-                : Container(
-                    width: 140.w,
-                    height: 32.w,
-                    color: Colors.transparent,
-                  ),
+                : info.showSourcePic == true
+                    ? Container(
+                        width: 140.w,
+                        height: 32.w,
+                      )
+                    : GestureDetector(
+                        onTap: onViewOriginImg,
+                        child: Container(
+                          width: 140.w,
+                          height: 32.w,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF999999).withAlpha(76),
+                            borderRadius: BorderRadius.circular(100.w),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "查看原图($sizeStr)",
+                            style:
+                                TextStyle(fontSize: 12.sp, color: Colors.white),
+                          ),
+                        ),
+                      ),
             widget.showMenu != null
                 ? SizedBox(
                     width: 20.w,

@@ -39,8 +39,19 @@ class VoiceRecord {
         _updateDuration = updateDuration;
 
   start() async {
+    _long = _now();
+    await AudioController.instance.stop();
+    PermissionStatus permissionStatus = await Permission.microphone.status;
     PermissionUtil.microphone(
       () async {
+        if (!permissionStatus.isGranted) {
+          await stop();
+          return;
+        }
+        if (_timer != null) {
+          _timer?.cancel();
+          _timer = null;
+        }
         var path = (await getApplicationDocumentsDirectory()).path;
         _path = '$path/$_dir/$_tag$_ext';
         File file = File(_path);
@@ -53,7 +64,7 @@ class VoiceRecord {
         _timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
           int duration = (_now() - _long);
           if (duration >= _maxDuration) {
-            stop();
+            await stop();
           }
 
           try {
@@ -61,11 +72,12 @@ class VoiceRecord {
             _updateDuration?.call(duration, amplitude);
           } catch (e) {
             _updateDuration?.call(duration, null);
+            timer.cancel();
           }
         });
       },
       onFailed: (PermissionStatus status) async {
-        _callback(0, "");
+        await stop();
         await Permission.microphone.request();
       },
       onPermanently: () {
@@ -112,9 +124,9 @@ class VoiceRecord {
   stop() async {
     if (await _audioRecorder.isRecording()) {
       _audioRecorder.stop();
+      int duration = (_now() - _long) ~/ 1000;
+      _callback(duration, _path);
     }
-    _long = (_now() - _long) ~/ 1000;
-    _callback(_long, _path);
     if (_timer != null) {
       _timer?.cancel();
       _timer = null;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatInputBoxView extends StatefulWidget {
@@ -137,8 +137,11 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   @override
   void dispose() {
     _controller.dispose();
-    widget.controller?.dispose();
-    widget.focusNode?.dispose();
+    if (!DeviceUtil.instance.isPadOrTablet) {
+      widget.controller?.dispose();
+      widget.focusNode?.dispose();
+    }
+
     super.dispose();
   }
 
@@ -189,7 +192,6 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   }
 
   Widget buildView() {
-    print('sssss${widget.hideInputBox}');
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -279,11 +281,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             height: 20,
           ),
         ),
-        Visibility(
-          visible: widget.isGroupChat == true,
-          child: SizedBox(
-            width: 30,
-          ),
+        SizedBox(
+          width: 30,
         ),
         Visibility(
           child: GestureDetector(
@@ -296,35 +295,35 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
           ),
           visible: widget.isGroupChat == true,
         ),
-        // Visibility(
-        //   child: SizedBox(
-        //     width: 30,
-        //   ),
-        //   visible: widget.isGroupChat == true,
-        // ),
-        // GestureDetector(
-        //   onTap: () {
-        //     setState(() {
-        //       _emojiVisible = false;
-        //       widget.emojiViewState!(_emojiVisible);
-        //       _assetPickerVisible = false;
-        //       widget.assetPickerViewState!(_assetPickerVisible);
-        //       _voiceVisible = !_voiceVisible;
-        //       widget.voiceViewState!(_voiceVisible);
-        //       if (_voiceVisible) {
-        //         unfocus();
-        //       } else {
-        //         focus();
-        //       }
-        //     });
-        //   },
-        //   child: ImageUtil.assetImage(
-        //       _voiceVisible
-        //           ? "ic_inputbox_but_recording_selected"
-        //           : "ic_inputbox_but_recording",
-        //       width: 20,
-        //       height: 20),
-        // ),
+        Visibility(
+          child: SizedBox(
+            width: 30,
+          ),
+          visible: widget.isGroupChat == true,
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _emojiVisible = false;
+              widget.emojiViewState!(_emojiVisible);
+              _assetPickerVisible = false;
+              widget.assetPickerViewState!(_assetPickerVisible);
+              _voiceVisible = !_voiceVisible;
+              widget.voiceViewState!(_voiceVisible);
+              if (_voiceVisible) {
+                unfocus();
+              } else {
+                focus();
+              }
+            });
+          },
+          child: ImageUtil.assetImage(
+              _voiceVisible
+                  ? "ic_inputbox_but_recording_selected"
+                  : "ic_inputbox_but_recording",
+              width: 20,
+              height: 20),
+        ),
         SizedBox(
           width: 30,
         ),

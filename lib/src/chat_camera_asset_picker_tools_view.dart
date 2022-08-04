@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/constants/config.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/widgets/camera_picker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -145,6 +145,10 @@ class _ChatCameraAssetPickerToolsViewState
                           //   print(entity.toString());
                           // }
                           return Container(
+                            // constraints: BoxConstraints(
+                            //   minWidth: 50.w,
+                            //   minHeight: 220.w,
+                            // ),
                             width: 220.w * (entity.width / entity.height) > 50.w
                                 ? 220.w * (entity.width / entity.height)
                                 : 50.w,
@@ -154,18 +158,25 @@ class _ChatCameraAssetPickerToolsViewState
                               children: [
                                 Positioned.fill(
                                   child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    radius: 0.0,
                                     onTap: () =>
                                         previewSelectedAssets(context, index),
                                     child: Image(
                                       image: AssetEntityImageProvider(
                                         entity,
-                                        isOriginal: true,
+                                        isOriginal: !Platform.isAndroid,
                                         // isOriginal: entity.type != AssetType.video,
                                         // thumbnailSize:
                                         //     const ThumbnailSize.square(200),
                                         // thumbnailFormat: ThumbnailFormat.jpeg,
                                       ),
-                                      fit: BoxFit.cover,
+                                      fit: 220.w *
+                                                  (entity.width /
+                                                      entity.height) <
+                                              50.w
+                                          ? BoxFit.fitWidth
+                                          : BoxFit.fitHeight,
                                     ),
                                   ),
                                 ),
@@ -195,7 +206,10 @@ class _ChatCameraAssetPickerToolsViewState
                                       ),
                                       child: Center(
                                         child: Text(
-                                          getVideoDurationFormat(entity.duration > 0 ? entity.duration:1),
+                                          getVideoDurationFormat(
+                                              entity.duration > 0
+                                                  ? entity.duration
+                                                  : 1),
                                           style: TextStyle(
                                               fontSize: 12.0,
                                               color: Colors.white),
@@ -212,6 +226,8 @@ class _ChatCameraAssetPickerToolsViewState
                                   height: 26.w,
                                   // child: _appleOSSelectButton(context, true, entity),
                                   child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    radius: 0.0,
                                     onTap: () {
                                       if (selectedEntityList.length >=
                                               widget.selectedMaximumAssets &&
@@ -313,34 +329,34 @@ class _ChatCameraAssetPickerToolsViewState
                   highlightColor: Colors.transparent,
                   radius: 0.0,
                   onTap: () {
-                    // if (_ps.isAuth) {
-                    //   isNeedOrigin = !isNeedOrigin;
-                    //   setState(() {});
-                    // }
+                    if (_ps.isAuth) {
+                      isNeedOrigin = !isNeedOrigin;
+                      setState(() {});
+                    }
                   },
                   child: Row(
                     children: [
                       SizedBox(
                         width: 20,
                       ),
-                      // ImageUtil.assetImage(
-                      //   isNeedOrigin
-                      //       ? "user_agreement_but_selected"
-                      //       : "user_agreement_but_unselected",
-                      //   width: 16.w,
-                      //   height: 16.w,
-                      // ),
-                      // SizedBox(
-                      //   width: 5,
-                      // ),
-                      // Text(
-                      //   '原图',
-                      //   style: TextStyle(
-                      //       color: _ps.isAuth
-                      //           ? Color(0xFF333333)
-                      //           : Color(0xFFCCCCCC),
-                      //       fontSize: 16.0),
-                      // ),
+                      ImageUtil.assetImage(
+                        isNeedOrigin
+                            ? "user_agreement_but_selected"
+                            : "user_agreement_but_unselected",
+                        width: 16.w,
+                        height: 16.w,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '原图',
+                        style: TextStyle(
+                            color: _ps.isAuth
+                                ? Color(0xFF333333)
+                                : Color(0xFFCCCCCC),
+                            fontSize: 16.0),
+                      ),
                       SizedBox(
                         width: 20,
                       ),
@@ -362,7 +378,8 @@ class _ChatCameraAssetPickerToolsViewState
     // var minute =
     //     d.inMinutes % 60 > 10 ? d.inMinutes % 60 : '0${d.inMinutes % 60}';
     var minute = d.inMinutes >= 10 ? d.inMinutes : '0${d.inMinutes}';
-    var sec = d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
+    var sec =
+        d.inSeconds % 60 >= 10 ? d.inSeconds % 60 : '0${d.inSeconds % 60}';
     return '$minute:$sec';
   }
 
@@ -482,41 +499,101 @@ class _ChatCameraAssetPickerToolsViewState
         pickFromAssets(context);
       },
       onFailed: (PermissionStatus status) async {
-        if (status == PermissionStatus.permanentlyDenied) {
+        if (status == PermissionStatus.permanentlyDenied ||
+            status == PermissionStatus.limited) {
           showDialog(
             context: context,
-            builder: (BuildContext context) => MindIMDialog(
-              title: Text("无法访问相册中所有照片"),
-              content: Text("请前往设置，允许mind访问所有照片"),
-              cancelWidget: CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Color(0xFF333333),
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
+            useSafeArea: false,
+            builder: (BuildContext context) => Stack(
+              children: [
+                Positioned.fill(
+                    child: Container(
+                  color: Color(0xFF333333),
+                )),
+                Positioned(
+                  top: 45.w,
+                  left: 10.w,
+                  width: 40.w,
+                  height: 40.w,
+                  child: InkWell(
+                    highlightColor: Colors.transparent,
+                    radius: 0.0,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                    child: Container(
+                      width: 40.w,
+                      height: 40.w,
+                      child: Center(
+                        child: ImageUtil.assetImage(
+                          "title_but_close_white",
+                          width: 20.w,
+                          height: 20.w,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              ),
-              sureWidget: CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text(
-                  '前往设置',
-                  style: TextStyle(
-                    color: Color(0xFF006DFA),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                Positioned(
+                  top: 228.w,
+                  left: 0,
+                  right: 0,
+                  height: 34,
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        '无法访问相册中所有照片',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  await openAppSettings();
-                },
-              ),
+                Positioned(
+                  top: 282.w,
+                  left: 0,
+                  right: 0,
+                  height: 22,
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        '请前往设置，允许mind访问所有照片',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 160.w,
+                  left: 0,
+                  right: 0,
+                  height: 46.w,
+                  child: Container(
+                    child: Center(
+                      child: MaterialButton(
+                        elevation: 0,
+                        minWidth: 250.w,
+                        height: 46.w,
+                        padding: const EdgeInsets.symmetric(horizontal: 27),
+                        color: Color(0xFF006DFA),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Container(
+                          child: Text(
+                            '前往设置',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        onPressed: openAppSettings,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         } else {
@@ -535,6 +612,9 @@ class _ChatCameraAssetPickerToolsViewState
       ),
     );
 
+    // print(
+    //     '======================== pickFromCamera start ==============================');
+    // print(DateTime.now().toString());
     if (result != null) {
       entityList.add(result);
       selectedEntityList = entityList;
@@ -544,23 +624,28 @@ class _ChatCameraAssetPickerToolsViewState
       sendSelectedEntityList([], true);
     }
     selectedEntityList = [];
+    // print(DateTime.now().toString());
+    // print(
+    //     '======================== pickFromCamera end ==============================');
   }
 
   Future<void> pickFromAssets(BuildContext context) async {
     if (_ps.isAuth) {
       final List<AssetEntity>? result = await AssetPicker.pickAssets(
         context,
-        pickerTheme: theme,
-        selectedAssets: selectedEntityList,
-        maxAssets: widget.selectedMaximumAssets,
-        requestType: RequestType.common,
+        pickerConfig: AssetPickerConfig(
+          pickerTheme: theme,
+          selectedAssets: selectedEntityList,
+          maxAssets: widget.selectedMaximumAssets,
+          requestType: RequestType.common,
+        ),
       );
       selectedEntityList = result ?? [];
       setState(() {});
       sendSelectedEntityList(selectedEntityList, true);
       selectedEntityList = [];
     } else {
-      showToast('未开启权限');
+      // showToast('未开启权限');
     }
   }
 

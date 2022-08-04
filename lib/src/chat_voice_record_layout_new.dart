@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:record/record.dart';
 import 'package:sprintf/sprintf.dart';
@@ -37,7 +37,7 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
   int _recordTime = 0;
   double _dbLevel = 0.0;
   var _lastTipTime = 0;
-  late VoiceRecord? _record;
+  VoiceRecord? _record;
   String? _path;
   int _sec = 0;
   int maxDuration = 60 * 1000;
@@ -85,34 +85,41 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
         },
         onLongPressStart: (details) {
           widget.onStart?.call();
-          setState(() {
-            // 开始记录
-            _record = VoiceRecord(
-              callback,
-              context: context,
-              maxDuration: maxDuration,
-              onStartRecord: () {
-                setState(() {
-                  _startRecord = true;
-                  _selectedPressArea = true;
-                  _showVoiceRecordView = true;
-                });
-              },
-              updateDuration: (int time, Amplitude? amplitude) {
-                setState(() {
-                  _recordTime = time;
-                  if ((maxDuration - _recordTime) < _lastTime) {
-                    _lastTipTime = (maxDuration - _recordTime);
-                  } else {
-                    _lastTipTime = 0;
-                  }
-                  _dbLevel = amplitude?.current ?? 0.0;
-                  print("_dbLevel : ${amplitude?.current}");
-                });
-              },
-            );
-            _record?.start();
-          });
+          if (mounted) {
+            setState(() {
+              // 开始记录
+              if (_record == null) {
+                _record = VoiceRecord(
+                  callback,
+                  context: context,
+                  maxDuration: maxDuration,
+                  onStartRecord: () {
+                    setState(() {
+                      _startRecord = true;
+                      _selectedPressArea = true;
+                      _showVoiceRecordView = true;
+                    });
+                  },
+                  updateDuration: (int time, Amplitude? amplitude) {
+                    if (mounted) {
+                      setState(() {
+                        _recordTime = time;
+                        if ((maxDuration - _recordTime) < _lastTime) {
+                          _lastTipTime = (maxDuration - _recordTime);
+                        } else {
+                          _lastTipTime = 0;
+                        }
+                        _dbLevel = amplitude?.current ?? 0.0;
+                        print("_dbLevel : ${amplitude?.current}");
+                      });
+                    }
+                  },
+                );
+              }
+              _record?.start();
+            });
+          }
+
         },
         backgroundColor: (!_startRecord || _selectedPressArea)
             ? Color(0xFF006DFA)
@@ -293,6 +300,7 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
     _recordTime = 0;
     _lastTipTime = 0;
     _startRecord = false;
+    _record = null;
   }
 
   void _callback() {

@@ -4,7 +4,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_loading.dart';
 import 'package:flutter_openim_widget/src/custom_circular_progress.dart';
 import 'package:flutter_openim_widget/src/timing_view.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatSingleLayout extends StatelessWidget {
   final CustomPopupMenuController popupCtrl;
@@ -206,13 +206,18 @@ class ChatSingleLayout extends StatelessWidget {
                                                 ),
 
                                               /// 消息体
-                                              expandView!(
-                                                Padding(
-                                                  child: child,
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10.w, 6.w, 10.w, 10.w),
+                                              if (expandView != null)
+                                                expandView!(
+                                                  Padding(
+                                                    child: child,
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10.w,
+                                                            10.w,
+                                                            10.w,
+                                                            10.w),
+                                                  ),
                                                 ),
-                                              ),
                                               if (faceReplyView != null)
                                                 Padding(
                                                   padding: EdgeInsets.fromLTRB(
@@ -302,7 +307,13 @@ class ChatSingleLayout extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
           child: child,
         ),
-        onTap: () => _onItemClick?.add(index),
+        onTap: () {
+          try {
+            _onItemClick?.add(index);
+          } catch (e) {
+            print(e.toString());
+          }
+        },
       ),
     );
     if (faceReplyView == null) return widget;
@@ -365,6 +376,7 @@ class ChatSingleLayout extends StatelessWidget {
   /// 群聊
   Widget _buildGroupReadStatusView() {
     bool isAllRead = groupHaveReadCount >= groupMemberCount - 1;
+    double progress = groupHaveReadCount / (groupMemberCount - 1);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTapReadView,
@@ -375,9 +387,11 @@ class ChatSingleLayout extends StatelessWidget {
                 width: 20.w, height: 20.w)
             : CustomCircularProgress(
                 size: 16.w,
-                activeColor: Color.fromARGB(255, 0, 192, 155),
+                activeColor: progress <= 0
+                    ? Color(0xFFDDDDDD)
+                    : Color.fromARGB(255, 0, 192, 155),
                 backColor: Colors.white,
-                progress: groupHaveReadCount / (groupMemberCount - 1),
+                progress: progress,
               ),
       ),
     );

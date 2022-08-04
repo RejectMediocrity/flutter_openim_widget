@@ -8,7 +8,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
 
@@ -233,6 +233,29 @@ class _CameraPickerViewerState extends State<CameraPickerViewer> {
               previewFile,
               title: path.basename(previewFile.path),
             );
+            // 20220610 add video previewFile relativePath
+            if (entity != null) {
+              AssetEntity? tempEntity;
+              tempEntity = AssetEntity(
+                id: entity.id,
+                typeInt: entity.typeInt,
+                width: entity.width,
+                height: entity.height,
+                duration: entity.duration,
+                orientation: entity.orientation,
+                isFavorite: entity.isFavorite,
+                title: entity.title,
+                createDateSecond: entity.createDateSecond,
+                modifiedDateSecond: entity.modifiedDateSecond,
+                relativePath: previewFile.path,
+                latitude: entity.latitude,
+                longitude: entity.longitude,
+                mimeType: entity.mimeType,
+                subtype: entity.subtype,
+              );
+              entity = tempEntity;
+            }
+            // entity?.relativePath = previewFile.path;
             break;
         }
         if (shouldDeletePreviewFile && previewFile.existsSync()) {

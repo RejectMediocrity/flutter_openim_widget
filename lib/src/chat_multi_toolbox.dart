@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatMultiSelToolbox extends StatelessWidget {
   const ChatMultiSelToolbox(
-      {Key? key, this.onDelete, this.onMergeForward, this.onForwardOneByOne})
+      {Key? key,
+      this.onDelete,
+      this.onMergeForward,
+      this.onForwardOneByOne,
+      this.onAddMemo})
       : super(key: key);
   final Function()? onDelete;
   final Function()? onMergeForward;
   final Function()? onForwardOneByOne;
+  final Function()? onAddMemo;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,7 @@ class ChatMultiSelToolbox extends StatelessWidget {
             onTap: onMergeForward,
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 22.h),
+              padding: EdgeInsets.symmetric(horizontal: 19.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -48,7 +53,7 @@ class ChatMultiSelToolbox extends StatelessWidget {
             onTap: onForwardOneByOne,
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 22.h),
+              padding: EdgeInsets.symmetric(horizontal: 19.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -68,11 +73,37 @@ class ChatMultiSelToolbox extends StatelessWidget {
               ),
             ),
           ),
+          if (onAddMemo != null)
+            GestureDetector(
+              onTap: onAddMemo,
+              behavior: HitTestBehavior.translucent,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 19.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ImageUtil.assetImage(
+                      'msgpopup_btn_memo_bg',
+                      width: 46.w,
+                      height: 46.w,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Text(
+                      UILocalizations.addMemo,
+                      style:
+                          TextStyle(color: Color(0xFF333333), fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           GestureDetector(
             onTap: onDelete,
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 22.h),
+              padding: EdgeInsets.symmetric(horizontal: 19.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
