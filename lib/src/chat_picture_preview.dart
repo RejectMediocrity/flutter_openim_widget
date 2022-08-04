@@ -228,7 +228,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
     return GestureConfig(
       //you must set inPageView true if you want to use ExtendedImageGesturePageView
       inPageView: true,
-      initialScale: scale,
+      initialScale: scale < 1 ? 1 : scale,
       maxScale: 10.0,
       animationMaxScale: 12.0,
       initialAlignment: InitialAlignment.topCenter,
