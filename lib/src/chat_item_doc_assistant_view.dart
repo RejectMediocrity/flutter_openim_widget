@@ -42,7 +42,7 @@ class ChatItemDocAssistantView extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             if (onTapDocOperator != null)
-              onTapDocOperator!(assistantModel?.params?.toImUserId ?? "");
+              onTapDocOperator!(assistantModel.params?.toImUserId ?? "");
           },
           child: Text(
             replace1,
@@ -65,7 +65,7 @@ class ChatItemDocAssistantView extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             if (onTapDocUrl != null)
-              onTapDocUrl!(assistantModel?.params?.toUrl ?? "");
+              onTapDocUrl!(assistantModel.params?.toUrl ?? "");
           },
           child: Text(
             replace2,
