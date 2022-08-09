@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+import 'package:flutter_openim_widget/src/chat_item_doc_assistant_view.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
+import 'package:flutter_openim_widget/src/model/chat_doc_assistant_model.dart';
 import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
 import 'package:flutter_openim_widget/src/util/event_bus.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -222,6 +224,8 @@ class ChatItemView extends StatefulWidget {
   final Function(String uid)? onTapUser;
   final Function()? onTapUnShowReplyUser;
   final bool isVoiceUnread;
+  final Function(String userId)? onTapDocOperator;
+  final Function(String padUrl)? onTapDocUrl;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -294,6 +298,8 @@ class ChatItemView extends StatefulWidget {
     this.onTapUser,
     this.onTapUnShowReplyUser,
     this.isVoiceUnread = false,
+    this.onTapDocOperator,
+    this.onTapDocUrl,
   }) : super(key: key);
 
   @override
@@ -1031,6 +1037,16 @@ class _ChatItemViewState extends State<ChatItemView> {
       } else if (type.startsWith('memo_')) {
         String nickName1 = widget.message.senderNickname ?? '';
         return nickName1 + " " + opData["noticeValue"]["memo_notice"];
+      } else if (type == "cloud_doc_assistant") {
+        ChatDocAssistantModel model = ChatDocAssistantModel.fromJson(opData);
+        return _buildCommonItemView(
+          isBubbleBg: false,
+          child: ChatItemDocAssistantView(
+            model,
+            onTapDocOperator: widget.onTapDocOperator,
+            onTapDocUrl: widget.onTapDocUrl,
+          ),
+        );
       }
     } catch (e) {
       print(e.toString());
@@ -1553,7 +1569,6 @@ class _ChatItemViewState extends State<ChatItemView> {
           isCustomTypeNeedShow = true;
         }
       }
-
     }
 
     return widget.enabledMemoMenu ??
