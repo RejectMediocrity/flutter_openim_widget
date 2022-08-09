@@ -18,8 +18,8 @@ class PicInfo {
   final int? duration;
   final bool? isVideo; // 是否是视频
   final int? sendTime;
-  final int width;
-  final int height;
+  int width;
+  int height;
 
   PicInfo({
     this.url,
@@ -182,7 +182,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
         clearMemoryCacheWhenDispose: false,
-        loadStateChanged: _buildLoadStateChangedView,
+        loadStateChanged: (ExtendedImageState state) {
+          _buildLoadStateChangedView(state, index);
+        },
         initGestureConfigHandler: (ExtendedImageState state) {
           return _buildGestureConfig(state, info: info);
         },
@@ -195,7 +197,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         clearMemoryCacheWhenDispose: false,
         handleLoadingProgress: true,
         cache: true,
-        loadStateChanged: _buildLoadStateChangedView,
+        loadStateChanged: (ExtendedImageState state) {
+          _buildLoadStateChangedView(state, index);
+        },
         initGestureConfigHandler: (ExtendedImageState state) {
           return _buildGestureConfig(state, info: info);
         },
@@ -208,7 +212,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
         clearMemoryCacheWhenDispose: false,
         handleLoadingProgress: true,
         cache: true,
-        loadStateChanged: _buildLoadStateChangedView,
+        loadStateChanged: (ExtendedImageState state) {
+          _buildLoadStateChangedView(state, index);
+        },
         initGestureConfigHandler: (ExtendedImageState state) {
           return _buildGestureConfig(state, info: info);
         },
@@ -235,7 +241,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
     );
   }
 
-  Widget? _buildLoadStateChangedView(ExtendedImageState state) {
+  Widget? _buildLoadStateChangedView(ExtendedImageState state, int index) {
     switch (state.extendedImageLoadState) {
       case LoadState.loading:
         {
@@ -263,6 +269,10 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
           // return ExtendedRawImage(
           //   image: state.extendedImageInfo?.image,
           // );
+          int? width = state.extendedImageInfo?.image.width;
+          int? height = state.extendedImageInfo?.image.height;
+          picList.elementAt(index).width = width ?? 1;
+          picList.elementAt(index).height = height ?? 1;
           return null;
         }
       case LoadState.failed:
