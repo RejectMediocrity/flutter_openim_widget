@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/constants/config.dart';
 import 'package:flutter_openim_widget/src/wechat_camera_picker/lib/src/widgets/camera_picker.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -650,24 +652,46 @@ class _ChatCameraAssetPickerToolsViewState
   }
 
   Future<void> previewSelectedAssets(BuildContext context, int index) async {
-    // final List<AssetEntity> selected = selectedEntityList;
-    //
-    // final List<AssetEntity>? result = await AssetPickerViewer.pushToViewer(
-    //   context,
-    //   previewAssets: entityList,
-    //   currentIndex: index,
-    //   selectedAssets: selected,
-    //   themeData: theme,
-    //   maxAssets: widget.selectedMaximumAssets,
-    // );
-    // if (result != null) {
-    //   selectedEntityList = [];
-    //   setState(() {});
-    //   Navigator.of(context).maybePop(result);
-    // } else {
-    //   selectedEntityList = result!;
-    //   setState(() {});
-    // }
+    final List<AssetEntity> selected = selectedEntityList;
+
+    final List<AssetEntity>? result = await AssetPickerViewer.pushToViewer(
+      context,
+      previewAssets: entityList,
+      currentIndex: index,
+      selectedAssets: selected,
+      themeData: theme,
+      maxAssets: widget.selectedMaximumAssets,
+      selectorProvider: DefaultAssetPickerProvider(
+        selectedAssets: selected,
+        maxAssets: widget.selectedMaximumAssets,
+      ),
+    );
+    if (result == null) {
+      selectedEntityList = [];
+      setState(() {});
+      reSetStatusBar();
+    } else {
+      selectedEntityList = result;
+      setState(() {});
+      reSetStatusBar();
+    }
+  }
+
+  reSetStatusBar() {
+    var brightness = Brightness.light;
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+          statusBarBrightness: brightness, statusBarIconBrightness: brightness);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    } else {
+      Timer(Duration(milliseconds: 500), () {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarBrightness: brightness,
+          statusBarIconBrightness: brightness,
+        ));
+      });
+    }
   }
 
   showToast(String toastStr) {
