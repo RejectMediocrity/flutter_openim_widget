@@ -7,7 +7,12 @@ import 'package:flutter_openim_widget/src/model/chat_doc_assistant_model.dart';
 class ChatItemDocAssistantView extends StatelessWidget {
   final ChatDocAssistantModel assistantModel;
   final Function(String userId)? onTapDocOperator;
-  final Function(String padUrl)? onTapDocUrl;
+  final Function(
+      {String? padUrl,
+      String? code,
+      bool? isFolder,
+      int? type,
+      String? title})? onTapDocUrl;
   ChatItemDocAssistantView(
     this.assistantModel, {
     this.onTapDocOperator,
@@ -64,8 +69,15 @@ class ChatItemDocAssistantView extends StatelessWidget {
         alignment: PlaceholderAlignment.middle,
         child: GestureDetector(
           onTap: () {
-            if (onTapDocUrl != null)
-              onTapDocUrl!(assistantModel.params?.toUrl ?? "");
+            if (onTapDocUrl != null) {
+              onTapDocUrl!(
+                padUrl: assistantModel.params?.toUrl,
+                code: assistantModel.params?.folderCode,
+                type: assistantModel.params?.type,
+                isFolder: assistantModel.params?.noticeType == "folder",
+                title: assistantModel.params?.title,
+              );
+            }
           },
           child: Text(
             replace2,

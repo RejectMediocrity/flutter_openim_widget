@@ -225,7 +225,12 @@ class ChatItemView extends StatefulWidget {
   final Function()? onTapUnShowReplyUser;
   final bool isVoiceUnread;
   final Function(String userId)? onTapDocOperator;
-  final Function(String padUrl)? onTapDocUrl;
+  final Function(
+      {String? padUrl,
+      String? code,
+      bool? isFolder,
+      int? type,
+      String? title})? onTapDocUrl;
   const ChatItemView({
     Key? key,
     required this.index,

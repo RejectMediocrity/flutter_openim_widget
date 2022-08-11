@@ -31,15 +31,27 @@ class ChatDocAssistantParams {
   String? toImUserId;
   String? toImUserName;
   String? toUrl;
+  String? noticeType;
+  String? folderCode;
+  int? type;
 
   ChatDocAssistantParams(
-      {this.title, this.toImUserId, this.toImUserName, this.toUrl});
+      {this.title,
+      this.toImUserId,
+      this.toImUserName,
+      this.toUrl,
+      this.noticeType,
+      this.folderCode,
+      this.type});
 
   ChatDocAssistantParams.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     toImUserId = json['to_im_user_id'];
     toImUserName = json['to_im_user_name'];
     toUrl = json['to_url'];
+    noticeType = json['notice_type'];
+    folderCode = json['folder_code'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +60,9 @@ class ChatDocAssistantParams {
     data['to_im_user_id'] = this.toImUserId;
     data['to_im_user_name'] = this.toImUserName;
     data['to_url'] = this.toUrl;
+    data['notice_type'] = this.noticeType;
+    data['folder_code'] = this.folderCode;
+    data['type'] = this.type;
     return data;
   }
 }
