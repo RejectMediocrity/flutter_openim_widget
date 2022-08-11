@@ -57,6 +57,7 @@ class ImageUtil {
     double? height,
     BoxFit? fit,
     Color? color,
+    double? scale,
   }) {
     return Image.asset(
       imageResStr(res),
@@ -64,6 +65,7 @@ class ImageUtil {
       height: height,
       fit: fit,
       color: color,
+      scale: scale,
       // cacheHeight: height?.toInt(),
       // cacheWidth: width?.toInt(),
       package: 'flutter_openim_widget',

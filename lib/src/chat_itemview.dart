@@ -1208,9 +1208,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 padding: EdgeInsets.all(10.w),
                 child: type == "folderMessage"
                     ? ImageUtil.assetImage(
-                        "msg_icon_file",
-                        width: 60.w,
-                        height: 54.w,
+                        "folder_large",
+                        scale: 114 / 60,
                       )
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
