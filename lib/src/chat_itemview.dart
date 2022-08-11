@@ -1052,6 +1052,10 @@ class _ChatItemViewState extends State<ChatItemView> {
             onTapDocUrl: widget.onTapDocUrl,
           ),
         );
+      } else if (type == "folderMessage" || type == "cloud_excel") {
+        return _buildCloudDocChildItem(opData,
+            isSender: widget.message.sendID == OpenIM.iMManager.uid,
+            type: type);
       }
     } catch (e) {
       print(e.toString());
@@ -1060,14 +1064,21 @@ class _ChatItemViewState extends State<ChatItemView> {
   }
 
   Widget _buildCloudDocChildItem(Map<String, dynamic> map,
-      {required bool isSender}) {
+      {required bool isSender, String? type}) {
     CloudDocMessageModel model = CloudDocMessageModel.fromJson(map);
-    Map params = json.decode(model.params!);
-    String snapShot = params["textSnapshot"];
+    Map params;
+    if (model.params is Map) {
+      params = model.params!;
+    } else {
+      params = json.decode(model.params!);
+    }
+    String snapShot = params.keys.contains("textSnapshot")
+        ? params["textSnapshot"]
+        : params["padSnapshot"];
     String remark = params['remark'] ?? "";
     int permission =
         model.permission?.permission ?? 0; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
-    int recvPermission = model.recieverPermission ?? 0;
+    int recvPermission = model.recieverPermission ?? permission;
     int shareType =
         model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
@@ -1077,10 +1088,10 @@ class _ChatItemViewState extends State<ChatItemView> {
           ? widget.conversationName!
           : UILocalizations.grantThisSessionMemberPermissions;
       if (permission == 0) {
-        return Container();
+        permissionWidget = Container();
       } else if (permission == 1) {
         if (recvPermission == 0)
-          return Container();
+          permissionWidget = Container();
         else if (recvPermission == 1) {
           permissionStr = recieverDes + UILocalizations.canRead;
         } else {
@@ -1132,7 +1143,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       }
     } else {
       if (recvPermission == 0)
-        return Container();
+        permissionWidget = Container();
       else if (recvPermission == 1) {
         permissionStr = UILocalizations.you + UILocalizations.canRead;
       } else {
@@ -1160,7 +1171,11 @@ class _ChatItemViewState extends State<ChatItemView> {
               Row(
                 children: [
                   ImageUtil.assetImage(
-                    "msg_icon_document",
+                    type == "folderMessage"
+                        ? "msg_icon_file"
+                        : type == "cloud_excel"
+                            ? "msg_icon_excel"
+                            : "msg_icon_document",
                     width: 16.w,
                     height: 16.w,
                   ),
@@ -1191,39 +1206,46 @@ class _ChatItemViewState extends State<ChatItemView> {
                   borderRadius: BorderRadius.circular(6.w),
                 ),
                 padding: EdgeInsets.all(10.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        snapShot,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 100,
-                        style: TextStyle(
-                          color: Color(0XFF333333),
-                          fontSize: 14.sp,
-                        ),
+                child: type == "folderMessage"
+                    ? ImageUtil.assetImage(
+                        "msg_icon_file",
+                        width: 60.w,
+                        height: 54.w,
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              snapShot,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 100,
+                              style: TextStyle(
+                                color: Color(0XFF333333),
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.w,
+                          ),
+                          Container(
+                            color: Color(0xFFDDDDDD),
+                            height: 1.w,
+                          ),
+                          SizedBox(
+                            height: 10.w,
+                          ),
+                          permissionStr != null
+                              ? Text(
+                                  permissionStr,
+                                  style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 14.sp),
+                                )
+                              : permissionWidget!,
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 10.w,
-                    ),
-                    Container(
-                      color: Color(0xFFDDDDDD),
-                      height: 1.w,
-                    ),
-                    SizedBox(
-                      height: 10.w,
-                    ),
-                    permissionStr != null
-                        ? Text(
-                            permissionStr,
-                            style: TextStyle(
-                                color: Color(0xFF333333), fontSize: 14.sp),
-                          )
-                        : permissionWidget!,
-                  ],
-                ),
               ),
             ],
           ),

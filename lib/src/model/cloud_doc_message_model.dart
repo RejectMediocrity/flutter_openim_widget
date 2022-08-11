@@ -1,6 +1,6 @@
 class CloudDocMessageModel {
   String? id;
-  String? params;
+  var params;
   int? recieverPermission;
   String? title;
   CloudDocPermission? permission;
