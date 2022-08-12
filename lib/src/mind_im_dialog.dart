@@ -1,21 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MindIMDialog extends StatelessWidget {
   final Widget? title;
-  final Widget content;
+  final Widget? content;
   final Widget? cancelWidget;
   final Widget? sureWidget;
+  final String? sureText;
+  final String? cancelText;
   final Function()? onTapSure;
   final Function()? onTapCancel;
+  final TipType tipType;
+
   MindIMDialog({
-    required this.content,
+    this.content,
     this.title,
     this.onTapCancel,
     this.onTapSure,
     this.cancelWidget,
     this.sureWidget,
+    this.sureText,
+    this.cancelText,
+    this.tipType = TipType.Confirm,
   });
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,35 +40,39 @@ class MindIMDialog extends StatelessWidget {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.all(24.w),
+              margin: EdgeInsets.symmetric(
+                horizontal: 24.w,
+                vertical: 32.w,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (title != null)
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.w),
-                      child: DefaultTextStyle(
-                        child: title!,
-                        style: ts_333333_16sp_w600,
-                        textAlign: TextAlign.center,
-                      ),
+                    DefaultTextStyle(
+                      child: title!,
+                      style: ts_333333_16sp_w600,
+                      textAlign: TextAlign.center,
                     ),
-                  if (content != null)
-                    Padding(
-                      padding: EdgeInsets.only(top: title != null ?  0: 8.w, bottom: 8.w),
-                      child: DefaultTextStyle(
-                        child: content,
-                        style: ts_333333_16sp,
-                        textAlign: TextAlign.center,
+                  if (content != null) ...[
+                    if (title != null)
+                      SizedBox(
+                        height: 8.w,
                       ),
+                    DefaultTextStyle(
+                      child: content!,
+                      style:
+                          title == null ? ts_333333_16sp_w600 : ts_333333_16sp,
+                      textAlign: TextAlign.center,
                     ),
+                  ],
                 ],
               ),
             ),
-
             Container(
               color: Color(0xFFDDDDDD),
               height: .5.w,
@@ -68,21 +81,27 @@ class MindIMDialog extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (cancelWidget != null)
-                  Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        if (onTapCancel != null) {
-                          onTapCancel?.call();
-                        } else {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: cancelWidget,
-                    ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      if (onTapCancel != null) {
+                        onTapCancel?.call();
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: cancelWidget ??
+                        CupertinoDialogAction(
+                          child: Text(
+                            cancelText ?? "取消",
+                            style: ts_333333_16sp,
+                          ),
+                          onPressed: () => onTapCancel?.call(),
+                        ),
                   ),
+                ),
                 Container(
                   color: Color(0xFFE7E7E7),
                   height: 56.w,
@@ -99,7 +118,14 @@ class MindIMDialog extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: sureWidget,
+                    child: sureWidget ??
+                        CupertinoDialogAction(
+                          child: Text(
+                            sureText ?? "确定",
+                            style: getSureTextStyle(tipType),
+                          ),
+                          onPressed: () => onTapSure?.call(),
+                        ),
                   ),
                 ),
               ],
@@ -108,6 +134,13 @@ class MindIMDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  TextStyle getSureTextStyle(TipType tipType) {
+    if (tipType == TipType.Delete) {
+      return ts_FF4A4A_16sp;
+    }
+    return ts_006DFA_16sp_w400;
   }
 
   static var ts_006DFA_16sp_w400 = TextStyle(
@@ -131,9 +164,19 @@ class MindIMDialog extends StatelessWidget {
     fontSize: 16.sp,
     color: Color(0xFFED4040),
   );
-  static var ts_FF4A4A_16sp_w400 = TextStyle(
+  static var ts_FF4A4A_16sp = TextStyle(
     fontSize: 16.sp,
-    fontWeight: FontWeight.w400,
     color: Color(0xFFFF4A4A),
   );
+  static var ts_FF4A4A_16sp_w600 = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFFFF4A4A),
+  );
+}
+
+enum TipType {
+  Alert,
+  Delete,
+  Confirm,
 }

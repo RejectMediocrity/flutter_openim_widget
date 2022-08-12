@@ -410,35 +410,14 @@ class _ChatCameraAssetPickerToolsViewState
           builder: (BuildContext context) => MindIMDialog(
             title: Text("需获得麦克风权限"),
             content: Text("请在“设置-Mind”中打开麦克风权限，以便发送语音消息"),
-            cancelWidget: CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text(
-                '取消',
-                style: TextStyle(
-                  color: Color(0xFF333333),
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            sureWidget: CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text(
-                '前往设置',
-                style: TextStyle(
-                  color: Color(0xFF006DFA),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-                await openAppSettings();
-              },
-            ),
+            onTapCancel: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            sureText: "前往设置",
+            onTapSure: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+              await openAppSettings();
+            },
           ),
         );
       },
@@ -457,35 +436,14 @@ class _ChatCameraAssetPickerToolsViewState
             builder: (BuildContext context) => MindIMDialog(
               title: Text("需获得相机权限"),
               content: Text("请在“设置-Mind”中打开相机权限，以便使用拍照功能"),
-              cancelWidget: CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text(
-                  '取消',
-                  style: TextStyle(
-                    color: Color(0xFF333333),
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              ),
-              sureWidget: CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text(
-                  '前往设置',
-                  style: TextStyle(
-                    color: Color(0xFF006DFA),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  await openAppSettings();
-                },
-              ),
+              onTapCancel: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+              sureText: "前往设置",
+              onTapSure: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                await openAppSettings();
+              },
             ),
           );
         } else {
