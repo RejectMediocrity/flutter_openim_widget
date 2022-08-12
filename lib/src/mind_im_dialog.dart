@@ -89,7 +89,7 @@ class MindIMDialog extends StatelessWidget {
                       if (onTapCancel != null) {
                         onTapCancel?.call();
                       } else {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(false);
                       }
                     },
                     child: cancelWidget ??
@@ -98,7 +98,13 @@ class MindIMDialog extends StatelessWidget {
                             cancelText ?? "取消",
                             style: ts_333333_16sp,
                           ),
-                          onPressed: () => onTapCancel?.call(),
+                          onPressed: () {
+                            if (onTapCancel != null) {
+                              onTapCancel?.call();
+                            } else {
+                              Navigator.of(context).pop(false);
+                            }
+                          },
                         ),
                   ),
                 ),
@@ -115,7 +121,7 @@ class MindIMDialog extends StatelessWidget {
                       if (onTapSure != null) {
                         onTapSure?.call();
                       } else {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       }
                     },
                     child: sureWidget ??
@@ -124,7 +130,13 @@ class MindIMDialog extends StatelessWidget {
                             sureText ?? "确定",
                             style: getSureTextStyle(tipType),
                           ),
-                          onPressed: () => onTapSure?.call(),
+                          onPressed: () {
+                            if (onTapSure != null) {
+                              onTapSure?.call();
+                            } else {
+                              Navigator.of(context).pop(true);
+                            }
+                          },
                         ),
                   ),
                 ),
