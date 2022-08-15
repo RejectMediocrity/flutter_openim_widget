@@ -1077,79 +1077,88 @@ class _ChatItemViewState extends State<ChatItemView> {
         : params["padSnapshot"];
     String remark = params['remark'] ?? "";
     int permission =
-        model.permission?.permission ?? 0; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
-    int recvPermission = model.recieverPermission ?? permission;
+        model.permission?.permission ?? 1; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
+    int recvPermission = model.recieverPermission ?? 1;
     int shareType =
         model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
     Widget? permissionWidget;
-    if (isSender) {
-      String recieverDes = widget.isSingleChat
-          ? widget.conversationName!
-          : UILocalizations.grantThisSessionMemberPermissions;
-      if (permission == 0) {
-        permissionWidget = Container();
-      } else if (permission == 1) {
-        if (recvPermission == 0)
-          permissionWidget = Container();
-        else if (recvPermission == 1) {
-          permissionStr = recieverDes + UILocalizations.canRead;
-        } else {
-          permissionStr = recieverDes + UILocalizations.canEdit;
-        }
-      } else if (permission == 2 || permission == 3) {
-        permissionWidget = Row(
-          children: [
-            Flexible(
-              child: Text(
-                recieverDes,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Color(0xFF333333),
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 4.w,
-            ),
-            GestureDetector(
-              onTap: () => widget.setPermission!(permission),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    recvPermission == 1
-                        ? UILocalizations.canRead
-                        : UILocalizations.canEdit,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Color(0xFF006DFA),
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  ImageUtil.assetImage(
-                    "msg_but_unfold",
-                    width: 12.w,
-                    height: 12.w,
-                  )
-                ],
-              ),
-            )
-          ],
-        );
-      }
+
+    String recieverDes =
+        isSender ? widget.conversationName! : UILocalizations.you;
+    if (recvPermission == 1) {
+      permissionStr = recieverDes + UILocalizations.canRead;
     } else {
-      if (recvPermission == 0)
-        permissionWidget = Container();
-      else if (recvPermission == 1) {
-        permissionStr = UILocalizations.you + UILocalizations.canRead;
-      } else {
-        permissionStr = UILocalizations.you + UILocalizations.canEdit;
-      }
+      permissionStr = recieverDes + UILocalizations.canEdit;
     }
+
+    // if (isSender) {
+    //   String recieverDes = widget.isSingleChat
+    //       ?
+    //       : UILocalizations.grantThisSessionMemberPermissions;
+    //   if (permission == 0) {
+    //     permissionWidget = Container();
+    //   } else if (permission == 1) {
+    //     if (recvPermission == 0)
+    //       permissionWidget = Container();
+    //     else if (recvPermission == 1) {
+    //       permissionStr = recieverDes + UILocalizations.canRead;
+    //     } else {
+    //       permissionStr = recieverDes + UILocalizations.canEdit;
+    //     }
+    //   } else if (permission == 2 || permission == 3) {
+    //     permissionWidget = Row(
+    //       children: [
+    //         Flexible(
+    //           child: Text(
+    //             recieverDes,
+    //             overflow: TextOverflow.ellipsis,
+    //             maxLines: 1,
+    //             style: TextStyle(
+    //               color: Color(0xFF333333),
+    //               fontSize: 14.sp,
+    //             ),
+    //           ),
+    //         ),
+    //         SizedBox(
+    //           width: 4.w,
+    //         ),
+    //         GestureDetector(
+    //           onTap: () => widget.setPermission!(permission),
+    //           child: Row(
+    //             mainAxisSize: MainAxisSize.min,
+    //             children: [
+    //               Text(
+    //                 recvPermission == 1
+    //                     ? UILocalizations.canRead
+    //                     : UILocalizations.canEdit,
+    //                 overflow: TextOverflow.ellipsis,
+    //                 maxLines: 1,
+    //                 style: TextStyle(
+    //                   color: Color(0xFF006DFA),
+    //                   fontSize: 14.sp,
+    //                 ),
+    //               ),
+    //               ImageUtil.assetImage(
+    //                 "msg_but_unfold",
+    //                 width: 12.w,
+    //                 height: 12.w,
+    //               )
+    //             ],
+    //           ),
+    //         )
+    //       ],
+    //     );
+    //   }
+    // } else {
+    //   if (recvPermission == 0)
+    //     permissionWidget = Container();
+    //   else if (recvPermission == 1) {
+    //     permissionStr = UILocalizations.you + UILocalizations.canRead;
+    //   } else {
+    //     permissionStr = UILocalizations.you + UILocalizations.canEdit;
+    //   }
+    // }
     return _buildCommonItemView(
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -1206,51 +1215,86 @@ class _ChatItemViewState extends State<ChatItemView> {
                   borderRadius: BorderRadius.circular(6.w),
                 ),
                 padding: EdgeInsets.all(10.w),
-                child: type == "folderMessage"
-                    ? ImageUtil.assetImage(
-                        "folder_large",
-                        scale: 114 / 60,
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              snapShot,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 100,
-                              style: TextStyle(
-                                color: Color(0XFF333333),
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.w,
-                          ),
-                          Container(
-                            color: Color(0xFFDDDDDD),
-                            height: 1.w,
-                          ),
-                          SizedBox(
-                            height: 10.w,
-                          ),
-                          permissionStr != null
-                              ? Text(
-                                  permissionStr,
-                                  style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 14.sp),
-                                )
-                              : permissionWidget!,
-                        ],
-                      ),
+                child: _buildContentView(
+                    snapShot: snapShot,
+                    permissionStr: permissionStr,
+                    permissionWidget: permissionWidget,
+                    isFolder: type == "folderMessage"),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildContentView(
+      {bool? isFolder,
+      required String snapShot,
+      String? permissionStr,
+      Widget? permissionWidget}) {
+    if (isFolder == true) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ImageUtil.assetImage(
+              "folder_large",
+              scale: 114 / 60,
+            ),
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          Container(
+            color: Color(0xFFDDDDDD),
+            height: 1.w,
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          permissionStr != null
+              ? Text(
+                  permissionStr,
+                  style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                )
+              : permissionWidget!,
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              snapShot,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 100,
+              style: TextStyle(
+                color: Color(0XFF333333),
+                fontSize: 14.sp,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          Container(
+            color: Color(0xFFDDDDDD),
+            height: 1.w,
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          permissionStr != null
+              ? Text(
+                  permissionStr,
+                  style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                )
+              : permissionWidget!,
+        ],
+      );
+    }
   }
 
   Widget _buildCommonItemView({
