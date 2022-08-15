@@ -10,6 +10,7 @@ class UnreadCountView extends StatelessWidget {
   final int? count;
   final bool qqBadge;
   final String maxBadge = '99';
+  final bool isShowCountText;
 
   const UnreadCountView({
     Key? key,
@@ -18,6 +19,7 @@ class UnreadCountView extends StatelessWidget {
     this.size = 18,
     this.count = 0,
     this.qqBadge = false,
+    this.isShowCountText = true,
   }) : super(key: key);
 
   @override
@@ -30,34 +32,38 @@ class UnreadCountView extends StatelessWidget {
       builder: (_, AsyncSnapshot<int> hot) => Visibility(
         visible: (hot.data ?? 0) > 0,
         child: qqBadge
-                ? Container(
-                    width: size,
-                    height: size,
-                    child: QqBadge(
-                      text: '${(hot.data ?? 0) > 99 ? maxBadge : hot.data}',
-                      radius: size / 2,
-                      textStyle: TextStyle(
-                        fontSize: 8.sp,
-                        color: Color(0xFFFFFFFF),
-                      ),
-                    ),
-                  )
-                : Container(
-                    width: size,
-                    height: size,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${(hot.data ?? 0) > 99 ? maxBadge : hot.data}',
-                      style: TextStyle(
-                        fontSize: 8.sp,
-                        color: Color(0xFFFFFFFF),
-                      ),
-                    ),
+            ? Container(
+                width: size,
+                height: size,
+                child: QqBadge(
+                  text: isShowCountText
+                      ? '${(hot.data ?? 0) > 99 ? maxBadge : hot.data}'
+                      : '',
+                  radius: size / 2,
+                  textStyle: TextStyle(
+                    fontSize: 8.sp,
+                    color: Color(0xFFFFFFFF),
                   ),
+                ),
+              )
+            : Container(
+                width: size,
+                height: size,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  isShowCountText
+                      ? '${(hot.data ?? 0) > 99 ? maxBadge : hot.data}'
+                      : '',
+                  style: TextStyle(
+                    fontSize: 8.sp,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -65,33 +71,34 @@ class UnreadCountView extends StatelessWidget {
   Widget _buildChild({required int count}) => Visibility(
         visible: count > 0,
         child: qqBadge
-                ? Container(
-                    width: size,
-                    height: size,
-                    child: QqBadge(
-                      text: '${count > 99 ? maxBadge : count}',
-                      radius: size / 2,
-                      textStyle: TextStyle(
-                        fontSize: 8.sp,
-                        color: Color(0xFFFFFFFF),
-                      ),
-                    ),
-                  )
-                : Container(
-                    width: size,
-                    height: size,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${count > 99 ? maxBadge : count}',
-                      style: TextStyle(
-                        fontSize: 8.sp,
-                        color: Color(0xFFFFFFFF),
-                      ),
-                    ),
+            ? Container(
+                width: size,
+                height: size,
+                child: QqBadge(
+                  text:
+                      isShowCountText ? '${count > 99 ? maxBadge : count}' : '',
+                  radius: size / 2,
+                  textStyle: TextStyle(
+                    fontSize: 8.sp,
+                    color: Color(0xFFFFFFFF),
                   ),
+                ),
+              )
+            : Container(
+                width: size,
+                height: size,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  isShowCountText ? '${count > 99 ? maxBadge : count}' : '',
+                  style: TextStyle(
+                    fontSize: 8.sp,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
       );
 }
