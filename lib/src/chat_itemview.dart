@@ -1238,9 +1238,11 @@ class _ChatItemViewState extends State<ChatItemView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: ImageUtil.assetImage(
-              "folder_large",
-              scale: 114 / 60,
+            child: Center(
+              child: ImageUtil.assetImage(
+                "folder_large",
+                scale: 114 / 60,
+              ),
             ),
           ),
           SizedBox(
