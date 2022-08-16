@@ -26,14 +26,14 @@ class ChatItemDocAssistantView extends StatelessWidget {
     RegExp match2 = RegExp("{title}");
 
     String replace1 = "@${assistantModel.params?.toImUserName ?? ""}";
-    String replace2 = "@${assistantModel.params?.title ?? ""}";
+    String replace2 = "${assistantModel.params?.title ?? ""}";
 
     int start1 = des.indexOf(match1);
     int start2 = des.indexOf(match2);
 
     String pre = des.substring(0, start1);
     String middle = des.substring(match1.pattern.length + start1, start2);
-    String end = des.substring(start2 + match2.pattern.length, des.length - 1);
+    String end = des.substring(start2 + match2.pattern.length, des.length);
     List<InlineSpan> children = [
       TextSpan(
         text: pre,
