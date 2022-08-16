@@ -1086,7 +1086,7 @@ class _ChatItemViewState extends State<ChatItemView> {
 
     String recieverDes =
         isSender ? widget.conversationName! : UILocalizations.you;
-    if (recvPermission == 1) {
+    if (permission == 1) {
       permissionStr = recieverDes + UILocalizations.canRead;
     } else {
       permissionStr = recieverDes + UILocalizations.canEdit;
