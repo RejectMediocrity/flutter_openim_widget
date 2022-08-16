@@ -633,6 +633,7 @@ class _ChatCameraAssetPickerToolsViewState
       setState(() {});
       reSetStatusBar();
     }
+    sendSelectedEntityList(selectedEntityList, false);
   }
 
   reSetStatusBar() {
