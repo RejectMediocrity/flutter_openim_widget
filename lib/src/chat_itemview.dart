@@ -1074,8 +1074,9 @@ class _ChatItemViewState extends State<ChatItemView> {
     js = json.decode(js["data"]);
     js = js["data"]["bi_data"];
     String title = js["card_name"];
-    String lastUpdateTime = "最后更新时间：${widget.timeStr}";
-    String publisher = "发布人：${js["creator"]} (${js["push_day"] + js["push_time"]})";
+    String lastUpdateTime = "最后更新时间：${js["data_updated_at"]}";
+    String publisher =
+        "发布人：${js["creator"]}（${js["push_day"] + js["push_time"]}推送）";
     // String per_push = "推送频率：${js["push_day"] + js["push_time"]}";
     String snap_url = "${js["card_screenshot_url"]}";
     return Container(
@@ -1105,6 +1106,20 @@ class _ChatItemViewState extends State<ChatItemView> {
           ),
           CachedNetworkImage(
             imageUrl: snap_url,
+            imageBuilder: (
+              BuildContext context,
+              ImageProvider imageProvider,
+            ) {
+              Image img = Image(
+                image: imageProvider,
+                fit: BoxFit.fill,
+              );
+              return Container(
+                width: .65.sw,
+                height: (img.height ?? 1) * .65.sw / (img.width ?? 1),
+                child: img,
+              );
+            },
           ),
           Container(
             height: 21,
