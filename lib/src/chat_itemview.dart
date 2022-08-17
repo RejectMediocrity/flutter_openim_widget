@@ -1104,21 +1104,27 @@ class _ChatItemViewState extends State<ChatItemView> {
           SizedBox(
             height: 5.w,
           ),
-          CachedNetworkImage(
-            imageUrl: snap_url,
-            imageBuilder: (
-              BuildContext context,
-              ImageProvider imageProvider,
-            ) {
-              Image img = Image(
-                image: imageProvider,
-                fit: BoxFit.fill,
-              );
-              return Container(
-                width: .65.sw,
-                child: img,
-              );
+          GestureDetector(
+            onTap: () {
+              if (widget.onTapMarkDownImg != null)
+                widget.onTapMarkDownImg!(snap_url);
             },
+            child: CachedNetworkImage(
+              imageUrl: snap_url,
+              imageBuilder: (
+                BuildContext context,
+                ImageProvider imageProvider,
+              ) {
+                Image img = Image(
+                  image: imageProvider,
+                  fit: BoxFit.fill,
+                );
+                return Container(
+                  width: .65.sw,
+                  child: img,
+                );
+              },
+            ),
           ),
           Container(
             height: 21,
