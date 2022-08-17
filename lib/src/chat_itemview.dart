@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -1056,11 +1057,72 @@ class _ChatItemViewState extends State<ChatItemView> {
         return _buildCloudDocChildItem(opData,
             isSender: widget.message.sendID == OpenIM.iMManager.uid,
             type: type);
+      } else if (type == "bi_data") {
+        return _buildCommonItemView(
+          isBubbleBg: true,
+          child: _buildBiDataItem(widget.message.content ?? ""),
+        );
       }
     } catch (e) {
       print(e.toString());
     }
     return Container();
+  }
+
+  Widget _buildBiDataItem(String content) {
+    Map js = json.decode(content);
+    js = json.decode(js["data"]);
+    js = js["data"]["bi_data"];
+    String title = js["card_name"];
+    String lastUpdateTime = "最后更新时间：${widget.timeStr}";
+    String publisher = "发布人：${js["creator"]}";
+    String per_push = "推送频率：${js["push_day"] + js["push_time"]}";
+    String snap_url = "${js["card_screenshot_url"]}";
+    return Container(
+      constraints: BoxConstraints(maxWidth: .65.sw),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600),
+            maxLines: 10,
+          ),
+          SizedBox(
+            height: 5.w,
+          ),
+          Text(
+            "$lastUpdateTime\n$publisher\n$per_push",
+            style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+            maxLines: 10,
+          ),
+          SizedBox(
+            height: 5.w,
+          ),
+          CachedNetworkImage(
+            imageUrl: snap_url,
+          ),
+          Container(
+            height: 21,
+            alignment: Alignment.center,
+            child: Container(
+              color: Color(0xFFDDDDDD),
+              height: 1.w,
+              width: .65.sw,
+            ),
+          ),
+          Text(
+            "更多详情，请使用Mind电脑端查看",
+            style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+            maxLines: 10,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildCloudDocChildItem(Map<String, dynamic> map,
