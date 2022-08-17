@@ -104,37 +104,38 @@ class _ChatCameraAssetPickerToolsViewState
           ),
           Row(
             children: [
-              Column(
-                children: [
-                  Container(
-                    width: 60.w,
-                    height: 110.w,
-                    color: Color(0xFF333333),
-                    child: IconButton(
-                      onPressed: () => checkCameraPermission(context),
-                      color: Colors.white,
-                      icon: ImageUtil.assetImage(
-                        "file_but_camera",
-                        width: 22.w,
-                        height: 22.w,
+              Container(
+                color: Color(0xFF333333),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 110.w,
+                      child: IconButton(
+                        onPressed: () => checkCameraPermission(context),
+                        color: Colors.white,
+                        icon: ImageUtil.assetImage(
+                          "file_but_camera",
+                          width: 22.w,
+                          height: 22.w,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 60.w,
-                    height: 110.w,
-                    color: Color(0xFF333333),
-                    child: IconButton(
-                      onPressed: () => checkPhotosPermission(context),
-                      color: Colors.white,
-                      icon: ImageUtil.assetImage(
-                        "file_but_album",
-                        width: 22.w,
-                        height: 22.w,
+                    Container(
+                      width: 60.w,
+                      height: 110.w,
+                      child: IconButton(
+                        onPressed: () => checkPhotosPermission(context),
+                        color: Colors.white,
+                        icon: ImageUtil.assetImage(
+                          "file_but_album",
+                          width: 22.w,
+                          height: 22.w,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Container(
                 width: (size.width - 60.w),
