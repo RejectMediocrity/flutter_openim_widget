@@ -1116,7 +1116,6 @@ class _ChatItemViewState extends State<ChatItemView> {
               );
               return Container(
                 width: .65.sw,
-                height: (img.height ?? 1) * .65.sw / (img.width ?? 1),
                 child: img,
               );
             },
