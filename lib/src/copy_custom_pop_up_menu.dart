@@ -60,6 +60,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
   RenderBox? _parentBox;
   OverlayEntry? _overlayEntry;
   CustomPopupMenuController? _controller;
+  TapDownDetails? _tapDownDetails;
 
   _showMenu() {
     Widget arrow = ClipPath(
@@ -94,7 +95,16 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                   delegate: _MenuLayoutDelegate(
                     anchorSize: _childBox!.size,
                     anchorOffset: _childBox!.localToGlobal(
-                      Offset(-widget.horizontalMargin, 0),
+                      Offset(
+                          -widget.horizontalMargin,
+                          _tapDownDetails != null &&
+                                  (_childBox!.size.height > 400 ||
+                                      _tapDownDetails!.globalPosition.dy >
+                                          400 ||
+                                      _tapDownDetails!.localPosition.dy < 100)
+                              ? (_tapDownDetails!.localPosition.dy -
+                                  _childBox!.size.height)
+                              : 0),
                     ),
                     verticalMargin: widget.verticalMargin,
                   ),
@@ -141,6 +151,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
     if (_overlayEntry != null) {
       _overlayEntry?.remove();
       _overlayEntry = null;
+      _tapDownDetails = null;
     }
   }
 
@@ -182,6 +193,9 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: widget.child,
+        onTapDown: (TapDownDetails details) {
+          _tapDownDetails = details;
+        },
         onTap: widget.pressType == PressType.singleClick
             ? () {
                 if (widget.pressType == PressType.singleClick) {
