@@ -1696,17 +1696,36 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showForwardMenu =>
       widget.enabledForwardMenu ??
       widget.message.contentType != MessageType.voice &&
-          widget.message.contentType != MessageType.revoke;
+          widget.message.contentType != MessageType.revoke &&
+          !_isCloudDoc();
 
-  bool get _showReplyMenu =>
-      widget.enabledReplyMenu ??
-      widget.message.contentType == MessageType.text ||
-          widget.message.contentType == MessageType.at_text ||
-          widget.message.contentType == MessageType.video ||
-          widget.message.contentType == MessageType.picture ||
-          widget.message.contentType == MessageType.location ||
-          widget.message.contentType == MessageType.quote ||
-          widget.message.contentType == MessageType.voice;
+  bool get _showReplyMenu {
+    return widget.enabledReplyMenu ??
+        widget.message.contentType == MessageType.text ||
+            widget.message.contentType == MessageType.at_text ||
+            widget.message.contentType == MessageType.video ||
+            widget.message.contentType == MessageType.picture ||
+            widget.message.contentType == MessageType.location ||
+            widget.message.contentType == MessageType.quote ||
+            widget.message.contentType == MessageType.voice ||
+            _isCloudDoc();
+  }
+
+  bool _isCloudDoc() {
+    if (widget.message.contentType == MessageType.custom) {
+      try {
+        String data = widget.message.customElem?.data ?? "";
+        Map map = json.decode(data);
+        String type = map["type"];
+        return type == "cloud_doc" ||
+            type == "folderMessage" ||
+            type == "cloud_excel";
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  }
 
   bool get _showRevokeMenu =>
       widget.enabledRevokeMenu ??
@@ -1744,7 +1763,8 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showMultiChoiceMenu =>
       widget.enabledMultiMenu ??
       widget.message.contentType != MessageType.revoke &&
-          widget.message.contentType != MessageType.voice;
+          widget.message.contentType != MessageType.voice &&
+          !_isCloudDoc();
 
   bool get _showTranslationMenu =>
       widget.enabledTranslationMenu ??
