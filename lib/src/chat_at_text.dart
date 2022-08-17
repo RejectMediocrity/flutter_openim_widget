@@ -189,7 +189,9 @@ class ChatAtText extends StatelessWidget {
             value = uid;
             if (allAtMap.containsKey(uid)) {
               bool? hasRead = hasReadList?.contains(uid);
-              matchText = isSender == true?'@${allAtMap[uid]!}':'@${allAtMap[uid]!} ';
+              matchText = isSender == true
+                  ? '@${allAtMap[uid]!}'
+                  : '@${allAtMap[uid]!} ';
               inlineSpan = ExtendedWidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: GestureDetector(
@@ -199,18 +201,25 @@ class ChatAtText extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '$matchText',
-                        style: mapping.style != null ? mapping.style : style,
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: .6.sw),
+                        child: Text(
+                          '$matchText',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: mapping.style != null ? mapping.style : style,
+                        ),
                       ),
-                      (uid == "all"||isSender == false)?Container():Container(
-                        padding:
-                            EdgeInsets.only(left: 2.w, right: 4.w, top: 4.w),
-                        child: ImageUtil.assetImage(
-                            hasRead == true ? "read_green" : "read_gray",
-                            width: 6.w,
-                            height: 6.w),
-                      ),
+                      (uid == "all" || isSender == false)
+                          ? Container()
+                          : Container(
+                              padding: EdgeInsets.only(
+                                  left: 2.w, right: 4.w, top: 4.w),
+                              child: ImageUtil.assetImage(
+                                  hasRead == true ? "read_green" : "read_gray",
+                                  width: 6.w,
+                                  height: 6.w),
+                            ),
                     ],
                   ),
                 ),
@@ -218,7 +227,7 @@ class ChatAtText extends StatelessWidget {
                 actualText: '$value',
                 start: match.start,
               );
-            }else{
+            } else {
               inlineSpan = TextSpan(
                 text: "$matchText",
                 style: style,
