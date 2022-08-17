@@ -1075,8 +1075,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     js = js["data"]["bi_data"];
     String title = js["card_name"];
     String lastUpdateTime = "最后更新时间：${widget.timeStr}";
-    String publisher = "发布人：${js["creator"]}";
-    String per_push = "推送频率：${js["push_day"] + js["push_time"]}";
+    String publisher = "发布人：${js["creator"]} (${js["push_day"] + js["push_time"]})";
+    // String per_push = "推送频率：${js["push_day"] + js["push_time"]}";
     String snap_url = "${js["card_screenshot_url"]}";
     return Container(
       constraints: BoxConstraints(maxWidth: .65.sw),
@@ -1096,7 +1096,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             height: 5.w,
           ),
           Text(
-            "$lastUpdateTime\n$publisher\n$per_push",
+            "$lastUpdateTime\n$publisher",
             style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
             maxLines: 10,
           ),
