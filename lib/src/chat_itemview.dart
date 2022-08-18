@@ -1154,7 +1154,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else {
       params = json.decode(model.params!);
     }
-    String snapShot = params.keys.contains("textSnapshot")
+    String snapShot = params.keys.contains("textSnapshot") &&
+            ((params['textSnapshot'] ?? '') as String).isNotEmpty
         ? params["textSnapshot"]
         : params["padSnapshot"];
     String remark = params['remark'] ?? "";
@@ -1350,15 +1351,20 @@ class _ChatItemViewState extends State<ChatItemView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Text(
-              snapShot,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 100,
-              style: TextStyle(
-                color: Color(0XFF333333),
-                fontSize: 14.sp,
-              ),
-            ),
+            child: snapShot.startsWith('http')
+                ? CachedNetworkImage(
+                    imageUrl: snapShot,
+                    fit: BoxFit.fill,
+                  )
+                : Text(
+                    snapShot,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 100,
+                    style: TextStyle(
+                      color: Color(0XFF333333),
+                      fontSize: 14.sp,
+                    ),
+                  ),
           ),
           SizedBox(
             height: 10.w,
