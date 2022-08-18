@@ -1697,7 +1697,8 @@ class _ChatItemViewState extends State<ChatItemView> {
       widget.enabledForwardMenu ??
       widget.message.contentType != MessageType.voice &&
           widget.message.contentType != MessageType.revoke &&
-          !_isCloudDoc();
+          !_isCloudDoc() &&
+          !_isDocAssistant();
 
   bool get _showReplyMenu {
     return widget.enabledReplyMenu ??
@@ -1720,6 +1721,20 @@ class _ChatItemViewState extends State<ChatItemView> {
         return type == "cloud_doc" ||
             type == "folderMessage" ||
             type == "cloud_excel";
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  bool _isDocAssistant() {
+    if (widget.message.contentType == MessageType.custom) {
+      try {
+        String data = widget.message.customElem?.data ?? "";
+        Map map = json.decode(data);
+        String type = map["type"];
+        return type == "cloud_doc_assistant";
       } catch (e) {
         return false;
       }
@@ -1764,7 +1779,8 @@ class _ChatItemViewState extends State<ChatItemView> {
       widget.enabledMultiMenu ??
       widget.message.contentType != MessageType.revoke &&
           widget.message.contentType != MessageType.voice &&
-          !_isCloudDoc();
+          !_isCloudDoc() &&
+          !_isDocAssistant();
 
   bool get _showTranslationMenu =>
       widget.enabledTranslationMenu ??
