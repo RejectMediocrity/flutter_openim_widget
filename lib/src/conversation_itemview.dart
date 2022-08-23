@@ -102,7 +102,7 @@ class ConversationItemView extends StatelessWidget {
       child: _ConversationView(
         nickName: nickName,
         title: title,
-        content: content,
+        content: replaceSpecialChar(content),
         timeStr: timeStr,
         contentPrefix: contentPrefix,
         contentPrefixStyle: contentPrefixStyle,
@@ -137,6 +137,11 @@ class ConversationItemView extends StatelessWidget {
         children: slideActions.map((e) => _SlidableAction(item: e)).toList(),
       ),
     );
+  }
+
+  String replaceSpecialChar(String content) {
+    var ampReg = RegExp(r'&amp;');
+    return content.replaceAll(ampReg, '&');
   }
 }
 

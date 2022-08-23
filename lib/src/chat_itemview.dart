@@ -537,7 +537,16 @@ class _ChatItemViewState extends State<ChatItemView> {
       try {
         md.Element ele = element as md.Element;
         if (_kBlockTags.contains(ele.tag)) {
-          hasNode = true;
+          if ((ele.children is List) && ele.children!.length >= 1) {
+            if (ele.children![0] is md.Element){
+              hasNode = (ele.children![0] as md.Element).children!.length > 0;
+            } else {
+              hasNode = true;
+            }
+          }
+          else {
+            hasNode = false;
+          }
         }
         if (ele.tag == "table") {
           _isTableElement = true;
@@ -608,7 +617,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   }
 
   Widget? _buildMarkDownWidget(String text) {
-    markDownContent = text;
+    markDownContent = replaceSpecialChar(text);
     Widget content = Container(
       constraints: _isTableElement
           ? BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w)
@@ -742,7 +751,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           } else {
             child = _buildCommonItemView(
               child: ChatAtText(
-                text: widget.message.content!,
+                text: replaceSpecialChar(widget.message.content!),
                 maxLines: widget.isExpanded == true ? null : 10,
                 allAtMap: {},
                 textStyle: widget.textStyle,
@@ -761,7 +770,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           var text = map['text'];
           child = _buildCommonItemView(
             child: ChatAtText(
-              text: text,
+              text: replaceSpecialChar(text),
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
               patterns: widget.patterns,
@@ -873,7 +882,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         {
           child = _buildCommonItemView(
             child: ChatAtText(
-              text: widget.message.quoteElem?.text ?? '',
+              text: replaceSpecialChar(widget.message.quoteElem?.text ?? ''),
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
               patterns: widget.patterns,
@@ -975,6 +984,11 @@ class _ChatItemViewState extends State<ChatItemView> {
         break;
     }
     return child;
+  }
+
+  String replaceSpecialChar(String content) {
+    var ampReg = RegExp(r'&amp;');
+    return content.replaceAll(ampReg, '&');
   }
 
   dynamic parseCustomMsg() {
