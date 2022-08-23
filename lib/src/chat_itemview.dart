@@ -225,6 +225,7 @@ class ChatItemView extends StatefulWidget {
   final Function(String uid)? onTapUser;
   final Function()? onTapUnShowReplyUser;
   final bool isVoiceUnread;
+  final bool groupArchived;
   final Function(String userId)? onTapDocOperator;
   final Function(
       {String? padUrl,
@@ -304,6 +305,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapUser,
     this.onTapUnShowReplyUser,
     this.isVoiceUnread = false,
+    this.groupArchived = false,
     this.onTapDocOperator,
     this.onTapDocUrl,
   }) : super(key: key);
@@ -1495,7 +1497,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         child: GestureDetector(
-          onTap: () {
+          onTap: widget.groupArchived ? null : () {
             if (widget.onReplayWithFace != null)
               widget.onReplayWithFace!(
                 replay.emoji!,
@@ -1594,7 +1596,7 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   Widget _menuBuilder() => ChatLongPressMenu(
         controller: _popupCtrl,
-        menus: widget.menus ?? _menusItem(),
+        menus: widget.groupArchived ? [] : (widget.menus ?? _menusItem()),
         menuStyle: widget.menuStyle ??
             MenuStyle(
               crossAxisCount: 6,
@@ -1603,7 +1605,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               radius: 6.w,
               background: const Color(0xFFFFFFFF),
             ),
-        onTapEmoji: (emojiName) {
+        onTapEmoji: widget.groupArchived ? null : (emojiName) {
           if (widget.onReplayWithFace != null)
             widget.onReplayWithFace!(emojiName, widget.index,
                 isResignReply: didReplyWithThisEmoji(emojiName));
