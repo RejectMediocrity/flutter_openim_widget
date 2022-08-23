@@ -1062,11 +1062,13 @@ class _ChatItemViewState extends State<ChatItemView> {
           isBubbleBg: true,
           child: _buildBiDataItem(widget.message.content ?? ""),
         );
+      } else {
+        return UILocalizations.unsupportedMessage;
       }
     } catch (e) {
       print(e.toString());
     }
-    return Container();
+    return UILocalizations.unsupportedMessage;
   }
 
   Widget _buildBiDataItem(String content) {
