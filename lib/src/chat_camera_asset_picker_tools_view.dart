@@ -36,7 +36,7 @@ class _ChatCameraAssetPickerToolsViewState
   List<AssetEntity> entityList = [];
   List<AssetEntity> selectedEntityList = [];
   bool isNeedOrigin = false;
-  final Color _themeColor = Colors.blue;
+  final Color _themeColor = Color(0xFF006DFA);
   late final ThemeData theme = AssetPicker.themeData(_themeColor);
   late PermissionState _ps = PermissionState.authorized;
 

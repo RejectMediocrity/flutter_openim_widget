@@ -75,11 +75,12 @@ class UILocalizations {
       "thisSessionMember": "this session member",
       "removeFromGroup": "%s have removed %s from the group chat",
       "addToGroup": "%s have added %s to the group chat",
-      "canManage":"can manage",
+      "canManage": "can manage",
       "cancel": "Cancel",
       "lastTimeTip": "Recording will stop after %d",
       "moveToCancel": "Slide your finger up to cancel sending",
       "releaseFingerSend": "Release your finger and cancel sending",
+      "archived": 'Archived',
     },
     'zh': {
       'top': '置顶',
@@ -142,11 +143,12 @@ class UILocalizations {
       "thisSessionMember": "本会话成员",
       "removeFromGroup": "%s 将 %s 移出群聊",
       "addToGroup": "%s 将 %s 加入群聊",
-      "canManage":"可管理",
+      "canManage": "可管理",
       "cancel": "取消",
       "lastTimeTip": "%d''后将停止录音",
       "moveToCancel": "手指上滑，取消发送",
       "releaseFingerSend": "松开手指，取消发送",
+      "archived": '已归档',
     },
   };
 
@@ -285,4 +287,5 @@ class UILocalizations {
 
   static String get releaseFingerSend => _value(key: "releaseFingerSend");
 
+  static String get archived => _value(key: "archived");
 }

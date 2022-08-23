@@ -42,6 +42,7 @@ class ConversationItemView extends StatelessWidget {
   final bool isGroupChat;
   final String? senderName;
   final List<AtUserInfo>? atUserInfo;
+  final bool archived;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -92,6 +93,7 @@ class ConversationItemView extends StatelessWidget {
     this.senderName,
     this.faceReplySpan,
     this.atUserInfo,
+    this.archived = false,
   }) : super(key: key);
 
   @override
@@ -127,6 +129,7 @@ class ConversationItemView extends StatelessWidget {
         senderName: senderName,
         faceReplySpan: faceReplySpan,
         atUserInfo: atUserInfo,
+        archived: archived,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -170,6 +173,7 @@ class _ConversationView extends StatelessWidget {
     this.senderName,
     this.faceReplySpan,
     this.atUserInfo,
+    this.archived = false,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -200,6 +204,7 @@ class _ConversationView extends StatelessWidget {
   final bool isGroupChat;
   final String? senderName;
   final List<AtUserInfo>? atUserInfo;
+  final bool archived;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -273,11 +278,36 @@ class _ConversationView extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                CommonUtil.breakWord(title),
-                                style: titleStyle,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      CommonUtil.breakWord(title),
+                                      style: titleStyle,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  if (archived)
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10.w),
+                                      padding: EdgeInsets.all(3.w),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFDDDDDD),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2.w)),
+                                      ),
+                                      child: Text(
+                                        UILocalizations.archived,
+                                        style: TextStyle(
+                                          color: Color(0xFF666666),
+                                          fontSize: 10.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
                             SizedBox(
