@@ -73,9 +73,10 @@ class ImageUtil {
   }
 
   static Widget back({Color color = const Color(0xFF333333)}) => assetImage(
-        'ic_back',
-        width: 12.w,
-        height: 20.h,
+        'title_but_back_dark',
+        width: 20.w,
+        height: 24.h,
+        fit: BoxFit.fill,
         color: color,
       );
 

@@ -46,7 +46,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
     BuildContext context, {
     String? title,
     TextStyle textStyle = const TextStyle(
-      fontSize: 18.0,
+      fontSize: 16.0,
       color: Color(0xFF333333),
     ),
     dynamic result,
@@ -66,10 +66,8 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
         left = GestureDetector(
           onTap: backClick ?? () => Navigator.pop(context, result),
           behavior: HitTestBehavior.translucent,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 22),
-            child: ImageUtil.back(),
-          ),
+          child: Padding(
+              padding: EdgeInsets.only(left: 16), child: ImageUtil.back()),
         ),
         right = right,
         center = center ??
