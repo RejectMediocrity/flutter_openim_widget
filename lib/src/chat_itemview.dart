@@ -540,13 +540,12 @@ class _ChatItemViewState extends State<ChatItemView> {
         md.Element ele = element as md.Element;
         if (_kBlockTags.contains(ele.tag)) {
           if ((ele.children is List) && ele.children!.length >= 1) {
-            if (ele.children![0] is md.Element){
+            if (ele.children![0] is md.Element) {
               hasNode = (ele.children![0] as md.Element).children!.length > 0;
             } else {
               hasNode = true;
             }
-          }
-          else {
+          } else {
             hasNode = false;
           }
         }
@@ -1469,7 +1468,8 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   Widget? _buildFaceReplyView() {
     ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
-    if (widget.message.ex != null) {
+    if (widget.message.ex != null &&
+        widget.message.contentType != MessageType.revoke) {
       try {
         var obj = json.decode(widget.message.ex ?? "");
         if (obj is Map) {
@@ -1514,14 +1514,16 @@ class _ChatItemViewState extends State<ChatItemView> {
       WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         child: GestureDetector(
-          onTap: widget.groupArchived ? null : () {
-            if (widget.onReplayWithFace != null)
-              widget.onReplayWithFace!(
-                replay.emoji!,
-                widget.index,
-                isResignReply: didReplyWithThisEmoji(replay.emoji!),
-              );
-          },
+          onTap: widget.groupArchived
+              ? null
+              : () {
+                  if (widget.onReplayWithFace != null)
+                    widget.onReplayWithFace!(
+                      replay.emoji!,
+                      widget.index,
+                      isResignReply: didReplyWithThisEmoji(replay.emoji!),
+                    );
+                },
           child: ImageUtil.faceImage(
             emoji ?? "",
             width: 18.w,
@@ -1622,11 +1624,13 @@ class _ChatItemViewState extends State<ChatItemView> {
               radius: 6.w,
               background: const Color(0xFFFFFFFF),
             ),
-        onTapEmoji: widget.groupArchived ? null : (emojiName) {
-          if (widget.onReplayWithFace != null)
-            widget.onReplayWithFace!(emojiName, widget.index,
-                isResignReply: didReplyWithThisEmoji(emojiName));
-        },
+        onTapEmoji: widget.groupArchived
+            ? null
+            : (emojiName) {
+                if (widget.onReplayWithFace != null)
+                  widget.onReplayWithFace!(emojiName, widget.index,
+                      isResignReply: didReplyWithThisEmoji(emojiName));
+              },
       );
 
   Widget? _customItemView() => widget.customItemBuilder?.call(
