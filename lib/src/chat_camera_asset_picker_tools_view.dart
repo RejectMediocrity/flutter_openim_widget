@@ -152,9 +152,9 @@ class _ChatCameraAssetPickerToolsViewState
                             //   minWidth: 50.w,
                             //   minHeight: 220.w,
                             // ),
-                            width: 220.w * (entity.width / entity.height) > 50.w
+                            width: 220.w * (entity.width / entity.height) > 110.w
                                 ? 220.w * (entity.width / entity.height)
-                                : 50.w,
+                                : 110.w,
                             height: 220.w,
                             color: Colors.white,
                             child: Stack(
