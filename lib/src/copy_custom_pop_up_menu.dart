@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_openim_widget/src/util/screen_util.dart';
 
 enum PressType {
   longPress,
@@ -281,10 +282,11 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
       );
     }
 
-    bool isTop = false;
-    if (anchorBottomY + verticalMargin + arrowSize.height + contentSize.height >
-        size.height) {
-      isTop = true;
+    double free = 1.sh - (tapDownDetails?.globalPosition.dy ?? 0);
+    bool isTop = free <= contentSize.height;
+    if (!isTop) {
+      var height = 275 / 667 * 1.sh;
+      isTop = free <= height;
     }
     if (anchorCenterX - contentSize.width / 2 < 0) {
       menuPosition = isTop ? _MenuPosition.topLeft : _MenuPosition.bottomLeft;
@@ -359,7 +361,8 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
           _MenuLayoutId.content,
           isTop
               ? contentOffset
-              : Offset(contentOffset.dx, contentOffset.dy - offsety));
+              : Offset(contentOffset.dx,
+                  anchorTopY - verticalMargin - arrowSize.height));
     }
     bool isBottom = false;
     if (_MenuPosition.values.indexOf(menuPosition) < 3) {
