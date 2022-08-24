@@ -233,6 +233,7 @@ class ChatItemView extends StatefulWidget {
       bool? isFolder,
       int? type,
       String? title})? onTapDocUrl;
+  final Function(int index)? onClickVoice;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -308,6 +309,7 @@ class ChatItemView extends StatefulWidget {
     this.groupArchived = false,
     this.onTapDocOperator,
     this.onTapDocUrl,
+    this.onClickVoice,
   }) : super(key: key);
 
   @override
@@ -812,11 +814,12 @@ class _ChatItemViewState extends State<ChatItemView> {
           child = _buildCommonItemView(
             child: ChatVoiceView(
               index: widget.index,
-              clickStream: widget.clickSubject.stream,
+              // clickStream: widget.clickSubject.stream,
               isReceived: _isFromMsg,
               soundPath: sound?.soundPath,
               soundUrl: sound?.sourceUrl,
               duration: sound?.duration,
+              onClick: widget.onClickVoice,
             ),
           );
         }

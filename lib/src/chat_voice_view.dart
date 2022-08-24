@@ -16,23 +16,24 @@ class ChatVoiceView extends StatefulWidget {
   final String? soundUrl;
   final int? duration;
   final bool? ownerRight;
-
+  final Function(int index)? onClick;
   const ChatVoiceView({
     Key? key,
     required this.index,
-    required this.clickStream,
+    this.clickStream,
     required this.isReceived,
     this.soundPath,
     this.soundUrl,
     this.duration,
     this.ownerRight,
+    this.onClick,
   }) : super(key: key);
 
   @override
   _ChatVoiceViewState createState() => _ChatVoiceViewState();
 }
 
-class _ChatVoiceViewState extends State<ChatVoiceView>{
+class _ChatVoiceViewState extends State<ChatVoiceView> {
   bool _isPlaying = false;
 
   @override
@@ -52,11 +53,11 @@ class _ChatVoiceViewState extends State<ChatVoiceView>{
   @override
   void dispose() {
     String key = widget.soundPath ?? widget.soundUrl ?? "";
+
     /// FIXME 当修复未知原因，频繁刷新dispose后需要执行此代码
     // AudioController.instance.removeListener(key, this.voicePlayingState);
     super.dispose();
   }
-
 
   bool get isOwnerRight => widget.ownerRight == true;
 
@@ -73,41 +74,55 @@ class _ChatVoiceViewState extends State<ChatVoiceView>{
       png = 'assets/images/ic_voice_blue.webp';
       turns = 90;
     }
-    return Directionality(
-      textDirection: isOwnerRight ? TextDirection.rtl : TextDirection.ltr,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _isPlaying
-              ? RotatedBox(
-                  quarterTurns: turns,
-                  child: Lottie.asset(
-                    anim,
-                    height: 19.h,
-                    width: 18.w,
-                    package: 'flutter_openim_widget',
-                  ),
-                )
-              : Image.asset(
-                  png,
-                  height: 19.h,
-                  width: 18.w,
-                  package: 'flutter_openim_widget',
+    return GestureDetector(
+      onTap: () {
+        widget.onClick?.call(widget.index);
+      },
+      child: Directionality(
+        textDirection: isOwnerRight ? TextDirection.rtl : TextDirection.ltr,
+        child: Container(
+          padding: EdgeInsets.all(12.w),
+          decoration: BoxDecoration(
+            color: !widget.isReceived ? Color(0xFFAFD2FD) : Color(0xFFE4E4E4),
+            borderRadius: BorderRadius.circular(6.w),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _isPlaying
+                  ? RotatedBox(
+                      quarterTurns: turns,
+                      child: Lottie.asset(
+                        anim,
+                        height: 19.h,
+                        width: 18.w,
+                        package: 'flutter_openim_widget',
+                      ),
+                    )
+                  : Image.asset(
+                      png,
+                      height: 19.h,
+                      width: 18.w,
+                      package: 'flutter_openim_widget',
+                    ),
+              SizedBox(
+                width: 12.w,
+              ),
+              Text(
+                "${widget.duration ?? 0}''",
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Color(0xFF333333),
                 ),
-          SizedBox(
-            width: 12.w,
+              ),
+              SizedBox(
+                width: 132.w *
+                    (widget.duration! > 60 ? 60 : widget.duration!) /
+                    60,
+              ),
+            ],
           ),
-          Text(
-            "${widget.duration ?? 0}''",
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Color(0xFF333333),
-            ),
-          ),
-          SizedBox(
-            width: 132.w * (widget.duration! > 60 ? 60 : widget.duration!) / 60,
-          ),
-        ],
+        ),
       ),
     );
   }
