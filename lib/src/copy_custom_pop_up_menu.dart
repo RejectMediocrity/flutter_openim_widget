@@ -93,9 +93,11 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                 ),
                 child: CustomMultiChildLayout(
                   delegate: _MenuLayoutDelegate(
+                    tapDownDetails: _tapDownDetails,
                     anchorSize: _childBox!.size,
                     anchorOffset: _childBox!.localToGlobal(
-                      Offset(-widget.horizontalMargin, 0),
+                      Offset(-widget.horizontalMargin,
+                          _tapDownDetails?.localPosition.dy ?? 0),
                     ),
                     verticalMargin: widget.verticalMargin,
                   ),
@@ -199,6 +201,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
             ? () {
                 if (widget.pressType == PressType.longPress) {
                   _showMenu();
+                  FocusScope.of(context).requestFocus(FocusNode());
                 }
               }
             : null,
@@ -239,11 +242,13 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     required this.anchorSize,
     required this.anchorOffset,
     required this.verticalMargin,
+    required this.tapDownDetails,
   });
 
   final Size anchorSize;
   final Offset anchorOffset;
   final double verticalMargin;
+  final TapDownDetails? tapDownDetails;
 
   @override
   void performLayout(Size size) {
@@ -349,7 +354,12 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
         break;
     }
     if (hasChild(_MenuLayoutId.content)) {
-      positionChild(_MenuLayoutId.content, contentOffset);
+      double offsety = tapDownDetails?.localPosition.dy ?? 0;
+      positionChild(
+          _MenuLayoutId.content,
+          isTop
+              ? contentOffset
+              : Offset(contentOffset.dx, contentOffset.dy - offsety));
     }
     bool isBottom = false;
     if (_MenuPosition.values.indexOf(menuPosition) < 3) {
