@@ -34,11 +34,14 @@ class ChatTextField extends StatelessWidget {
       keyboardAppearance: Brightness.light,
       textAlignVertical: TextAlignVertical.center,
       style: style,
-      specialTextSpanBuilder: AtSpecialTextSpanBuilder(
-          atCallback: atCallback,
-          allAtMap: allAtMap,
-          atStyle: atStyle,
-          atMeStyle: atMeStyle),
+      specialTextSpanBuilder: MyRegExpSpecialTextSpanBuilder(
+        preRegExps: <RegExpSpecialText>[
+          RegExpMailText(),
+          RegExpDollarText(),
+          RegExpAtText(allAtMap: this.allAtMap, atTextStyle: atStyle),
+          RegExpEmojiText(),
+        ],
+      ),
       focusNode: focusNode,
       controller: controller,
       keyboardType: TextInputType.multiline,

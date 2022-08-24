@@ -43,6 +43,7 @@ export 'src/custom_chawie_controls.dart';
 export 'src/favorite_emoji_listview.dart';
 export 'src/model/chat_face_reply_model.dart';
 export 'src/model/cloud_doc_message_model.dart';
+export 'src/my_special_text_span_builder.dart';
 export 'src/pop_button.dart';
 export 'src/popup_view.dart';
 export 'src/revoke_message_helper.dart';
