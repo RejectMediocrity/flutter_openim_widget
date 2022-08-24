@@ -9,7 +9,7 @@ enum PressType {
 
 class CustomPopupMenuController extends ChangeNotifier {
   bool menuIsShowing = false;
-
+  late TapDownDetails details;
   void showMenu() {
     menuIsShowing = true;
     notifyListeners();
@@ -95,16 +95,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                   delegate: _MenuLayoutDelegate(
                     anchorSize: _childBox!.size,
                     anchorOffset: _childBox!.localToGlobal(
-                      Offset(
-                          -widget.horizontalMargin,
-                          _tapDownDetails != null &&
-                                  (_childBox!.size.height > 400 ||
-                                      _tapDownDetails!.globalPosition.dy >
-                                          400 ||
-                                      _tapDownDetails!.localPosition.dy < 100)
-                              ? (_tapDownDetails!.localPosition.dy -
-                                  _childBox!.size.height)
-                              : 0),
+                      Offset(-widget.horizontalMargin, 0),
                     ),
                     verticalMargin: widget.verticalMargin,
                   ),
@@ -195,6 +186,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
         child: widget.child,
         onTapDown: (TapDownDetails details) {
           _tapDownDetails = details;
+          widget.controller?.details = details;
         },
         onTap: widget.pressType == PressType.singleClick
             ? () {

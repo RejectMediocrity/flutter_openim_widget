@@ -62,9 +62,22 @@ class ChatLongPressMenu extends StatefulWidget {
 
 class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
   bool openEmoji = false;
+  bool isTop = false;
   @override
   void initState() {
     widget.menus.removeWhere((element) => element.enabled != true);
+    double height = 0;
+    if (widget.menus.length > 6) {
+      height = 210 / 667 * 1.sh;
+    } else {
+      height = 139 / 667 * 1.sh;
+    }
+    double free = 1.sh - widget.controller.details.globalPosition.dy;
+    isTop = free <= height;
+    if (!isTop) {
+      height = 275 / 667 * 1.sh;
+      isTop = free <= height;
+    }
     super.initState();
   }
 
@@ -88,18 +101,35 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
         ],
       ),
       child: Column(
-        children: [
-          if (!openEmoji) _buildMenuGridView(),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.w),
-            color: Color(0xFFF2F2F2),
-            height: 1.w,
-          ),
-          if (openEmoji) _buildEmojiBox(),
-          _buildLatestEmojiBox(),
-        ],
+        children: isTop ? aboveChildren() : belowChildren(),
       ),
     );
+  }
+
+  List<Widget> aboveChildren() {
+    return [
+      if (!openEmoji) _buildMenuGridView(),
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        color: Color(0xFFF2F2F2),
+        height: 1.w,
+      ),
+      if (openEmoji) _buildEmojiBox(),
+      _buildLatestEmojiBox(),
+    ];
+  }
+
+  List<Widget> belowChildren() {
+    return [
+      _buildLatestEmojiBox(),
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        color: Color(0xFFF2F2F2),
+        height: 1.w,
+      ),
+      if (openEmoji) _buildEmojiBox(),
+      if (!openEmoji) _buildMenuGridView(),
+    ];
   }
 
   ConstrainedBox _buildLatestEmojiBox() {
