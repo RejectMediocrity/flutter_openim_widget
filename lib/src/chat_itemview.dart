@@ -8,9 +8,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_item_doc_assistant_view.dart';
+import 'package:flutter_openim_widget/src/chat_item_task_assistant_view.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
 import 'package:flutter_openim_widget/src/model/chat_doc_assistant_model.dart';
 import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
+import 'package:flutter_openim_widget/src/model/task_assistant_model.dart';
 import 'package:flutter_openim_widget/src/util/event_bus.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
@@ -1053,6 +1055,16 @@ class _ChatItemViewState extends State<ChatItemView> {
         }
         return opData["data"];
       } else if (type.startsWith('task_')) {
+        if("task_assistant" == type){
+          TaskAssistantModel assistantModel = TaskAssistantModel.fromJson(opData);
+          return _buildCommonItemView(
+            isBubbleBg: false,
+            child: ChatItemTaskAssistantView(
+              assistantModel,
+              onTapDocOperator: widget.onTapDocOperator,
+            ),
+          );
+        }
         String nickName1 = opData["opUser"]["nickname"];
         return nickName1 + " " + opData["msg"];
       } else if (type.startsWith('goal_')) {
