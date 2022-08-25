@@ -225,7 +225,7 @@ class ChatItemView extends StatefulWidget {
   final Function(String emoji, int index, {bool? isResignReply})?
       onReplayWithFace;
   final Function(String uid)? onTapUser;
-  final Function()? onTapUnShowReplyUser;
+  final Function(int index)? onTapUnShowReplyUser;
   final bool isVoiceUnread;
   final bool groupArchived;
   final Function(String userId)? onTapDocOperator;
@@ -1516,7 +1516,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         runSpacing: 6.w,
         alignment: WrapAlignment.start,
         children:
-            listModel.dataList.map((e) => _buildFaceReplyCell(e)).toList(),
+            listModel.dataList.map((e) => _buildFaceReplyCell(e,listModel.dataList.indexOf(e))).toList(),
       ),
     );
   }
@@ -1535,7 +1535,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     return user != -1;
   }
 
-  Widget _buildFaceReplyCell(ChatFaceReplyModel replay) {
+  Widget _buildFaceReplyCell(ChatFaceReplyModel replay,int index) {
     String? emoji = emojiFaces[replay.emoji];
     List<User> users = replay.user!;
     List<InlineSpan> children = [
@@ -1608,7 +1608,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               if (widget.onTapUnShowReplyUser != null)
-                widget.onTapUnShowReplyUser!();
+                widget.onTapUnShowReplyUser!(index);
             },
         ));
         break;
