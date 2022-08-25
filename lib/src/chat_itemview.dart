@@ -1446,7 +1446,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         onLongPressRightAvatar: widget.onLongPressRightAvatar,
         onTapRightAvatar: widget.onTapRightAvatar,
         onLongPressLeftAvatar: widget.onLongPressLeftAvatar,
-        onTapLeftAvatar: widget.onTapLeftAvatar,
+        onTapLeftAvatar: () {
+          generateOnTapLeftAvatar();
+        },
         isSendFailed: widget.message.status == MessageStatus.failed,
         isSending: widget.message.status == MessageStatus.sending,
         timeView: widget.timeStr == null ? null : _buildTimeView(),
@@ -1479,6 +1481,18 @@ class _ChatItemViewState extends State<ChatItemView> {
         faceReplyView: _buildFaceReplyView(),
         isVoiceUnread: widget.isVoiceUnread,
       );
+
+  void generateOnTapLeftAvatar() {
+    if(widget.message.contentType == MessageType.custom){
+      String data = widget.message.customElem?.data ?? "";
+      Map map = json.decode(data);
+      String type = map["type"];
+      if(type == "cloud_doc_assistant"||type == "task_assistant"){
+        return;
+      }
+    }
+    widget.onTapLeftAvatar?.call();
+  }
 
   Widget? _buildFaceReplyView() {
     ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
