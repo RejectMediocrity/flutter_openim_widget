@@ -821,6 +821,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               soundUrl: sound?.sourceUrl,
               duration: sound?.duration,
               onClick: widget.onClickVoice,
+              ex: widget.message.ex,
             ),
           );
         }
@@ -1055,8 +1056,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         }
         return opData["data"];
       } else if (type.startsWith('task_')) {
-        if("task_assistant" == type){
-          TaskAssistantModel assistantModel = TaskAssistantModel.fromJson(opData);
+        if ("task_assistant" == type) {
+          TaskAssistantModel assistantModel =
+              TaskAssistantModel.fromJson(opData);
           return _buildCommonItemView(
             isBubbleBg: false,
             child: ChatItemTaskAssistantView(

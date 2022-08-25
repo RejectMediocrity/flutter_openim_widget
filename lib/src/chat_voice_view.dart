@@ -17,6 +17,7 @@ class ChatVoiceView extends StatefulWidget {
   final int? duration;
   final bool? ownerRight;
   final Function(int index)? onClick;
+  final String? ex;
   const ChatVoiceView({
     Key? key,
     required this.index,
@@ -27,6 +28,7 @@ class ChatVoiceView extends StatefulWidget {
     this.duration,
     this.ownerRight,
     this.onClick,
+    this.ex,
   }) : super(key: key);
 
   @override
@@ -80,50 +82,56 @@ class _ChatVoiceViewState extends State<ChatVoiceView> {
       },
       child: Directionality(
         textDirection: isOwnerRight ? TextDirection.rtl : TextDirection.ltr,
-        child: Container(
-          padding: EdgeInsets.all(12.w),
-          decoration: BoxDecoration(
-            color: !widget.isReceived ? Color(0xFFAFD2FD) : Color(0xFFE4E4E4),
-            borderRadius: BorderRadius.circular(6.w),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _isPlaying
-                  ? RotatedBox(
-                      quarterTurns: turns,
-                      child: Lottie.asset(
-                        anim,
-                        height: 19.h,
-                        width: 18.w,
-                        package: 'flutter_openim_widget',
-                      ),
-                    )
-                  : Image.asset(
-                      png,
-                      height: 19.h,
-                      width: 18.w,
-                      package: 'flutter_openim_widget',
-                    ),
-              SizedBox(
-                width: 12.w,
-              ),
-              Text(
-                "${widget.duration ?? 0}''",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Color(0xFF333333),
+        child: widget.ex?.isNotEmpty == true
+            ? Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: !widget.isReceived
+                      ? Color(0xFFAFD2FD)
+                      : Color(0xFFE4E4E4),
+                  borderRadius: BorderRadius.circular(6.w),
                 ),
+                child: buildContent(turns, anim, png),
+              )
+            : buildContent(turns, anim, png),
+      ),
+    );
+  }
+
+  Row buildContent(turns, anim, png) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _isPlaying
+            ? RotatedBox(
+                quarterTurns: turns,
+                child: Lottie.asset(
+                  anim,
+                  height: 19.h,
+                  width: 18.w,
+                  package: 'flutter_openim_widget',
+                ),
+              )
+            : Image.asset(
+                png,
+                height: 19.h,
+                width: 18.w,
+                package: 'flutter_openim_widget',
               ),
-              SizedBox(
-                width: 132.w *
-                    (widget.duration! > 60 ? 60 : widget.duration!) /
-                    60,
-              ),
-            ],
+        SizedBox(
+          width: 12.w,
+        ),
+        Text(
+          "${widget.duration ?? 0}''",
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: Color(0xFF333333),
           ),
         ),
-      ),
+        SizedBox(
+          width: 132.w * (widget.duration! > 60 ? 60 : widget.duration!) / 60,
+        ),
+      ],
     );
   }
 
