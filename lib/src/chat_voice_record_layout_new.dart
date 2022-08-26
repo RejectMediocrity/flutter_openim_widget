@@ -140,6 +140,7 @@ class _ChatVoiceRecordLayoutNewState extends State<ChatVoiceRecordLayoutNew> {
       bottom: 0,
       child: Container(
         height: _startRecord ? 270.h : 270.h,
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border(

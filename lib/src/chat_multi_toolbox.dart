@@ -19,7 +19,8 @@ class ChatMultiSelToolbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(minHeight: 88.h),
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(
+          vertical: 10.h + MediaQuery.of(context).padding.bottom),
       color: Color(0xFFF2F2F2),
       alignment: Alignment.center,
       child: Row(

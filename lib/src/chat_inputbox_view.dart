@@ -199,6 +199,11 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
+              padding: EdgeInsets.only(
+                  bottom:
+                      (_assetPickerVisible || _emojiVisible || _voiceVisible)
+                          ? 0
+                          : MediaQuery.of(context).padding.bottom),
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(

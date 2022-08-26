@@ -81,6 +81,7 @@ class _ChatCameraAssetPickerToolsViewState
       duration: Duration(milliseconds: 200),
       child: Container(
         color: Color(0xFFFFFFFF),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
