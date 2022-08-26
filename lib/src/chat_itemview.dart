@@ -1812,7 +1812,8 @@ class _ChatItemViewState extends State<ChatItemView> {
       Map msgContentMap = json.decode(widget.message.content ?? '');
       if (msgContentMap.containsKey('data')) {
         Map contentDataMap = json.decode(msgContentMap['data'] ?? '');
-        if (contentDataMap['type'] == 'cloud_doc') {
+        // if (contentDataMap['type'] == 'cloud_doc') {
+        if (_isCloudDoc()) {
           isCustomTypeNeedShow = true;
         }
       }
