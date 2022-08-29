@@ -362,7 +362,7 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
               widget.edgeInsets ?? EdgeInsets.fromLTRB(14.w, 20.w, 14.w, 101.w),
           itemCount: emojiFaces.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
+            crossAxisCount: DeviceUtil.instance.isPadOrTablet ? 9 : 7,
             childAspectRatio: 1,
             mainAxisSpacing: widget.mainAxisSpacing ?? 22.w,
             crossAxisSpacing: widget.crossAxisSpacing ?? 22.w,
@@ -380,8 +380,10 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
                   child: Center(
                     child: ImageUtil.faceImage(
                       emojiFaces.values.elementAt(index),
-                      width: widget.size ?? 30.w,
-                      height: widget.size ?? 30.w,
+                      width: widget.size ??
+                          (DeviceUtil.instance.isPadOrTablet ? 37.w : 30.w),
+                      height: widget.size ??
+                          (DeviceUtil.instance.isPadOrTablet ? 37.w : 30.w),
                     ),
                   ),
                 ),
