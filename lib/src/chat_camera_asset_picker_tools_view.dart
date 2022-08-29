@@ -600,6 +600,7 @@ class _ChatCameraAssetPickerToolsViewState
           selectedAssets: selectedEntityList,
           maxAssets: widget.selectedMaximumAssets,
           requestType: RequestType.common,
+          gridCount: DeviceUtil.instance.isPadOrTablet ? 8 : 4,
         ),
       );
       selectedEntityList = result ?? [];
