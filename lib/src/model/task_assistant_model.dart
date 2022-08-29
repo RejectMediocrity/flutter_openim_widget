@@ -4,9 +4,10 @@ class TaskAssistantModel {
   String? title;
   int? type;
   String? userName;
+  String? expire_time;
 
   TaskAssistantModel(
-      {this.imUserId, this.sourceName, this.title, this.type, this.userName});
+      {this.imUserId, this.sourceName, this.title, this.type, this.userName,this.expire_time});
 
   TaskAssistantModel.fromJson(Map<String, dynamic> json) {
     imUserId = json['im_user_id'];
@@ -14,6 +15,7 @@ class TaskAssistantModel {
     title = json['title'];
     type = json['type'];
     userName = json['user_name'];
+    expire_time = json['expire_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +25,7 @@ class TaskAssistantModel {
     data['title'] = this.title;
     data['type'] = this.type;
     data['user_name'] = this.userName;
+    data['expire_time'] = this.expire_time;
     return data;
   }
 }
