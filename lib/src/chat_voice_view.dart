@@ -18,6 +18,7 @@ class ChatVoiceView extends StatefulWidget {
   final bool? ownerRight;
   final Function(int index)? onClick;
   final String? ex;
+  final Widget? voiceUnreadView;
   const ChatVoiceView({
     Key? key,
     required this.index,
@@ -29,6 +30,7 @@ class ChatVoiceView extends StatefulWidget {
     this.ownerRight,
     this.onClick,
     this.ex,
+    this.voiceUnreadView,
   }) : super(key: key);
 
   @override
@@ -83,15 +85,24 @@ class _ChatVoiceViewState extends State<ChatVoiceView> {
       child: Directionality(
         textDirection: isOwnerRight ? TextDirection.rtl : TextDirection.ltr,
         child: widget.ex?.isNotEmpty == true
-            ? Container(
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: !widget.isReceived
-                      ? Color(0xFFAFD2FD)
-                      : Color(0xFFE4E4E4),
-                  borderRadius: BorderRadius.circular(6.w),
-                ),
-                child: buildContent(turns, anim, png),
+            ? Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(12.w),
+                    decoration: BoxDecoration(
+                      color: !widget.isReceived
+                          ? Color(0xFFAFD2FD)
+                          : Color(0xFFE4E4E4),
+                      borderRadius: BorderRadius.circular(6.w),
+                    ),
+                    child: buildContent(turns, anim, png),
+                  ),
+                  if (widget.voiceUnreadView != null)
+                    Padding(
+                      child: widget.voiceUnreadView!,
+                      padding: EdgeInsets.only(left: 6.w),
+                    ),
+                ],
               )
             : buildContent(turns, anim, png),
       ),

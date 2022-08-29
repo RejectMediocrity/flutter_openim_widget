@@ -822,6 +822,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               duration: sound?.duration,
               onClick: widget.onClickVoice,
               ex: widget.message.ex,
+              voiceUnreadView:
+                  widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
             ),
           );
         }
@@ -1479,15 +1481,32 @@ class _ChatItemViewState extends State<ChatItemView> {
         onTapReadView: widget.onTapReadView,
         isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
         faceReplyView: _buildFaceReplyView(),
-        isVoiceUnread: widget.isVoiceUnread,
+        voiceUnreadView:
+            widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
       );
 
+  Widget _buildVoiceUnread() {
+    var badgeWidth = 8.w;
+    return Container(
+      width: badgeWidth,
+      height: badgeWidth,
+      margin: EdgeInsets.symmetric(
+        vertical: 15.w,
+        horizontal: 4.w,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.all(Radius.circular(badgeWidth / 2)),
+      ),
+    );
+  }
+
   void generateOnTapLeftAvatar() {
-    if(widget.message.contentType == MessageType.custom){
+    if (widget.message.contentType == MessageType.custom) {
       String data = widget.message.customElem?.data ?? "";
       Map map = json.decode(data);
       String type = map["type"];
-      if(type == "cloud_doc_assistant"||type == "task_assistant"){
+      if (type == "cloud_doc_assistant" || type == "task_assistant") {
         return;
       }
     }
@@ -1515,8 +1534,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         spacing: 6.w,
         runSpacing: 6.w,
         alignment: WrapAlignment.start,
-        children:
-            listModel.dataList.map((e) => _buildFaceReplyCell(e,listModel.dataList.indexOf(e))).toList(),
+        children: listModel.dataList
+            .map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e)))
+            .toList(),
       ),
     );
   }
@@ -1535,7 +1555,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     return user != -1;
   }
 
-  Widget _buildFaceReplyCell(ChatFaceReplyModel replay,int index) {
+  Widget _buildFaceReplyCell(ChatFaceReplyModel replay, int index) {
     String? emoji = emojiFaces[replay.emoji];
     List<User> users = replay.user!;
     List<InlineSpan> children = [

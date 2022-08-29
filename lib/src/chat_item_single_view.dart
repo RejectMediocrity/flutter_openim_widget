@@ -51,7 +51,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Function()? onTapReadView;
   final bool? isSelfChat; // 自己和自己聊天
   final Widget? faceReplyView;
-  final bool isVoiceUnread;
+  final Widget? voiceUnreadView;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -98,7 +98,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.onTapReadView,
     this.isSelfChat,
     this.faceReplyView,
-    this.isVoiceUnread = false,
+    this.voiceUnreadView,
   }) : super(key: key);
 
   @override
@@ -266,7 +266,9 @@ class ChatSingleLayout extends StatelessWidget {
                                   !isSending &&
                                   enabledReadStatus)
                                 _buildGroupReadStatusView(),
-                              if (isVoiceUnread) _buildVoiceUnread(),
+                              if (faceReplyView == null &&
+                                  voiceUnreadView != null)
+                                voiceUnreadView!,
                             ],
                           ),
 
@@ -414,22 +416,6 @@ class ChatSingleLayout extends StatelessWidget {
     //                 width: 20.w, height: 20.w),
     //   ),
     // );
-  }
-
-  Widget _buildVoiceUnread() {
-    var badgeWidth = 8.w;
-    return Container(
-      width: badgeWidth,
-      height: badgeWidth,
-      margin: EdgeInsets.symmetric(
-        vertical: 15.w,
-        horizontal: 4.w,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.all(Radius.circular(badgeWidth / 2)),
-      ),
-    );
   }
 
   Widget _buildQuoteMsgView() {
