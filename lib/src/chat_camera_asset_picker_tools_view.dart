@@ -153,9 +153,10 @@ class _ChatCameraAssetPickerToolsViewState
                             //   minWidth: 50.w,
                             //   minHeight: 220.w,
                             // ),
-                            width: 220.w * (entity.width / entity.height) > 110.w
-                                ? 220.w * (entity.width / entity.height)
-                                : 110.w,
+                            width:
+                                220.w * (entity.width / entity.height) > 110.w
+                                    ? 220.w * (entity.width / entity.height)
+                                    : 110.w,
                             height: 220.w,
                             color: Colors.white,
                             child: Stack(
@@ -404,7 +405,11 @@ class _ChatCameraAssetPickerToolsViewState
         pickFromCamera(context);
       },
       onFailed: (PermissionStatus status) async {
-        await Permission.microphone.request();
+        PermissionStatus permissionStatus =
+            await Permission.microphone.request();
+        if (permissionStatus.isGranted) {
+          pickFromCamera(context);
+        }
       },
       onPermanently: () {
         showDialog(
@@ -559,7 +564,10 @@ class _ChatCameraAssetPickerToolsViewState
             ),
           );
         } else {
-          await Permission.photos.request();
+          PermissionStatus permissionStatus = await Permission.photos.request();
+          if (permissionStatus.isGranted) {
+            pickFromAssets(context);
+          }
         }
       },
     );
