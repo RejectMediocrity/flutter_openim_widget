@@ -63,3 +63,4 @@ export 'src/util/device_util.dart';
 export 'src/util/screen_util.dart';
 export 'src/util/event_bus.dart';
 export 'src/model/chat_doc_assistant_model.dart';
+export 'package:archive/archive_io.dart';
