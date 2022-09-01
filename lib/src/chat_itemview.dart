@@ -1188,10 +1188,10 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else {
       params = json.decode(model.params!);
     }
-    String snapShot = params.keys.contains("textSnapshot") &&
-            ((params['textSnapshot'] ?? '') as String).isNotEmpty
-        ? params["textSnapshot"]
-        : params["padSnapshot"];
+    String snapShot = params.keys.contains("padSnapshot") &&
+            ((params['padSnapshot'] ?? '') as String).isNotEmpty
+        ? params["padSnapshot"]
+        : params["textSnapshot"];
     String remark = params['remark'] ?? "";
     int permission =
         model.permission?.permission ?? 1; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
