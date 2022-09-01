@@ -1600,8 +1600,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     }
     for (int i = 0; i < users.length; i++) {
       User e = users[i];
-      String name = e == users.last ? e.name! : "${e.name!}, ";
-      userStr = userStr + name;
+      String name = e == users.last ? (e.name ?? '') : "${e.name ?? ''}, ";
+      userStr = userStr + name; 
       if (CommonUtil.didExceedMaxLines(
         content: userStr,
         maxLine: 1,
