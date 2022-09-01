@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MindIMDialog extends StatelessWidget {
   final Widget? title;
@@ -31,7 +32,7 @@ class MindIMDialog extends StatelessWidget {
       alignment: Alignment.center,
       color: Color(0x00000000),
       padding: EdgeInsets.symmetric(
-        horizontal: 28.w,
+        horizontal: DeviceUtil.instance.isPadOrTablet ? 328.w : 28.w,
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
