@@ -1765,7 +1765,8 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showCopyMenu =>
       widget.enabledCopyMenu ??
       widget.message.contentType == MessageType.text ||
-          widget.message.contentType == MessageType.at_text;
+          widget.message.contentType == MessageType.at_text ||
+          widget.message.contentType == MessageType.quote;
 
   bool get _showDelMenu =>
       widget.enabledDelMenu ?? widget.message.contentType != MessageType.revoke;
