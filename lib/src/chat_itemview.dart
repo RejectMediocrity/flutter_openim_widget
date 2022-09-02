@@ -71,14 +71,14 @@ class ChatItemView extends StatefulWidget {
   final Color rightBubbleColor;
 
   /// Click on the message to process voice playback, video playback, picture preview, etc.
-  final Subject<int> clickSubject;
+  final Function(Message message, {bool? isFromMergePreview})? onItemClick;
 
   /// The status of message sending,
   /// there are two kinds of success or failure, true success, false failure
-  final Subject<MsgStreamEv<bool>> msgSendStatusSubject;
+  final Subject<MsgStreamEv<bool>>? msgSendStatusSubject;
 
   /// The progress of sending messages, such as the progress of uploading pictures, videos, and files
-  final Subject<MsgStreamEv<int>> msgSendProgressSubject;
+  final Subject<MsgStreamEv<int>>? msgSendProgressSubject;
 
   /// Download progress of pictures, videos, and files
   // final Subject<MsgStreamEv<int>> downloadProgressSubject;
@@ -243,9 +243,9 @@ class ChatItemView extends StatefulWidget {
     required this.message,
     // this.quoteMessage,
     this.customItemBuilder,
-    required this.clickSubject,
-    required this.msgSendStatusSubject,
-    required this.msgSendProgressSubject,
+    this.onItemClick,
+    this.msgSendStatusSubject,
+    this.msgSendProgressSubject,
     // required this.downloadProgressSubject,
     this.isBubbleMsg = true,
     // this.width = 100,
@@ -801,10 +801,9 @@ class _ChatItemViewState extends State<ChatItemView> {
               width: width.toDouble(),
               height: height.toDouble(),
               widgetWidth: width > height ? 226.w : 100.w,
-              msgSenProgressStream: widget.msgSendProgressSubject.stream,
+              msgSenProgressStream: widget.msgSendProgressSubject?.stream,
               initMsgSendProgress: 100,
               index: widget.index,
-              clickStream: widget.clickSubject.stream,
             ),
           );
         }
@@ -845,10 +844,9 @@ class _ChatItemViewState extends State<ChatItemView> {
               width: width.toDouble(),
               height: height.toDouble(),
               widgetWidth: width > height ? 226.w : 100.w,
-              msgSenProgressStream: widget.msgSendProgressSubject.stream,
+              msgSenProgressStream: widget.msgSendProgressSubject?.stream,
               initMsgSendProgress: 100,
               index: widget.index,
-              clickStream: widget.clickSubject.stream,
             ),
           );
         }
@@ -865,9 +863,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               bytes: file.fileSize ?? 0,
               width: .65.sw,
               initProgress: 100,
-              uploadStream: widget.msgSendProgressSubject.stream,
+              uploadStream: widget.msgSendProgressSubject?.stream,
               index: widget.index,
-              clickStream: widget.clickSubject.stream,
             ),
           );
         }
@@ -929,7 +926,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             child: ChatRevokeView(
               message: widget.message,
               onTap: () {
-                widget.clickSubject.addSafely(widget.index);
+                widget.onItemClick?.call(widget.message);
               },
             ),
             isBubbleBg: true,
@@ -1431,8 +1428,10 @@ class _ChatItemViewState extends State<ChatItemView> {
         msgId: widget.message.clientMsgID!,
         index: widget.index,
         menuBuilder: _menuBuilder,
-        clickSink: widget.clickSubject.sink,
-        sendStatusStream: widget.msgSendStatusSubject.stream,
+        onItemClick: () {
+          widget.onItemClick?.call(widget.message);
+        },
+        sendStatusStream: widget.msgSendStatusSubject?.stream,
         popupCtrl: _popupCtrl,
         isReceivedMsg: _isFromMsg,
         isSingleChat: widget.isSingleChat,
@@ -1440,7 +1439,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
         leftAvatar: widget.message.senderFaceUrl ?? "",
         leftName: widget.message.senderNickname ?? "",
-        isUnread: widget.message.isRead != true,
+        isUnread: false,
         leftBubbleColor: widget.leftBubbleColor,
         rightBubbleColor: widget.rightBubbleColor,
         onLongPressRightAvatar: widget.onLongPressRightAvatar,

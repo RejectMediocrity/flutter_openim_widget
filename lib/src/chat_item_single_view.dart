@@ -12,7 +12,7 @@ class ChatSingleLayout extends StatelessWidget {
   final String msgId;
   final bool isSingleChat;
   final int index;
-  final Sink<int> clickSink;
+  final Function()? onItemClick;
   final Widget Function() menuBuilder;
   final Function()? onTapLeftAvatar;
   final Function()? onLongPressLeftAvatar;
@@ -59,7 +59,7 @@ class ChatSingleLayout extends StatelessWidget {
     required this.index,
     required this.isSingleChat,
     required this.menuBuilder,
-    required this.clickSink,
+    this.onItemClick,
     required this.sendStatusStream,
     required this.popupCtrl,
     required this.isReceivedMsg,
@@ -184,7 +184,7 @@ class ChatSingleLayout extends StatelessWidget {
                                 /// 聊天气泡&tips
                                 child: isBubbleBg
                                     ? GestureDetector(
-                                        onTap: () => _onItemClick?.add(index),
+                                        onTap: () => onItemClick?.call(),
                                         child: ChatBubble(
                                           showBorder:
                                               messageType == MessageType.file,
@@ -240,8 +240,11 @@ class ChatSingleLayout extends StatelessWidget {
                               _buildDestroyAfterReadingView(),
 
                               /// 发送中、发送成功、发送失败
-                              if (delaySendingStatus) _delayedStatusView(),
-                              if (!delaySendingStatus)
+                              if (delaySendingStatus &&
+                                  sendStatusStream != null)
+                                _delayedStatusView(),
+                              if (!delaySendingStatus &&
+                                  sendStatusStream != null)
                                 Visibility(
                                   visible: isSending && !isSendFailed,
                                   child: ChatLoading(),
@@ -311,7 +314,7 @@ class ChatSingleLayout extends StatelessWidget {
         ),
         onTap: () {
           try {
-            _onItemClick?.add(index);
+            onItemClick?.call();
           } catch (e) {
             print(e.toString());
           }
@@ -339,8 +342,6 @@ class ChatSingleLayout extends StatelessWidget {
       backgroundColor: _bubbleColor(),
     );
   }
-
-  Sink<int>? get _onItemClick => clickSink;
 
   // BubbleNip _nip() =>
   //     isReceivedMsg ? BubbleNip.leftCenter : BubbleNip.rightCenter;
