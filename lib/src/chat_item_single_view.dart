@@ -180,6 +180,7 @@ class ChatSingleLayout extends StatelessWidget {
                                 barrierColor: Colors.transparent,
                                 arrowColor: Color(0xFF666666),
                                 verticalMargin: 0,
+                                isNeedFixOffsetOnPad: true,
                                 // horizontalMargin: 0,
                                 /// 聊天气泡&tips
                                 child: isBubbleBg

@@ -40,6 +40,7 @@ class CopyCustomPopupMenu extends StatefulWidget {
     this.arrowSize = 10.0,
     this.horizontalMargin = 10.0,
     this.verticalMargin = 10.0,
+    this.isNeedFixOffsetOnPad = false,
   });
 
   final Widget child;
@@ -52,6 +53,7 @@ class CopyCustomPopupMenu extends StatefulWidget {
   final double arrowSize;
   final CustomPopupMenuController? controller;
   final Widget Function() menuBuilder;
+  final bool isNeedFixOffsetOnPad;
 
   @override
   _CopyCustomPopupMenuState createState() => _CopyCustomPopupMenuState();
@@ -102,6 +104,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                           _tapDownDetails?.localPosition.dy ?? 0),
                     ),
                     verticalMargin: widget.verticalMargin,
+                    isNeedFixOffsetOnPad: widget.isNeedFixOffsetOnPad,
                   ),
                   children: <Widget>[
                     // if (widget.showArrow)
@@ -245,12 +248,14 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     required this.anchorOffset,
     required this.verticalMargin,
     required this.tapDownDetails,
+    this.isNeedFixOffsetOnPad = false,
   });
 
   final Size anchorSize;
   final Offset anchorOffset;
   final double verticalMargin;
   final TapDownDetails? tapDownDetails;
+  final bool isNeedFixOffsetOnPad;
 
   @override
   void performLayout(Size size) {
@@ -260,7 +265,7 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     Offset arrowOffset = Offset(0, 0);
 
     double anchorCenterX = anchorOffset.dx + anchorSize.width / 2;
-    if (DeviceUtil.instance.isPadOrTablet) {
+    if (DeviceUtil.instance.isPadOrTablet && isNeedFixOffsetOnPad) {
       anchorCenterX = anchorOffset.dx + anchorSize.width / 4 - 0.45.sw;
     }
     double anchorTopY = anchorOffset.dy;
