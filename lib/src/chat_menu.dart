@@ -87,7 +87,7 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
       return Container();
     }
     return Container(
-      constraints: BoxConstraints(maxWidth: 330.w),
+      constraints: BoxConstraints(maxWidth: DeviceUtil.instance.isPadOrTablet ? 400.w : 330.w),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: widget.menuStyle.background,
@@ -135,7 +135,7 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
   ConstrainedBox _buildLatestEmojiBox() {
     List<String> latestEmojis = RecentlyUsedEmojiManager.getEmojiList();
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 48.w),
+      constraints: BoxConstraints(maxHeight: DeviceUtil.instance.isPadOrTablet ? 58.w : 48.w),
       child: GridView.builder(
         padding: EdgeInsets.fromLTRB(16.w, 10.w, 16.w, 16.w),
         physics: NeverScrollableScrollPhysics(),
@@ -170,8 +170,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
                           emojiFaces.values.elementAt(emojiFaces.keys
                               .toList()
                               .indexOf(latestEmojis[index])),
-                          width: 24.w,
-                          height: 24.w,
+                          width: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
+                          height: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
                         )
                       : ImageUtil.assetImage(
                           openEmoji ? "ic_video_close" : "title_but_add_dark",
@@ -203,7 +203,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
           mainAxisSpacing: 12.w,
           backColor: Colors.white,
           edgeInsets: EdgeInsets.fromLTRB(16.w, 16.w, 16.w, 44.w),
-          size: 24.w,
+          size: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
+          crossAxisCount: 7,
         ),
       ),
     );

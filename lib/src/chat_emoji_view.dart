@@ -191,6 +191,7 @@ class ChatEmojiView extends StatefulWidget {
     this.edgeInsets,
     this.size,
     this.showDelete,
+    this.crossAxisCount,
   }) : super(key: key);
   final Function()? onDeleteEmoji;
   final Function(String emoji)? onAddEmoji;
@@ -204,6 +205,7 @@ class ChatEmojiView extends StatefulWidget {
   final EdgeInsets? edgeInsets;
   final double? size;
   final bool? showDelete;
+  final int? crossAxisCount;
   @override
   _ChatEmojiViewState createState() => _ChatEmojiViewState();
 }
@@ -362,7 +364,8 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
               widget.edgeInsets ?? EdgeInsets.fromLTRB(14.w, 20.w, 14.w, 101.w),
           itemCount: emojiFaces.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: DeviceUtil.instance.isPadOrTablet ? 9 : 7,
+            crossAxisCount: widget.crossAxisCount ??
+                (DeviceUtil.instance.isPadOrTablet ? 9 : 7),
             childAspectRatio: 1,
             mainAxisSpacing: widget.mainAxisSpacing ?? 22.w,
             crossAxisSpacing: widget.crossAxisSpacing ?? 22.w,

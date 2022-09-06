@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/util/screen_util.dart';
 
 enum PressType {
@@ -259,6 +260,9 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     Offset arrowOffset = Offset(0, 0);
 
     double anchorCenterX = anchorOffset.dx + anchorSize.width / 2;
+    if (DeviceUtil.instance.isPadOrTablet) {
+      anchorCenterX = anchorOffset.dx + anchorSize.width / 4 - 0.45.sw;
+    }
     double anchorTopY = anchorOffset.dy;
     double anchorBottomY = anchorTopY + anchorSize.height;
     _MenuPosition menuPosition = _MenuPosition.bottomCenter;
