@@ -41,6 +41,8 @@ class CopyCustomPopupMenu extends StatefulWidget {
     this.horizontalMargin = 10.0,
     this.verticalMargin = 10.0,
     this.isNeedFixOffsetOnPad = false,
+    this.pressFunc,
+    this.dismissCallback,
   });
 
   final Widget child;
@@ -54,6 +56,8 @@ class CopyCustomPopupMenu extends StatefulWidget {
   final CustomPopupMenuController? controller;
   final Widget Function() menuBuilder;
   final bool isNeedFixOffsetOnPad;
+  final Function()? pressFunc;
+  final Function()? dismissCallback;
 
   @override
   _CopyCustomPopupMenuState createState() => _CopyCustomPopupMenuState();
@@ -150,6 +154,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
       _overlayEntry?.remove();
       _overlayEntry = null;
       _tapDownDetails = null;
+      widget.dismissCallback?.call();
     }
   }
 
@@ -199,6 +204,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
             ? () {
                 if (widget.pressType == PressType.singleClick) {
                   _showMenu();
+                  widget.pressFunc?.call();
                 }
               }
             : null,
@@ -207,6 +213,7 @@ class _CopyCustomPopupMenuState extends State<CopyCustomPopupMenu> {
                 if (widget.pressType == PressType.longPress) {
                   _showMenu();
                   FocusScope.of(context).requestFocus(FocusNode());
+                  widget.pressFunc?.call();
                 }
               }
             : null,

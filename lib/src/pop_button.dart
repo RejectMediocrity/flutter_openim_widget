@@ -4,6 +4,14 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 
 // typedef PopupMenuItemBuilder = Widget Function(PopMenuInfo info);
 
+/// 菜单布局类型
+/// horizontal 水平排布
+/// vertical 垂直排布（默认）
+enum MenuItemLayoutType {
+  horizontal,
+  vertical,
+}
+
 class PopMenuInfo {
   final String? icon;
   final String text;
@@ -44,6 +52,10 @@ class PopButton extends StatelessWidget {
   final EdgeInsetsGeometry? menuItemPadding;
   final TextStyle menuItemTextStyle;
   final double menuItemIconSize;
+  final Function()? pressFunc;
+  final Function()? dismissCallback;
+  final MenuItemLayoutType? menuItemLayoutType;
+  final bool? isNeedFixOffsetOnPad;
 
   PopButton({
     Key? key,
@@ -73,6 +85,10 @@ class PopButton extends StatelessWidget {
     ),
     this.menuItemIconSize = 18.0,
     this.menuItemPadding,
+    this.pressFunc,
+    this.dismissCallback,
+    this.menuItemLayoutType = MenuItemLayoutType.vertical,
+    this.isNeedFixOffsetOnPad = false,
   }) : super(key: key);
 
   @override
@@ -89,11 +105,20 @@ class PopButton extends StatelessWidget {
       child: child,
       menuBuilder: () => _buildPopBgView(
         child: popupChild ??
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: menus.map((e) => _buildPopItemView(e)).toList(),
-            ),
+            (menuItemLayoutType == MenuItemLayoutType.vertical
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: menus.map((e) => _buildPopItemView(e)).toList(),
+                  )
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: menus.map((e) => _buildPopItemView(e)).toList(),
+                  )),
       ),
+      pressFunc: pressFunc,
+      dismissCallback: dismissCallback,
+      isNeedFixOffsetOnPad: isNeedFixOffsetOnPad ?? false,
     );
   }
 
