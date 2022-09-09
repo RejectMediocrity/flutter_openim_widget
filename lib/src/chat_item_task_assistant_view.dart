@@ -19,7 +19,7 @@ class ChatItemTaskAssistantView extends StatelessWidget {
     String part4 = assistantModel.type == 1
         ? "的任务执行人"
         : assistantModel.type == 2
-            ? "的目标执行人"
+            ? "的目标负责人"
             : "即将在${assistantModel.expire_time}之后到期";
 
     List<InlineSpan> children = [
