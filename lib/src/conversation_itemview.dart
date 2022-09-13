@@ -43,6 +43,7 @@ class ConversationItemView extends StatelessWidget {
   final String? senderName;
   final List<AtUserInfo>? atUserInfo;
   final bool archived;
+  final bool? meeting;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -94,6 +95,7 @@ class ConversationItemView extends StatelessWidget {
     this.faceReplySpan,
     this.atUserInfo,
     this.archived = false,
+    this.meeting,
   }) : super(key: key);
 
   @override
@@ -130,6 +132,7 @@ class ConversationItemView extends StatelessWidget {
         faceReplySpan: faceReplySpan,
         atUserInfo: atUserInfo,
         archived: archived,
+        meeting: meeting,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -179,6 +182,7 @@ class _ConversationView extends StatelessWidget {
     this.faceReplySpan,
     this.atUserInfo,
     this.archived = false,
+    this.meeting,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -210,6 +214,7 @@ class _ConversationView extends StatelessWidget {
   final String? senderName;
   final List<AtUserInfo>? atUserInfo;
   final bool archived;
+  final bool? meeting;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -294,6 +299,15 @@ class _ConversationView extends StatelessWidget {
                                       maxLines: 1,
                                     ),
                                   ),
+                                  if (meeting == true)
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.w),
+                                      child: Image.asset(
+                                        "assets/images/call_minimum.webp",
+                                        width: 14.w,
+                                        height: 14.w,
+                                      ),
+                                    ),
                                   if (archived)
                                     Container(
                                       margin: EdgeInsets.only(left: 10.w),
