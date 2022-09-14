@@ -1093,6 +1093,12 @@ class _ChatItemViewState extends State<ChatItemView> {
           isBubbleBg: true,
           child: _buildBiDataItem(widget.message.content ?? ""),
         );
+      } else if (type.startsWith('begin_meeting')) {
+        String nickName1 = widget.message.senderNickname ?? '';
+        return nickName1 + "发起了会议";
+      } else if (type.startsWith('end_meeting')) {
+        int min = (widget.message.sendTime! - opData["beginTime"]) / 1000 ~/ 60;
+        return "会议已结束 时长$min分钟";
       }
     } catch (e) {
       print(e.toString());
@@ -1600,7 +1606,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     for (int i = 0; i < users.length; i++) {
       User e = users[i];
       String name = e == users.last ? (e.name ?? '') : "${e.name ?? ''}, ";
-      userStr = userStr + name; 
+      userStr = userStr + name;
       if (CommonUtil.didExceedMaxLines(
         content: userStr,
         maxLine: 1,
