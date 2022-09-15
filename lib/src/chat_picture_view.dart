@@ -186,8 +186,9 @@ class _ChatPictureViewState extends State<ChatPictureView> {
   @override
   Widget build(BuildContext context) {
     var child = _buildChildView();
-    // return child;
-    return Hero(tag: widget.msgId, child: child);
+    return child;
+    // 20220915 暂时去掉hero动画
+    // return Hero(tag: widget.msgId, child: child);
   }
 
   Widget _errorIcon() =>

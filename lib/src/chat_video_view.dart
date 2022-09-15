@@ -151,27 +151,28 @@ class _ChatVideoViewState extends State<ChatVideoView> {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-        tag: widget.msgId,
-        child: Container(
-          width: _trulyWidth,
-          height: _trulyHeight,
-          // color: Color(0xFFB3D7FF),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              _buildThumbView(),
-              ImageUtil.assetImage("vedio_but_play_small",width: 38,height: 38),
-              ChatSendProgressView(
-                height: _trulyHeight,
-                width: _trulyWidth,
-                msgId: widget.msgId,
-                stream: widget.msgSenProgressStream,
-                initProgress: widget.initMsgSendProgress,
-              ),
-            ],
+    // 20220915 暂时去掉hero动画
+    // return Hero(
+    //     tag: widget.msgId,
+    return Container(
+      width: _trulyWidth,
+      height: _trulyHeight,
+      // color: Color(0xFFB3D7FF),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          _buildThumbView(),
+          ImageUtil.assetImage("vedio_but_play_small", width: 38, height: 38),
+          ChatSendProgressView(
+            height: _trulyHeight,
+            width: _trulyWidth,
+            msgId: widget.msgId,
+            stream: widget.msgSenProgressStream,
+            initProgress: widget.initMsgSendProgress,
           ),
-        ));
+        ],
+      ),
+    );
   }
 
   Widget _errorIcon() =>
