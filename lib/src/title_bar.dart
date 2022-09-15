@@ -71,9 +71,12 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         right = right,
         center = center ??
-            Text(
-              title ?? '',
-              style: textStyle,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                CommonUtil.breakWord(title ?? ''),
+                style: textStyle,
+              ),
             );
 
   TitleBar.leftTitle({

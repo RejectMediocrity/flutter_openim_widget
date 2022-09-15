@@ -48,12 +48,15 @@ class ChatLongPressMenu extends StatefulWidget {
   final List<MenuInfo> menus;
   final MenuStyle menuStyle;
   final Function(String)? onTapEmoji;
+  /// enableEmoji false 禁止添加表情功能, default true
+  final bool enableEmoji;
   const ChatLongPressMenu({
     Key? key,
     required this.controller,
     required this.menus,
     this.menuStyle = const MenuStyle.base(),
     this.onTapEmoji,
+    this.enableEmoji = true,
   }) : super(key: key);
 
   @override
@@ -132,7 +135,10 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
     ];
   }
 
-  ConstrainedBox _buildLatestEmojiBox() {
+  Widget _buildLatestEmojiBox() {
+    if (!widget.enableEmoji) {
+      return Container();
+    }
     List<String> latestEmojis = RecentlyUsedEmojiManager.getEmojiList();
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: DeviceUtil.instance.isPadOrTablet ? 58.w : 48.w),

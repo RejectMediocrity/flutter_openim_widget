@@ -1671,7 +1671,17 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   Widget _menuBuilder() => ChatLongPressMenu(
         controller: _popupCtrl,
-        menus: widget.groupArchived ? [] : (widget.menus ?? _menusItem()),
+        menus: widget.groupArchived
+            ? [
+                MenuInfo(
+                  icon: ImageUtil.menuCopy(),
+                  text: UILocalizations.copy,
+                  enabled: _showCopyMenu,
+                  textStyle: menuTextStyle,
+                  onTap: widget.onTapCopyMenu,
+                ),
+              ]
+            : (widget.menus ?? _menusItem()),
         menuStyle: widget.menuStyle ??
             MenuStyle(
               crossAxisCount: 6,
@@ -1687,6 +1697,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                   widget.onReplayWithFace!(emojiName, widget.index,
                       isResignReply: didReplyWithThisEmoji(emojiName));
               },
+        enableEmoji: !widget.groupArchived,
       );
 
   Widget? _customItemView() => widget.customItemBuilder?.call(
