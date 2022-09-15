@@ -1097,7 +1097,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         String nickName1 = widget.message.senderNickname ?? '';
         return nickName1 + "发起了会议";
       } else if (type.startsWith('end_meeting')) {
-        int min = (widget.message.sendTime! - opData["beginTime"]) / 1000 ~/ 60;
+        int min =
+            ((widget.message.sendTime! - opData["beginTime"]) / 1000 ~/ 60 + 1)
+                .ceil();
         return "会议已结束 时长$min分钟";
       }
     } catch (e) {
