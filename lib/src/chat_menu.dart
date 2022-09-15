@@ -48,6 +48,7 @@ class ChatLongPressMenu extends StatefulWidget {
   final List<MenuInfo> menus;
   final MenuStyle menuStyle;
   final Function(String)? onTapEmoji;
+
   /// enableEmoji false 禁止添加表情功能, default true
   final bool enableEmoji;
   const ChatLongPressMenu({
@@ -90,7 +91,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
       return Container();
     }
     return Container(
-      constraints: BoxConstraints(maxWidth: DeviceUtil.instance.isPadOrTablet ? 400.w : 330.w),
+      constraints: BoxConstraints(
+          maxWidth: DeviceUtil.instance.isPadOrTablet ? 400.w : 330.w),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: widget.menuStyle.background,
@@ -117,6 +119,10 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
         color: Color(0xFFF2F2F2),
         height: 1.w,
       ),
+      if (openEmoji)
+        SizedBox(
+          height: 8.w,
+        ),
       if (openEmoji) _buildEmojiBox(),
       _buildLatestEmojiBox(),
     ];
@@ -131,6 +137,10 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
         height: 1.w,
       ),
       if (openEmoji) _buildEmojiBox(),
+      if (openEmoji)
+        SizedBox(
+          height: 8.w,
+        ),
       if (!openEmoji) _buildMenuGridView(),
     ];
   }
@@ -141,7 +151,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
     }
     List<String> latestEmojis = RecentlyUsedEmojiManager.getEmojiList();
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: DeviceUtil.instance.isPadOrTablet ? 58.w : 48.w),
+      constraints: BoxConstraints(
+          maxHeight: DeviceUtil.instance.isPadOrTablet ? 58.w : 48.w),
       child: GridView.builder(
         padding: EdgeInsets.fromLTRB(16.w, 10.w, 16.w, 16.w),
         physics: NeverScrollableScrollPhysics(),
@@ -176,8 +187,10 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
                           emojiFaces.values.elementAt(emojiFaces.keys
                               .toList()
                               .indexOf(latestEmojis[index])),
-                          width: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
-                          height: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
+                          width:
+                              DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
+                          height:
+                              DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
                         )
                       : ImageUtil.assetImage(
                           openEmoji ? "ic_video_close" : "title_but_add_dark",
@@ -197,20 +210,29 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
   ConstrainedBox _buildEmojiBox() {
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 226.w),
-      child: SingleChildScrollView(
-        child: ChatEmojiView(
-          onAddEmoji: (emojiName) {
-            widget.controller.hideMenu();
-            if (widget.onTapEmoji != null) widget.onTapEmoji!(emojiName);
-          },
-          onDeleteEmoji: null,
-          controller: null,
-          crossAxisSpacing: 20.w,
-          mainAxisSpacing: 12.w,
-          backColor: Colors.white,
-          edgeInsets: EdgeInsets.fromLTRB(16.w, 16.w, 16.w, 44.w),
-          size: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
-          crossAxisCount: 7,
+      child: Container(
+        // color: Colors.blueAccent,
+        decoration: BoxDecoration(
+          color: widget.menuStyle.background,
+          // borderRadius: BorderRadius.circular(widget.menuStyle.radius),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: SingleChildScrollView(
+          child: ChatEmojiView(
+            onAddEmoji: (emojiName) {
+              widget.controller.hideMenu();
+              if (widget.onTapEmoji != null) widget.onTapEmoji!(emojiName);
+            },
+            onDeleteEmoji: null,
+            controller: null,
+            crossAxisSpacing: 20.w,
+            mainAxisSpacing: 12.w,
+            backColor: Colors.white,
+            edgeInsets:
+                EdgeInsets.fromLTRB(16.w, isTop ? 8.w : 16.w, 16.w, 44.w),
+            size: DeviceUtil.instance.isPadOrTablet ? 37.w : 24.w,
+            crossAxisCount: 7,
+          ),
         ),
       ),
     );
