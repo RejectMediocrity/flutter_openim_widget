@@ -236,6 +236,7 @@ class ChatItemView extends StatefulWidget {
       int? type,
       String? title})? onTapDocUrl;
   final Function(int index)? onClickVoice;
+  final Widget? fileIcon;
   const ChatItemView({
     Key? key,
     required this.index,
@@ -312,6 +313,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapDocOperator,
     this.onTapDocUrl,
     this.onClickVoice,
+    this.fileIcon,
   }) : super(key: key);
 
   @override
@@ -865,6 +867,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               initProgress: 100,
               uploadStream: widget.msgSendProgressSubject?.stream,
               index: widget.index,
+              fileIcon: widget.fileIcon,
             ),
           );
         }

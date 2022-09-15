@@ -119,6 +119,7 @@ class ChatFileView extends StatelessWidget {
     this.width = 158,
     this.initProgress = 100,
     this.uploadStream,
+    this.fileIcon,
   }) : super(key: key);
   final String msgId;
   final String fileName;
@@ -130,6 +131,7 @@ class ChatFileView extends StatelessWidget {
   // final String url;
   final int index;
   final Stream<int>? clickStream;
+  final Widget? fileIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +144,7 @@ class ChatFileView extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ImageUtil.file(),
+              fileIcon != null ? fileIcon! : ImageUtil.file(),
               SizedBox(
                 width: 10.w,
               ),
