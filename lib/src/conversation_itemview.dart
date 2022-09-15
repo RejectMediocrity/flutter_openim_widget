@@ -44,6 +44,7 @@ class ConversationItemView extends StatelessWidget {
   final List<AtUserInfo>? atUserInfo;
   final bool archived;
   final bool? meeting;
+  final String? customMsgType;
   ConversationItemView({
     Key? key,
     this.slideActions = const [],
@@ -96,6 +97,7 @@ class ConversationItemView extends StatelessWidget {
     this.atUserInfo,
     this.archived = false,
     this.meeting,
+    this.customMsgType,
   }) : super(key: key);
 
   @override
@@ -133,6 +135,7 @@ class ConversationItemView extends StatelessWidget {
         atUserInfo: atUserInfo,
         archived: archived,
         meeting: meeting,
+        customMsgType: customMsgType,
       ),
       endActionPane: ActionPane(
         motion: DrawerMotion(),
@@ -183,6 +186,7 @@ class _ConversationView extends StatelessWidget {
     this.atUserInfo,
     this.archived = false,
     this.meeting,
+    this.customMsgType,
   }) : super(key: key);
   final double avatarSize;
   final String? avatarUrl;
@@ -215,6 +219,7 @@ class _ConversationView extends StatelessWidget {
   final List<AtUserInfo>? atUserInfo;
   final bool archived;
   final bool? meeting;
+  final String? customMsgType;
 
   InlineSpan? _buildImgSpan(String? prefixStr) {
     if (null == contentPrefix) {
@@ -405,7 +410,9 @@ class _ConversationView extends StatelessWidget {
                 prefixSpan: _buildImgSpan(contentPrefix),
                 patterns: patterns,
                 needToTpliceContent: needToTpliceContent,
-                senderSpan: isGroupChat == true
+                senderSpan: isGroupChat == true &&
+                        customMsgType != "end_meeting" &&
+                        customMsgType != "begin_meeting"
                     ? _buildSendernameSpan(senderName)
                     : null,
                 faceReplySpan: faceReplySpan,
@@ -426,8 +433,11 @@ class _ConversationView extends StatelessWidget {
             prefixSpan: _buildImgSpan(contentPrefix),
             patterns: patterns,
             needToTpliceContent: needToTpliceContent,
-            senderSpan:
-                isGroupChat == true ? _buildSendernameSpan(senderName) : null,
+            senderSpan: isGroupChat == true &&
+                    customMsgType != "end_meeting" &&
+                    customMsgType != "begin_meeting"
+                ? _buildSendernameSpan(senderName)
+                : null,
             faceReplySpan: faceReplySpan,
           );
   }
