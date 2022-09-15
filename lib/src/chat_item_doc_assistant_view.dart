@@ -20,89 +20,93 @@ class ChatItemDocAssistantView extends StatelessWidget {
   });
 
   List<InlineSpan> createRichText() {
-    String des = assistantModel.textDescribe ?? "";
+    try {
+      String des = assistantModel.textDescribe ?? "";
 
-    RegExp match1 = RegExp("{to_im_user_name}");
-    RegExp match2 = RegExp("{title}");
+      RegExp match1 = RegExp("{to_im_user_name}");
+      RegExp match2 = RegExp("{title}");
 
-    String replace1 = "@${assistantModel.params?.toImUserName ?? ""}";
-    String replace2 = "${assistantModel.params?.title ?? ""}";
+      String replace1 = "@${assistantModel.params?.toImUserName ?? ""}";
+      String replace2 = "${assistantModel.params?.title ?? ""}";
 
-    int start1 = des.indexOf(match1);
-    int start2 = des.indexOf(match2);
+      int start1 = des.indexOf(match1);
+      int start2 = des.indexOf(match2);
 
-    String pre = des.substring(0, start1);
-    String middle = des.substring(match1.pattern.length + start1, start2);
-    String end = des.substring(start2 + match2.pattern.length, des.length);
-    List<InlineSpan> children = [
-      TextSpan(
-        text: pre,
-        style: TextStyle(
-          color: Color(0xFF333333),
-          fontSize: 14.sp,
+      String pre = des.substring(0, start1);
+      String middle = des.substring(match1.pattern.length + start1, start2);
+      String end = des.substring(start2 + match2.pattern.length, des.length);
+      List<InlineSpan> children = [
+        TextSpan(
+          text: pre,
+          style: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 14.sp,
+          ),
         ),
-      ),
-      ExtendedWidgetSpan(
-        alignment: PlaceholderAlignment.middle,
-        child: GestureDetector(
-          onTap: () {
-            if (onTapDocOperator != null)
-              onTapDocOperator!(assistantModel.params?.toImUserId ?? "");
-          },
-          child: Text(
-            replace1,
-            style: TextStyle(
-              color: Color(0xFF006DFA),
-              fontSize: 14.sp,
+        ExtendedWidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: GestureDetector(
+            onTap: () {
+              if (onTapDocOperator != null)
+                onTapDocOperator!(assistantModel.params?.toImUserId ?? "");
+            },
+            child: Text(
+              replace1,
+              style: TextStyle(
+                color: Color(0xFF006DFA),
+                fontSize: 14.sp,
+              ),
             ),
           ),
         ),
-      ),
-      TextSpan(
-        text: middle,
-        style: TextStyle(
-          color: Color(0xFF333333),
-          fontSize: 14.sp,
+        TextSpan(
+          text: middle,
+          style: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 14.sp,
+          ),
         ),
-      ),
-      ExtendedWidgetSpan(
-        alignment: PlaceholderAlignment.middle,
-        child: GestureDetector(
-          onTap: () {
-            if (onTapDocUrl != null) {
-              onTapDocUrl!(
-                padUrl: assistantModel.params?.toUrl,
-                code: assistantModel.params?.folderCode,
-                type: assistantModel.params?.type,
-                isFolder: assistantModel.params?.noticeType == "folder",
-                title: assistantModel.params?.title,
-              );
-            }
-          },
-          child: Text(
-            replace2,
-            style: TextStyle(
-              color: Color(0xFF006DFA),
-              fontSize: 14.sp,
+        ExtendedWidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: GestureDetector(
+            onTap: () {
+              if (onTapDocUrl != null) {
+                onTapDocUrl!(
+                  padUrl: assistantModel.params?.toUrl,
+                  code: assistantModel.params?.folderCode,
+                  type: assistantModel.params?.type,
+                  isFolder: assistantModel.params?.noticeType == "folder",
+                  title: assistantModel.params?.title,
+                );
+              }
+            },
+            child: Text(
+              replace2,
+              style: TextStyle(
+                color: Color(0xFF006DFA),
+                fontSize: 14.sp,
+              ),
             ),
           ),
         ),
-      ),
-      TextSpan(
-        text: end,
-        style: TextStyle(
-          color: Color(0xFF333333),
-          fontSize: 14.sp,
+        TextSpan(
+          text: end,
+          style: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 14.sp,
+          ),
         ),
-      ),
-    ];
-    return children;
+      ];
+      return children;
+    } catch (e) {
+      return [TextSpan(text: '')];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 270.w,
+      width: 0.65.sw,
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
         color: Colors.white,
