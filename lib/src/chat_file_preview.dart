@@ -35,8 +35,8 @@ class ChatFilePreview extends StatefulWidget {
 }
 
 class _ChatFilePreviewState extends State<ChatFilePreview> {
-  bool _start = false;
-
+  bool _pause = false;
+  bool _begin = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +63,7 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
                 height: 20.w,
               ),
               Text(
-                "该文件类型无法查看",
+                widget.name,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.sp,
@@ -85,10 +85,17 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
               SizedBox(
                 height: 40.w,
               ),
-              widget.available
-                  ? GestureDetector(
+              _begin
+                  ? buildDownLoadWidget()
+                  // : widget.available
+                  //     ?
+                  : GestureDetector(
                       onTap: () {
-                        _launchInBrowser(Uri.parse(widget.url ?? ""));
+                        widget.onDownload?.call(widget.url ?? "");
+                        setState(() {
+                          _begin = true;
+                        });
+                        // _launchInBrowser(Uri.parse(widget.url ?? ""));
                       },
                       child: Container(
                         width: 150.w,
@@ -99,7 +106,7 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
                           borderRadius: BorderRadius.circular(6.w),
                         ),
                         child: Text(
-                          "用其他应用打开",
+                          "下载文件",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,
@@ -108,14 +115,14 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
                         ),
                       ),
                     )
-                  : Text(
-                      UILocalizations.fileUnavailable,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: Color(0xFFDD000F),
-                      ),
-                    ),
+              // : Text(
+              //     UILocalizations.fileUnavailable,
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //       fontSize: 16.sp,
+              //       color: Color(0xFFDD000F),
+              //     ),
+              //   ),
             ],
           ),
         ),
@@ -123,46 +130,26 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
     );
   }
 
-  Container buildDownLoadWidget() {
-    return Container(
-      alignment: Alignment.center,
-      child: StreamBuilder(
-        stream: widget.subject?.stream,
-        builder: (_, AsyncSnapshot<MsgStreamEv<double>> hot) {
-          var event = hot.data;
-          return GestureDetector(
-            onTap: _start
-                ? null
-                : () {
-                    setState(() {
-                      _start = !_start;
-                      widget.onDownload?.call(widget.url!);
-                    });
-                  },
-            behavior: HitTestBehavior.translucent,
-            child: Container(
-              width: 50.w,
-              height: 50.h,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    backgroundColor: Color(0xFFCCCCCC),
-                    color: Color(0xFF1D6BED),
-                    strokeWidth: 3,
-                    value: event?.value ?? 0,
-                  ),
-                  ImageUtil.assetImage(
-                    _start ? 'ic_download_continue' : 'ic_download_stop',
-                    width: 23.w,
-                    height: 23.h,
-                  )
-                ],
-              ),
+  Widget buildDownLoadWidget() {
+    return StreamBuilder(
+      stream: widget.subject?.stream,
+      builder: (_, AsyncSnapshot<MsgStreamEv<double>> hot) {
+        double event = hot.data?.value ?? 0.0;
+        return Container(
+          height: 4.w,
+          margin: EdgeInsets.only(top: 8.w),
+          padding: EdgeInsets.symmetric(horizontal: 112.w),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(2.w),
+            clipBehavior: Clip.hardEdge,
+            child: LinearProgressIndicator(
+              backgroundColor: Color(0xFFCCE2FE),
+              valueColor: AlwaysStoppedAnimation(Color(0xFF006DFA)),
+              value: event,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
