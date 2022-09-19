@@ -106,7 +106,7 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
                           borderRadius: BorderRadius.circular(6.w),
                         ),
                         child: Text(
-                          "下载文件",
+                          "查看文件",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,

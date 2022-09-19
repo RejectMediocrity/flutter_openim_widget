@@ -37,15 +37,16 @@ class PicInfo {
 }
 
 class ChatPicturePreview extends StatefulWidget {
-  ChatPicturePreview(
-      {Key? key,
-      required this.picList,
-      this.index = 0,
-      this.tag,
-      this.onDownload,
-      this.onTap,
-      this.showMenu})
-      : this.controller = ExtendedPageController(
+  ChatPicturePreview({
+    Key? key,
+    required this.picList,
+    this.index = 0,
+    this.tag,
+    this.onDownload,
+    this.onTap,
+    this.showMenu,
+    this.previewIndexChanged,
+  })  : this.controller = ExtendedPageController(
           initialPage: index,
           pageSpacing: 10,
         ),
@@ -57,6 +58,7 @@ class ChatPicturePreview extends StatefulWidget {
   final Future<bool> Function(String, bool)? onDownload;
   final Function()? onTap;
   final Function()? showMenu;
+  final Future<List<PicInfo>> Function(int? index)? previewIndexChanged;
 
   @override
   State<ChatPicturePreview> createState() {
@@ -297,6 +299,18 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
             setState(() {
               currentPage = index;
             });
+            if (index == 0) {
+              widget.previewIndexChanged
+                  ?.call(widget.picList.elementAt(index).sendTime)
+                  .then((value) {
+                setState(() {
+                  picList.insertAll(0, value);
+                  currentPage = value.length;
+                });
+              }).catchError((e) {
+                print(e.toString());
+              });
+            }
           },
         ),
       );
