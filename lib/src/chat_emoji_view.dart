@@ -361,14 +361,14 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
         height: 270.w,
         child: GridView.builder(
           padding:
-              widget.edgeInsets ?? EdgeInsets.fromLTRB(14.w, 20.w, 14.w, 101.w),
+              widget.edgeInsets ?? EdgeInsets.fromLTRB(4.w, 8.w, 4.w, 90.w),
           itemCount: emojiFaces.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: widget.crossAxisCount ??
                 (DeviceUtil.instance.isPadOrTablet ? 9 : 7),
             childAspectRatio: 1,
-            mainAxisSpacing: widget.mainAxisSpacing ?? 22.w,
-            crossAxisSpacing: widget.crossAxisSpacing ?? 22.w,
+            // mainAxisSpacing: widget.mainAxisSpacing ?? 22.w,
+            // crossAxisSpacing: widget.crossAxisSpacing ?? 22.w,
           ),
           itemBuilder: (BuildContext context, int index) {
             return Material(
@@ -380,13 +380,15 @@ class _ChatEmojiViewState extends State<ChatEmojiView> {
                     RecentlyUsedEmojiManager.updateEmoji(emojiName);
                     widget.onAddEmoji?.call(emojiName);
                   },
-                  child: Center(
+                  child: Container(
+                    alignment: Alignment.center,
                     child: ImageUtil.faceImage(
                       emojiFaces.values.elementAt(index),
                       width: widget.size ??
                           (DeviceUtil.instance.isPadOrTablet ? 37.w : 30.w),
                       height: widget.size ??
                           (DeviceUtil.instance.isPadOrTablet ? 37.w : 30.w),
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
