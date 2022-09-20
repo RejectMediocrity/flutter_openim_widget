@@ -20,8 +20,10 @@ class PicInfo {
   final int? sendTime;
   int width;
   int height;
+  final String? clientMsgId;
 
   PicInfo({
+    this.clientMsgId,
     this.url,
     this.file,
     this.thumbUrl,
@@ -57,7 +59,7 @@ class ChatPicturePreview extends StatefulWidget {
   final ExtendedPageController controller;
   final Future<bool> Function(String, bool)? onDownload;
   final Function()? onTap;
-  final Function()? showMenu;
+  final Function(List<PicInfo>)? showMenu;
   final Future<List<PicInfo>> Function(int? index)? previewIndexChanged;
 
   @override
@@ -411,7 +413,9 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                 : Container(),
             widget.showMenu != null
                 ? GestureDetector(
-                    onTap: widget.showMenu,
+                    onTap: (){
+                      widget.showMenu?.call(picList);
+                    },
                     child: ImageUtil.assetImage(
                       "preview_but_thumbnail_background",
                       width: 32.w,
