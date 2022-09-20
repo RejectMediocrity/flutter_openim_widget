@@ -2,7 +2,7 @@ library flutter_openim_widget;
 
 export 'package:flutter_openim_sdk/flutter_openim_sdk.dart';
 export 'package:flutter_slidable/flutter_slidable.dart';
-
+export 'package:device_info_plus/device_info_plus.dart';
 export 'src/at_special_text_span_builder.dart';
 export 'src/chat_at_text.dart';
 export 'src/chat_avatar_view.dart';
