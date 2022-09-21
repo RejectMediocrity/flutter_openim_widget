@@ -10,6 +10,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_item_doc_assistant_view.dart';
 import 'package:flutter_openim_widget/src/chat_item_task_assistant_view.dart';
 import 'package:flutter_openim_widget/src/chat_revoke_view.dart';
+import 'package:flutter_openim_widget/src/check_exceed_maxLines.dart';
 import 'package:flutter_openim_widget/src/model/chat_doc_assistant_model.dart';
 import 'package:flutter_openim_widget/src/model/cloud_doc_message_model.dart';
 import 'package:flutter_openim_widget/src/model/task_assistant_model.dart';
@@ -454,7 +455,24 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
-  Widget expandView(Widget bubleView) {
+  Widget expandView(
+    Widget bubleView, {
+    required String text,
+    required TextStyle textStyle,
+    required List<MatchPattern> patterns,
+    required Map<String, String> allAtMap,
+    required List<String> hasReadList,
+    required bool isSender,
+  }) {
+    // bool didExceedMaxLines = CheckExceedMaxLines.didExceedMaxLines(
+    //   text: text,
+    //   textStyle: textStyle,
+    //   patterns: patterns,
+    //   allAtMap: allAtMap,
+    //   hasReadList: hasReadList,
+    //   isSender: isSender,
+    // );
+    // bool show = didExceedMaxLines &&
     bool show = didExceedMaxLines(widget.message) &&
         widget.isExpanded == false &&
         (widget.message.contentType == MessageType.text ||
@@ -1477,7 +1495,21 @@ class _ChatItemViewState extends State<ChatItemView> {
         onRadioChanged: widget.onMultiSelChanged,
         delaySendingStatus: widget.delaySendingStatus,
         enabledReadStatus: widget.enabledReadStatus,
-        expandView: expandView,
+        expandView: (bubleView) {
+          return expandView(bubleView,
+              text: replaceSpecialChar(widget.message.content ?? ""),
+              textStyle: widget.textStyle ??
+                  TextStyle(
+                      color: Color(0xFF111111),
+                      fontSize: 16.sp,
+                      letterSpacing: .3),
+              patterns: widget.patterns,
+              allAtMap: widget.allAtMap,
+              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                      ?.hasReadUserIDList ??
+                  [],
+              isSender: widget.message.sendID == OpenIM.iMManager.uid);
+        },
         enableMultiSel:
             widget.message.contentType != MessageType.revoke && !isHintMsg,
         messageType: widget.message.contentType,
