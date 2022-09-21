@@ -67,7 +67,7 @@ class CheckExceedMaxLines {
               matchText = isSender == true
                   ? '@${allAtMap?[uid]!}'
                   : '@${allAtMap?[uid]!} ';
-              inlineSpan = ExtendedWidgetSpan(
+              inlineSpan = WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: GestureDetector(
                   onTap: () =>
@@ -100,8 +100,6 @@ class CheckExceedMaxLines {
                   ),
                 ),
                 style: _mapping[regexAt]?.style,
-                actualText: '$value',
-                start: match.start,
               );
             } else {
               inlineSpan = TextSpan(
@@ -114,7 +112,7 @@ class CheckExceedMaxLines {
             value = uid;
             if (allAtMap?.containsKey(uid) == true) {
               matchText = '@${allAtMap?[uid]!} ';
-              inlineSpan = ExtendedWidgetSpan(
+              inlineSpan = WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -133,8 +131,6 @@ class CheckExceedMaxLines {
                   ),
                 ),
                 style: _mapping[regexAtMe]?.style,
-                actualText: '$value',
-                start: match.start,
               );
             }
           } else if (mapping.type == PatternType.EMOJI) {
@@ -173,16 +169,10 @@ class CheckExceedMaxLines {
       },
     );
     TextSpan span = TextSpan(children: children);
-    TextPainter tp = TextPainter(text: span, maxLines: 10);
-    layout(tp, children);
+    TextPainter tp =
+        TextPainter(text: span, maxLines: 10, textDirection: TextDirection.ltr);
+    tp.layout(maxWidth: .65.sw);
     return tp.didExceedMaxLines;
-  }
-
-  static Widget layout(TextPainter tp, List<InlineSpan> children) {
-    return LayoutBuilder(builder: (context, size) {
-      tp.layout(maxWidth: size.maxWidth);
-      return Container();
-    });
   }
 
   static getUrl(String text, PatternType type) {
