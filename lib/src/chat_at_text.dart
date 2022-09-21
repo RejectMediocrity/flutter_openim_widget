@@ -339,8 +339,9 @@ final regexAtMe = "\\s@(?=$uid)\\S+\\s";
 const regexEmail = r"\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b";
 
 /// URL Regex - A predefined type for handling URL matching
-const regexUrl =
-    r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:._\+-~#=%]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:_\+.~#?&\/\/=%$]*)";
+// const regexUrl =
+//     r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:._\+-~#=%]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:_\+.~#?&\/\/=%$]*)";
+const regexUrl= r'((http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?)|(?:www.*)|(?:bi.im30.*)|(?:gm.im30.*)';
 
 /// Phone Regex - A predefined type for handling phone matching
 // const regexMobile =
