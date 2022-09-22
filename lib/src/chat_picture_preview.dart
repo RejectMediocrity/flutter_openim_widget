@@ -389,23 +389,28 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                         width: 140.w,
                         height: 32.w,
                       )
-                    : GestureDetector(
-                        onTap: onViewOriginImg,
-                        child: Container(
-                          width: 140.w,
-                          height: 32.w,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF999999).withAlpha(76),
-                            borderRadius: BorderRadius.circular(100.w),
+                    : size <= 0
+                        ? Container(
+                            width: 140.w,
+                            height: 32.w,
+                          )
+                        : GestureDetector(
+                            onTap: onViewOriginImg,
+                            child: Container(
+                              width: 140.w,
+                              height: 32.w,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF999999).withAlpha(76),
+                                borderRadius: BorderRadius.circular(100.w),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "查看原图($sizeStr)",
+                                style: TextStyle(
+                                    fontSize: 12.sp, color: Colors.white),
+                              ),
+                            ),
                           ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "查看原图($sizeStr)",
-                            style:
-                                TextStyle(fontSize: 12.sp, color: Colors.white),
-                          ),
-                        ),
-                      ),
             widget.showMenu != null
                 ? SizedBox(
                     width: 20.w,
@@ -413,7 +418,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
                 : Container(),
             widget.showMenu != null
                 ? GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       widget.showMenu?.call(picList);
                     },
                     child: ImageUtil.assetImage(
