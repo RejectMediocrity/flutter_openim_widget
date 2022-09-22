@@ -1468,7 +1468,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         rightAvatar: OpenIM.iMManager.uInfo.faceURL ?? "",
         leftAvatar: widget.message.senderFaceUrl ?? "",
         leftName: widget.message.senderNickname ?? "",
-        isUnread: false,
+        isUnread: widget.message.isRead != true,
         leftBubbleColor: widget.leftBubbleColor,
         rightBubbleColor: widget.rightBubbleColor,
         onLongPressRightAvatar: widget.onLongPressRightAvatar,
