@@ -782,6 +782,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                     ?.hasReadUserIDList,
                 isSender: widget.message.sendID == OpenIM.iMManager.uid,
+                atUserInfos: widget.message.atElem?.atUsersInfo,
               ),
             );
           }
@@ -800,6 +801,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                   ?.hasReadUserIDList,
               isSender: widget.message.sendID == OpenIM.iMManager.uid,
+              atUserInfos: widget.message.atElem?.atUsersInfo,
             ),
           );
         }
@@ -915,6 +917,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                   ?.hasReadUserIDList,
               isSender: widget.message.sendID == OpenIM.iMManager.uid,
+              atUserInfos: widget.message.atElem?.atUsersInfo,
             ),
           );
         }
@@ -1000,6 +1003,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                     : widget.textStyle,
                 hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
                     ?.hasReadUserIDList,
+                atUserInfos: widget.message.atElem?.atUsersInfo,
               ),
             );
           } catch (e) {

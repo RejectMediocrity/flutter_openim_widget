@@ -154,6 +154,7 @@ class ChatQuoteView extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 hasReadList: message
                     .attachedInfoElem?.groupHasReadInfo?.hasReadUserIDList,
+                atUserInfos: message.atElem?.atUsersInfo,
               ),
             ),
             Container(

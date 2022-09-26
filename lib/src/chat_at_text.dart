@@ -31,6 +31,7 @@ class ChatAtText extends StatelessWidget {
   final InlineSpan? senderSpan;
   final TextSpan? faceReplySpan;
   final bool? isSender;
+  final List<AtUserInfo>? atUserInfos;
   // final TextAlign textAlign;
   ChatAtText({
     Key? key,
@@ -50,6 +51,7 @@ class ChatAtText extends StatelessWidget {
     this.faceReplySpan,
     this.hasReadList,
     this.isSender,
+    this.atUserInfos,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -117,10 +119,18 @@ class ChatAtText extends StatelessWidget {
   }
 
   Future<String> _replaceUIds(List<String> uIds) async {
-    var userInfos =
-        await OpenIM.iMManager.userManager.getUsersInfo(uidList: uIds);
-    for (UserInfo info in userInfos) {
-      text = text.replaceAll(" @${info.userID} ", "@${info.nickname!}");
+    atUserInfos?.forEach((element) {
+      if(uIds.contains(element.atUserID)){
+        text = text.replaceAll(" @${element.atUserID} ", "@${element.groupNickname}");
+        uIds.remove(element.atUserID);
+      }
+    });
+    if(uIds.isNotEmpty == true){
+      var userInfos =
+      await OpenIM.iMManager.userManager.getUsersInfo(uidList: uIds);
+      for (UserInfo info in userInfos) {
+        text = text.replaceAll(" @${info.userID} ", "@${info.nickname!}");
+      }
     }
     return text;
   }
