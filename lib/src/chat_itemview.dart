@@ -1896,19 +1896,18 @@ class _ChatItemViewState extends State<ChatItemView> {
     }
 
     return widget.enabledMemoMenu ??
-        (widget.message.groupID != null &&
-            (widget.message.contentType == MessageType.text ||
-                widget.message.contentType == MessageType.at_text ||
-                widget.message.contentType == MessageType.video ||
-                widget.message.contentType == MessageType.picture ||
-                widget.message.contentType == MessageType.location ||
-                widget.message.contentType == MessageType.quote ||
-                widget.message.contentType == MessageType.file ||
-                widget.message.contentType == MessageType.merger ||
-                widget.message.contentType == MessageType.card ||
-                // widget.message.contentType == MessageType.voice ||
-                isCustomTypeNeedShow ||
-                widget.message.contentType == MessageType.custom_face));
+        (widget.message.contentType == MessageType.text ||
+            widget.message.contentType == MessageType.at_text ||
+            widget.message.contentType == MessageType.video ||
+            widget.message.contentType == MessageType.picture ||
+            widget.message.contentType == MessageType.location ||
+            widget.message.contentType == MessageType.quote ||
+            widget.message.contentType == MessageType.file ||
+            widget.message.contentType == MessageType.merger ||
+            widget.message.contentType == MessageType.card ||
+            // widget.message.contentType == MessageType.voice ||
+            isCustomTypeNeedShow ||
+            widget.message.contentType == MessageType.custom_face);
   }
 
   bool get _showMultiChoiceMenu =>
