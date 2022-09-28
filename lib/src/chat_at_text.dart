@@ -362,12 +362,12 @@ const regexUrl =
     r'((http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?)|(?:www.*)|(?:bi.im30.*)|(?:gm.im30.*)';
 
 /// Phone Regex - A predefined type for handling phone matching
-const regexMobile =
-    r"(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{5})";
+// const regexMobile =
+//     r"(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{3})";
 
 /// Regex of exact mobile.
-// const String regexMobile =
-//     '^(\\+?86)?((13[0-9])|(14[57])|(15[0-35-9])|(16[2567])|(17[01235-8])|(18[0-9])|(19[1589]))\\d{8}\$';
+const String regexMobile =
+    r"(\\+?86)?((13[0-9])|(14[57])|(15[0-35-9])|(16[2567])|(17[01235-8])|(18[0-9])|(19[1589]))\d{8}";
 
 /// Regex of telephone number.
 const String regexTel = '^0\\d{2,3}[-]?\\d{7,8}';
