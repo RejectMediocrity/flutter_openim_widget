@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -143,7 +144,7 @@ class ChatAvatarView extends StatelessWidget {
     } else if (enMatch != null) {
       text = text.substring(enMatch.start, 1).toUpperCase();
       style = TextStyle(
-          fontSize: (_size / 42.h) *(Platform.isAndroid ? 15.sp : 18.sp),
+          fontSize: (_size / 42.h) * (Platform.isAndroid ? 15.sp : 18.sp),
           color: Colors.white,
           letterSpacing: .5,
           fontWeight: FontWeight.w500);
@@ -177,27 +178,36 @@ class ChatAvatarView extends StatelessWidget {
     int? cacheWidth,
     int? cacheHeight,
   }) =>
-      lowMemory
-          ? ImageUtil.lowMemoryNetworkImage(
-              url: url,
-              width: width,
-              height: height,
-              fit: BoxFit.cover,
-              loadProgress: false,
-              cacheWidth: cacheWidth ?? (1.sw * .3).toInt(),
-              cacheHeight: cacheHeight,
-              defaultImage: _defaultAvatar(size: _size, text: text),
-            )
-          : ImageUtil.networkImage(
-              url: url,
-              width: width,
-              height: height,
-              fit: BoxFit.cover,
-              loadProgress: false,
-              cacheWidth: cacheWidth ?? (1.sw * .3).toInt(),
-              cacheHeight: cacheHeight,
-              defaultImage: _defaultAvatar(size: _size, text: text),
-            );
+      CachedNetworkImage(
+        imageUrl: url,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        placeholder: (_, url) {
+          return _defaultAvatar(size: _size, text: text);
+        },
+      );
+  // lowMemory
+  //     ? ImageUtil.lowMemoryNetworkImage(
+  //         url: url,
+  //         width: width,
+  //         height: height,
+  //         fit: BoxFit.cover,
+  //         loadProgress: false,
+  //         cacheWidth: cacheWidth ?? (1.sw * .3).toInt(),
+  //         cacheHeight: cacheHeight,
+  //         defaultImage: _defaultAvatar(size: _size, text: text),
+  //       )
+  //     : ImageUtil.networkImage(
+  //         url: url,
+  //         width: width,
+  //         height: height,
+  //         fit: BoxFit.cover,
+  //         loadProgress: false,
+  //         cacheWidth: cacheWidth ?? (1.sw * .3).toInt(),
+  //         cacheHeight: cacheHeight,
+  //         defaultImage: _defaultAvatar(size: _size, text: text),
+  //       );
 
   Widget _nineGridAvatar() => Container(
         width: _size,
