@@ -119,16 +119,23 @@ class ChatAtText extends StatelessWidget {
   }
 
   Future<String> _replaceUIds(List<String> uIds) async {
-    atUserInfos?.forEach((element) {
-      if(uIds.contains(element.atUserID)){
-        text = text.replaceAll(" @${element.atUserID} ", "@${element.groupNickname}");
+    atUserInfos?.forEach((element) async {
+      if (uIds.contains(element.atUserID)) {
+        if (!allAtMap.containsKey(element.atUserID)) {
+          allAtMap['${element.atUserID}'] = element.groupNickname!;
+        }
+        text = text.replaceAll(
+            " @${element.atUserID} ", "@${element.groupNickname}");
         uIds.remove(element.atUserID);
       }
     });
-    if(uIds.isNotEmpty == true){
+    if (uIds.isNotEmpty == true) {
       var userInfos =
-      await OpenIM.iMManager.userManager.getUsersInfo(uidList: uIds);
+          await OpenIM.iMManager.userManager.getUsersInfo(uidList: uIds);
       for (UserInfo info in userInfos) {
+        if (!allAtMap.containsKey(info.userID)) {
+          allAtMap['${info.userID}'] = info.nickname!;
+        }
         text = text.replaceAll(" @${info.userID} ", "@${info.nickname!}");
       }
     }
