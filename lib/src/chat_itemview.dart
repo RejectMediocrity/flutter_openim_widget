@@ -1126,6 +1126,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             ((widget.message.sendTime! - opData["beginTime"]) / 1000 ~/ 60 + 1)
                 .ceil();
         return "会议已结束 时长$min分钟";
+      } else if (type == 'report_week_assistant') {
+        return "${opData["user_name"]}给你分享了一份周报，请到电脑上查看";
       }
     } catch (e) {
       print(e.toString());
