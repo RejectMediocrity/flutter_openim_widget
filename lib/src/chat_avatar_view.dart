@@ -186,6 +186,8 @@ class ChatAvatarView extends StatelessWidget {
         placeholder: (_, url) {
           return _defaultAvatar(size: _size, text: text);
         },
+        fadeInDuration: Duration.zero,
+        fadeOutDuration: Duration.zero,
       );
   // lowMemory
   //     ? ImageUtil.lowMemoryNetworkImage(
