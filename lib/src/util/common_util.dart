@@ -177,9 +177,10 @@ class CommonUtil {
       String uid = des.replaceFirst("@", "").trim();
       List<AtUserInfo>? currentUser = atUserInfo
           ?.where((element) =>
-      element.atUserID == uid && element.groupNickname != null)
+              element.atUserID == uid && element.groupNickname != null)
           .toList();
-      if (!atUserNameMappingMap.containsKey(uid)&&(currentUser == null||currentUser.isEmpty)) {
+      if (!atUserNameMappingMap.containsKey(uid) &&
+          (currentUser == null || currentUser.isEmpty)) {
         noMatchUids.add(uid);
       }
     }
@@ -228,5 +229,15 @@ class CommonUtil {
     );
     painter.layout(maxWidth: maxWidth);
     return painter.didExceedMaxLines;
+  }
+
+  static bool isDigit({
+    required String s,
+    int idx = 0,
+  }) {
+    int _zero = "0".codeUnits[0];
+    int _nine = "9".codeUnits[0];
+    int cuIdx = s.codeUnits[idx];
+    return cuIdx >= _zero && cuIdx <= _nine;
   }
 }

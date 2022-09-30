@@ -284,6 +284,50 @@ class ChatAtText extends StatelessWidget {
                 imageWidth: size + 4,
                 imageHeight: size + 4,
                 margin: EdgeInsets.symmetric(horizontal: 1));
+          } else if (mapping.type == PatternType.MOBILE) {
+            /// 增加优化 | 识别的电话号码规则，必须满足11位长度
+            int startPos = text.indexOf(matchText);
+            if (startPos > 0) {
+              if (!CommonUtil.isDigit(
+                      s: text.substring(startPos - 1, startPos)) &&
+                  !CommonUtil.isDigit(
+                      s: text.substring(startPos + matchText.length,
+                          startPos + matchText.length + 1))) {
+                inlineSpan = TextSpan(
+                  text: "$matchText",
+                  style: mapping.style != null ? mapping.style : style,
+                  recognizer: mapping.onTap == null
+                      ? null
+                      : (TapGestureRecognizer()
+                        ..onTap = () => mapping.onTap!(
+                            _getUrl(value, mapping.type), mapping.type)),
+                );
+              } else {
+                text = CommonUtil.breakWord(text);
+                print("$text");
+                children.add(TextSpan(text: text, style: style));
+                return '';
+              }
+            } else {
+              if (text == matchText || !CommonUtil.isDigit(
+                  s: text.substring(startPos + matchText.length,
+                      startPos + matchText.length + 1))) {
+                inlineSpan = TextSpan(
+                  text: "$matchText",
+                  style: mapping.style != null ? mapping.style : style,
+                  recognizer: mapping.onTap == null
+                      ? null
+                      : (TapGestureRecognizer()
+                        ..onTap = () => mapping.onTap!(
+                            _getUrl(value, mapping.type), mapping.type)),
+                );
+              } else {
+                text = CommonUtil.breakWord(text);
+                print("$text");
+                children.add(TextSpan(text: text, style: style));
+                return '';
+              }
+            }
           } else {
             inlineSpan = TextSpan(
               text: "$matchText",
