@@ -123,7 +123,9 @@ class _CustomPopupViewState extends State<CustomPopupView> {
       Overlay.of(context)!.insert(_overlayEntry!);
       setState(() {
         menuIsShowing = true;
-        _controller.menuIsShowing = true;
+        if (!_controller.menuIsShowing) {
+          _controller.showMenu();
+        }
       });
     }
   }
@@ -134,16 +136,20 @@ class _CustomPopupViewState extends State<CustomPopupView> {
       _overlayEntry = null;
       setState(() {
         menuIsShowing = false;
-        _controller.menuIsShowing = false;
+        if (_controller.menuIsShowing) {
+          _controller.hideMenu();
+        }
       });
     }
   }
 
   _updateView() {
-    if (_controller.menuIsShowing) {
-      _showMenu();
-    } else {
-      _hideMenu();
+    if (menuIsShowing != _controller.menuIsShowing) {
+      if (_controller.menuIsShowing) {
+        _showMenu();
+      } else {
+        _hideMenu();
+      }
     }
   }
 
