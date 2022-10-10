@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 
 class RevokeMessageHelper {
@@ -34,6 +36,15 @@ class RevokeMessageHelper {
   bool canEdit(Message message) {
     String id = message.clientMsgID!;
     if (id.isEmpty) return false;
+    if (message.contentType == MessageType.advancedRevoke) {
+      var revokedInfoMap = json.decode(message.ex!);
+      if (revokedInfoMap['revoke_user_id'] != OpenIM.iMManager.uid || message.sendID != OpenIM.iMManager.uid) {
+        return false;
+      }
+      if (message.sendID != OpenIM.iMManager.uid) {
+        return false;
+      }
+    }
     List elements =
         revokeInfos.where((element) => element["id"] == id).toList();
     if (elements.isEmpty) {

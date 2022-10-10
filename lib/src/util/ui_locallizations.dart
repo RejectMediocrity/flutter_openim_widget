@@ -55,6 +55,8 @@ class UILocalizations {
       "you": "You",
       "revokeAMsg": "revoke a message",
       "revokedAMsg": "Message retracted",
+      "revokedAMsgByOwner": "Message retracted by owner %s ",
+      "revokedAMsgByManager": "Message retracted by manager %s ",
       "memoSaved": "Memo saved",
       "reEdit": "Re-edit",
       "picLoadError": "Image failed to load",
@@ -123,7 +125,9 @@ class UILocalizations {
       "confirm": "确定",
       "you": "你",
       "revokeAMsg": "撤回了一条消息",
-      "revokedAMsg": "消息已撤回",
+      "revokedAMsg": "此消息已撤回",
+      "revokedAMsgByOwner": "此消息已被群主 %s 撤回",
+      "revokedAMsgByManager": "此消息已被群管理员 %s 撤回",
       "memoSaved": "已备忘",
       "reEdit": "重新编辑",
       "picLoadError": "图片加载失败",
@@ -253,6 +257,10 @@ class UILocalizations {
   static String get allRead => _value(key: "allRead");
 
   static String get revokedAMsg => _value(key: "revokedAMsg");
+
+  static String get revokedAMsgByOwner => _value(key: "revokedAMsgByOwner");
+
+  static String get revokedAMsgByManager => _value(key: "revokedAMsgByManager");
 
   static String get reEdit => _value(key: "reEdit");
 

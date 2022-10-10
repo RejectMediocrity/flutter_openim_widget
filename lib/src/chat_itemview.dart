@@ -41,6 +41,8 @@ typedef ItemVisibilityChange = void Function(
   bool visible,
 );
 
+typedef OnTapRevokerCallback = Function(String uid);
+
 ///  chat item
 ///
 class ChatItemView extends StatefulWidget {
@@ -238,6 +240,8 @@ class ChatItemView extends StatefulWidget {
       String? title})? onTapDocUrl;
   final Function(int index)? onClickVoice;
   final Widget? fileIcon;
+  final OnTapRevokerCallback? onTapRevokerCallback;
+
   const ChatItemView({
     Key? key,
     required this.index,
@@ -315,6 +319,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapDocUrl,
     this.onClickVoice,
     this.fileIcon,
+    this.onTapRevokerCallback,
   }) : super(key: key);
 
   @override
@@ -957,6 +962,20 @@ class _ChatItemViewState extends State<ChatItemView> {
           );
         }
         break;
+      case MessageType.advancedRevoke:
+        {
+          child = _buildCommonItemView(
+            child: ChatRevokeView(
+              message: widget.message,
+              onTap: () {
+                widget.onItemClick?.call(widget.message);
+              },
+              onTapRevokerCallback: (uid) => widget.onTapRevokerCallback?.call(uid),
+            ),
+            isBubbleBg: true,
+          );
+        }
+        break;
       default:
         {
           try {
@@ -966,6 +985,11 @@ class _ChatItemViewState extends State<ChatItemView> {
               var who = _isFromMsg
                   ? widget.message.senderNickname
                   : UILocalizations.you;
+              text = '$who ${UILocalizations.revokeAMsg}';
+            } else if (MessageType.advancedRevoke ==
+                widget.message.contentType) {
+              var advancedRevokedInfo = json.decode(widget.message.ex!);
+              var who = advancedRevokedInfo['revoke_user_name'];
               text = '$who ${UILocalizations.revokeAMsg}';
             } else if (MessageType.custom == widget.message.contentType) {
               var result = parseCustomMsg();
@@ -1883,7 +1907,6 @@ class _ChatItemViewState extends State<ChatItemView> {
       widget.enabledRevokeMenu ??
       widget.message.sendID == OpenIM.iMManager.uid &&
           widget.message.contentType != MessageType.revoke;
-
   bool get _showMemoMenu {
     bool isCustomTypeNeedShow = false;
     if (widget.message.contentType == MessageType.custom) {
