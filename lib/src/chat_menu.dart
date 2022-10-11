@@ -114,16 +114,16 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
   List<Widget> aboveChildren() {
     return [
       if (!openEmoji) _buildMenuGridView(),
-      Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w),
-        color: Color(0xFFF2F2F2),
-        height: 1.w,
-      ),
       if (openEmoji)
         SizedBox(
           height: 8.w,
         ),
       if (openEmoji) _buildEmojiBox(),
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        color: Color(0xFFF2F2F2),
+        height: 1.w,
+      ),
       _buildLatestEmojiBox(),
     ];
   }
