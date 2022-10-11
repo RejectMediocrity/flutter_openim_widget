@@ -36,9 +36,27 @@ class RevokeMessageHelper {
   bool canEdit(Message message) {
     String id = message.clientMsgID!;
     if (id.isEmpty) return false;
-    if (message.contentType == MessageType.advancedRevoke) {
-      var revokedInfoMap = json.decode(message.ex!);
-      if (revokedInfoMap['revoke_user_id'] != OpenIM.iMManager.uid || message.sendID != OpenIM.iMManager.uid) {
+    if (message.contentType == MessageType.advancedRevoke &&
+        message.ex!.length > 0) {
+      var revokedInfoMap;
+      if (message.ex!.length > 0) {
+        revokedInfoMap = json.decode(message.ex!);
+      } else if (message.content!.length > 0) {
+        RevokedInfo revokedInfo =
+            RevokedInfo.fromJson(json.decode(message.content!));
+        revokedInfoMap = {
+          "revoke_role": revokedInfo.revokerRole,
+          "revoke_user_name": revokedInfo.revokerNickname,
+          "revoke_user_id": revokedInfo.revokerID
+        };
+      } else {
+        revokedInfoMap = {
+          "revoke_role": 0,
+          "revoke_user_id": "",
+        };
+      }
+      if (revokedInfoMap['revoke_user_id'] != OpenIM.iMManager.uid ||
+          message.sendID != OpenIM.iMManager.uid) {
         return false;
       }
       if (message.sendID != OpenIM.iMManager.uid) {

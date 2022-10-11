@@ -50,7 +50,21 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
       revokedOver2Min = true;
     }
     if (widget.message.contentType == MessageType.advancedRevoke) {
-      revokedInfoMap = json.decode(widget.message.ex!);
+      if (widget.message.ex!.length > 0) {
+        revokedInfoMap = json.decode(widget.message.ex!);
+      } else if (widget.message.content!.length > 0) {
+        RevokedInfo revokedInfo =
+            RevokedInfo.fromJson(json.decode(widget.message.content!));
+        revokedInfoMap = {
+          "revoke_role": revokedInfo.revokerRole,
+          "revoke_user_name": revokedInfo.revokerNickname,
+          "revoke_user_id": revokedInfo.revokerID
+        };
+      } else {
+        revokedInfoMap = {
+          "revoke_role": 0,
+        };
+      }
       revokerRoleLevel = revokedInfoMap['revoke_role'];
       if (revokerRoleLevel == 2) {
         revokerInfoStr = sprintf(UILocalizations.revokedAMsgByOwner,

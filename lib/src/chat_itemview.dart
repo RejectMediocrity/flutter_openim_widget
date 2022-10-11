@@ -970,7 +970,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               onTap: () {
                 widget.onItemClick?.call(widget.message);
               },
-              onTapRevokerCallback: (uid) => widget.onTapRevokerCallback?.call(uid),
+              onTapRevokerCallback: (uid) =>
+                  widget.onTapRevokerCallback?.call(uid),
             ),
             isBubbleBg: true,
           );
@@ -988,7 +989,23 @@ class _ChatItemViewState extends State<ChatItemView> {
               text = '$who ${UILocalizations.revokeAMsg}';
             } else if (MessageType.advancedRevoke ==
                 widget.message.contentType) {
-              var advancedRevokedInfo = json.decode(widget.message.ex!);
+              var advancedRevokedInfo;
+              if (widget.message.ex!.length > 0) {
+                advancedRevokedInfo = json.decode(widget.message.ex!);
+              } else if (widget.message.content!.length > 0) {
+                RevokedInfo revokedInfo =
+                    RevokedInfo.fromJson(json.decode(widget.message.content!));
+                advancedRevokedInfo = {
+                  "revoke_role": revokedInfo.revokerRole,
+                  "revoke_user_name": revokedInfo.revokerNickname,
+                  "revoke_user_id": revokedInfo.revokerID
+                };
+              } else {
+                advancedRevokedInfo = {
+                  "revoke_role": 0,
+                  "revoke_user_name": '',
+                };
+              }
               var who = advancedRevokedInfo['revoke_user_name'];
               text = '$who ${UILocalizations.revokeAMsg}';
             } else if (MessageType.custom == widget.message.contentType) {
