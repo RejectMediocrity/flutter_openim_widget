@@ -1923,7 +1923,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showRevokeMenu =>
       widget.enabledRevokeMenu ??
       widget.message.sendID == OpenIM.iMManager.uid &&
-          widget.message.contentType != MessageType.revoke;
+          widget.message.contentType != MessageType.revoke && widget.message.contentType != MessageType.advancedRevoke;
   bool get _showMemoMenu {
     bool isCustomTypeNeedShow = false;
     if (widget.message.contentType == MessageType.custom) {
