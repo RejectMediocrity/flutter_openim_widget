@@ -96,7 +96,7 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
         textWidget = Row(
           children: [
             Text(
-              revokerInfoStrSegments.first,
+              revokerInfoStrSegments.first + ' ',
               style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
             ),
             InkWell(
@@ -105,23 +105,33 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
                     ?.call(revokedInfoMap['revoke_user_id']);
               },
               child: Container(
+                height: 20.w,
                 decoration: BoxDecoration(
                   color: Color(0xFF006DFA),
                   borderRadius: BorderRadius.all(
                     Radius.circular(15),
                   ),
                 ),
-                child: Text(
-                  ' ${revokerInfoStrSegments.elementAt(1)} ',
-                  style: TextStyle(
-                      color: Color(0xFFFFFFFF),
+                child: Center(
+                  child: Text(
+                    '  ${revokerInfoStrSegments.elementAt(1)}  ',
+                    style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w500),
+                    strutStyle: StrutStyle(
                       fontSize: 15.sp,
-                      fontWeight: FontWeight.w500),
+                      leading: 0,
+                      height: 1.1,
+                      // 1.1更居中
+                      forceStrutHeight: true, // 关键属性 强制改为文字高度
+                    ),
+                  ),
                 ),
               ),
             ),
             Text(
-              revokerInfoStrSegments.last,
+              ' ' + revokerInfoStrSegments.last,
               style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
             ),
           ],
