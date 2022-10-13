@@ -102,6 +102,7 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
               Text(
                 revokerInfoStrSegments.first + ' ',
                 style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
+                textScaleFactor: 1.0,
               ),
               InkWell(
                 onTap: () {
@@ -130,6 +131,7 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
                         // 1.1更居中
                         forceStrutHeight: true, // 关键属性 强制改为文字高度
                       ),
+                      textScaleFactor: 1.0,
                     ),
                   ),
                 ),
@@ -137,6 +139,7 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
               Text(
                 ' ' + revokerInfoStrSegments.last,
                 style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
+                textScaleFactor: 1.0,
               ),
             ],
           ),
