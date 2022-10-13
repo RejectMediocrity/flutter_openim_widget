@@ -90,6 +90,8 @@ class _ChatLongPressMenuState extends State<ChatLongPressMenu> {
     if (widget.menus.length == 0) {
       return Container();
     }
+    widget.menus.removeWhere((element) => element.enabled != true);
+
     return Container(
       constraints: BoxConstraints(
           maxWidth: DeviceUtil.instance.isPadOrTablet ? 400.w : 330.w),
