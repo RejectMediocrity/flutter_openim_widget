@@ -93,72 +93,82 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
 
     if (revokerInfoStrSegments != null && revokerInfoStrSegments.length > 1) {
       if (OpenIM.iMManager.uid == revokedInfoMap['revoke_user_id']) {
-        textWidget = Row(
-          children: [
-            Text(
-              revokerInfoStrSegments.first + ' ',
-              style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
-            ),
-            InkWell(
-              onTap: () {
-                widget.onTapRevokerCallback
-                    ?.call(revokedInfoMap['revoke_user_id']);
-              },
-              child: Container(
-                height: 20.w,
-                decoration: BoxDecoration(
-                  color: Color(0xFF006DFA),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
+        textWidget = Container(
+          constraints: BoxConstraints(
+            maxWidth: 1.sw - 130.w,
+          ),
+          child: Wrap(
+            children: [
+              Text(
+                revokerInfoStrSegments.first + ' ',
+                style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
+              ),
+              InkWell(
+                onTap: () {
+                  widget.onTapRevokerCallback
+                      ?.call(revokedInfoMap['revoke_user_id']);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF006DFA),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: Text(
-                    '  ${revokerInfoStrSegments.elementAt(1)}  ',
-                    style: TextStyle(
-                        color: Color(0xFFFFFFFF),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Text(
+                      '  ${revokerInfoStrSegments.elementAt(1)}  ',
+                      style: TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500),
+                      strutStyle: StrutStyle(
                         fontSize: 15.sp,
-                        fontWeight: FontWeight.w500),
-                    strutStyle: StrutStyle(
-                      fontSize: 15.sp,
-                      leading: 0,
-                      height: 1.1,
-                      // 1.1更居中
-                      forceStrutHeight: true, // 关键属性 强制改为文字高度
+                        leading: 0,
+                        height: 1.1,
+                        // 1.1更居中
+                        forceStrutHeight: true, // 关键属性 强制改为文字高度
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Text(
-              ' ' + revokerInfoStrSegments.last,
-              style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
-            ),
-          ],
-        );
-      } else {
-        textWidget = RichText(
-          text: TextSpan(
-            text: revokerInfoStrSegments.first,
-            style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
-            children: [
-              TextSpan(
-                text: ' ${revokerInfoStrSegments.elementAt(1)} ',
-                style: TextStyle(
-                    color: Color(0xFF006DFA),
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    widget.onTapRevokerCallback
-                        ?.call(revokedInfoMap['revoke_user_id']);
-                  },
-              ),
-              TextSpan(
-                text: revokerInfoStrSegments.last,
+              Text(
+                ' ' + revokerInfoStrSegments.last,
                 style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
               ),
             ],
+          ),
+        );
+      } else {
+        textWidget = Container(
+          constraints: BoxConstraints(
+            maxWidth: 1.sw - 130.w,
+          ),
+          child: RichText(
+            text: TextSpan(
+              text: revokerInfoStrSegments.first,
+              style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
+              children: [
+                TextSpan(
+                  text: ' ${revokerInfoStrSegments.elementAt(1)} ',
+                  style: TextStyle(
+                      color: Color(0xFF006DFA),
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      widget.onTapRevokerCallback
+                          ?.call(revokedInfoMap['revoke_user_id']);
+                    },
+                ),
+                TextSpan(
+                  text: revokerInfoStrSegments.last,
+                  style: TextStyle(color: Color(0xFF666666), fontSize: 15.sp),
+                ),
+              ],
+            ),
           ),
         );
       }
