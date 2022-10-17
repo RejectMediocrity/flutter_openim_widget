@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_openim_widget/src/chat_video_player.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -291,6 +292,7 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
   Widget _buildPageView() => GestureDetector(
         onTap: widget.onTap ?? close,
         child: ExtendedImageGesturePageView.builder(
+          scrollDirection: Axis.horizontal,
           reverse: widget.showMenu == null ? true : false,
           controller: widget.controller,
           itemCount: picList.length,
