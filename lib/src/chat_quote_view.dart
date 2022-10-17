@@ -107,14 +107,17 @@ class ChatQuoteView extends StatelessWidget {
           content = "[${UILocalizations.voice}]";
         } else if (quoteMessage.contentType == MessageType.revoke) {
           content = "${UILocalizations.revokedAMsg}";
-        }else if(quoteMessage.contentType == MessageType.custom){
+        } else if (quoteMessage.contentType == MessageType.advancedRevoke) {
+          content = "${UILocalizations.revokedAMsg}";
+        } else if (quoteMessage.contentType == MessageType.custom) {
           String data = quoteMessage.customElem?.data ?? "";
           Map<String, dynamic> map = json.decode(data);
           String type = map["type"];
           if (type == "cloud_doc" ||
               type == "folderMessage" ||
               type == "cloud_excel") {
-            CloudDocMessageModel model = CloudDocMessageModel.fromJson(map["data"]);
+            CloudDocMessageModel model =
+                CloudDocMessageModel.fromJson(map["data"]);
             content = '[${model.permission?.title ?? ""}]';
           }
         }
@@ -123,7 +126,7 @@ class ChatQuoteView extends StatelessWidget {
     String uidString = "";
     if (content != null && content.isNotEmpty) {
       uidString =
-          '${CommonUtil.replaceAtMsgIdWithNickName(content: content, atUserNameMappingMap: allAtMap ?? {},atUserInfo: message.atElem?.atUsersInfo)}';
+          '${CommonUtil.replaceAtMsgIdWithNickName(content: content, atUserNameMappingMap: allAtMap ?? {}, atUserInfo: message.atElem?.atUsersInfo)}';
     }
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

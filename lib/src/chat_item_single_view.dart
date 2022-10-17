@@ -131,6 +131,7 @@ class ChatSingleLayout extends StatelessWidget {
                       checked: checked,
                       showRadio: showRadio,
                       enable: messageType != MessageType.revoke &&
+                          messageType != MessageType.advancedRevoke &&
                           messageType != MessageType.voice &&
                           !isHintMsg,
                     ),

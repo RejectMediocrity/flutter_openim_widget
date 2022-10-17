@@ -1557,8 +1557,9 @@ class _ChatItemViewState extends State<ChatItemView> {
                   [],
               isSender: widget.message.sendID == OpenIM.iMManager.uid);
         },
-        enableMultiSel:
-            widget.message.contentType != MessageType.revoke && !isHintMsg,
+        enableMultiSel: widget.message.contentType != MessageType.revoke &&
+            widget.message.contentType != MessageType.advancedRevoke &&
+            !isHintMsg,
         messageType: widget.message.contentType,
         resendMsg: widget.resendMsg,
         groupHaveReadCount:
@@ -1603,7 +1604,8 @@ class _ChatItemViewState extends State<ChatItemView> {
   Widget? _buildFaceReplyView() {
     ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
     if (widget.message.ex != null &&
-        widget.message.contentType != MessageType.revoke) {
+        widget.message.contentType != MessageType.revoke &&
+        widget.message.contentType != MessageType.advancedRevoke) {
       try {
         var obj = json.decode(widget.message.ex ?? "");
         if (obj is Map) {
@@ -1869,12 +1871,15 @@ class _ChatItemViewState extends State<ChatItemView> {
           widget.message.contentType == MessageType.quote;
 
   bool get _showDelMenu =>
-      widget.enabledDelMenu ?? widget.message.contentType != MessageType.revoke;
+      widget.enabledDelMenu ??
+      (widget.message.contentType != MessageType.revoke &&
+          widget.message.contentType != MessageType.advancedRevoke);
 
   bool get _showForwardMenu =>
       widget.enabledForwardMenu ??
       widget.message.contentType != MessageType.voice &&
           widget.message.contentType != MessageType.revoke &&
+          widget.message.contentType != MessageType.advancedRevoke &&
           !_isCloudDoc() &&
           !_isDocAssistant();
 
@@ -1923,7 +1928,8 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showRevokeMenu =>
       widget.enabledRevokeMenu ??
       widget.message.sendID == OpenIM.iMManager.uid &&
-          widget.message.contentType != MessageType.revoke && widget.message.contentType != MessageType.advancedRevoke;
+          widget.message.contentType != MessageType.revoke &&
+          widget.message.contentType != MessageType.advancedRevoke;
   bool get _showMemoMenu {
     bool isCustomTypeNeedShow = false;
     if (widget.message.contentType == MessageType.custom) {
@@ -1955,6 +1961,7 @@ class _ChatItemViewState extends State<ChatItemView> {
   bool get _showMultiChoiceMenu =>
       widget.enabledMultiMenu ??
       widget.message.contentType != MessageType.revoke &&
+          widget.message.contentType != MessageType.advancedRevoke &&
           widget.message.contentType != MessageType.voice &&
           !_isCloudDoc() &&
           !_isDocAssistant();
