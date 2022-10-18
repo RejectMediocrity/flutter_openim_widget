@@ -1276,7 +1276,7 @@ class _ChatItemViewState extends State<ChatItemView> {
 
     String recieverDes =
         isSender ? widget.conversationName! : UILocalizations.you;
-    if (permission == 1) {
+    if (recvPermission == 1) {
       permissionStr = recieverDes + UILocalizations.canRead;
     } else {
       permissionStr = recieverDes + UILocalizations.canEdit;
@@ -1364,7 +1364,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                   padding: EdgeInsets.only(bottom: 8),
                   child: Text(
                     remark,
-                    style: TextStyle(color: Color(0xFF666666), fontSize: 14.sp),
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 16.sp),
                   ),
                 ),
               Row(
