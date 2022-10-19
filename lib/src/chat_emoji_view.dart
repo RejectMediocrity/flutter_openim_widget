@@ -173,7 +173,20 @@ const emojiFaces = <String, String>{
   "[公交车]": "emoji_statusbus.png",
   "[飞行中]": "emoji_statusinflight.png",
   "[辛勤营业]": "emoji_generalsun.png",
-  "[天色已晚]": "emoji_generalmoonrest_v2.png"
+  "[天色已晚]": "emoji_generalmoonrest_v2.png",
+  "[别急]": "emoji_bieji.png",
+  "[催一下]": "emoji_cuiyixia.png",
+  "[等结果]": "emoji_dengjieguo.png",
+  "[Easy!]": "emoji_easy.png",
+  "[赶工中]": "emoji_gangongzhong.png",
+  "[马上改]": "emoji_mashanggai.png",
+  "[妙啊]": "emoji_miaoa.png",
+  "[排查中]": "emoji_paichazhong.png",
+  "[稍后回]": "emoji_shaohouhui.png",
+  "[要抓紧]": "emoji_yaozhuajin.png",
+  "[已安排]": "emoji_yianpai.png",
+  "[YYDS]": "emoji_YYDS.png",
+  "[在线等]": "emoji_zaixiandeng.png",
 };
 
 class ChatEmojiView extends StatefulWidget {
