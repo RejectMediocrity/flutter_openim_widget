@@ -237,6 +237,7 @@ class ChatItemView extends StatefulWidget {
   final OnTapRevokerCallback? onTapRevokerCallback;
   final Color? backgroundColor;
   final bool? isShowLongPressPopMenu;
+  final Function(String summaryId)? onTapSummary;
 
   const ChatItemView({
     Key? key,
@@ -318,6 +319,7 @@ class ChatItemView extends StatefulWidget {
     this.onTapRevokerCallback,
     this.backgroundColor,
     this.isShowLongPressPopMenu = true,
+    this.onTapSummary,
   }) : super(key: key);
 
   @override
@@ -1159,6 +1161,11 @@ class _ChatItemViewState extends State<ChatItemView> {
         return "会议已结束 时长$min分钟";
       } else if (type == 'report_week_assistant') {
         return "${opData["user_name"]}${SummaryUtil.workSummaryText(opData['summary_type'])}";
+      } else if (type == 'summary_share') {
+        return _buildCommonItemView(
+          isBubbleBg: false,
+          child: _buildSummaryItem(widget.message.content ?? ""),
+        );
       }
     } catch (e) {
       print(e.toString());
@@ -1464,6 +1471,151 @@ class _ChatItemViewState extends State<ChatItemView> {
         ],
       );
     }
+  }
+
+  Widget _buildSummaryItem(String content) {
+    Map dataMap = json.decode(content);
+    dataMap = json.decode(dataMap["data"]);
+    dataMap = dataMap["data"];
+    String title = dataMap["title"];
+    num goalCount = dataMap["dtl_goal_count"];
+    String dtlOverallTitle = UILocalizations.overallSummary + "：";
+    String dtlOverallContent = UILocalizations.noSummary;
+    if (dataMap["dtl_overall_content"] != null &&
+        dataMap["dtl_overall_content"].length > 0) {
+      dtlOverallContent = dataMap["dtl_overall_content"];
+    }
+    String goalSummaryTitle = UILocalizations.goalSummary + "：";
+    String goalSummaryContent =
+        sprintf(UILocalizations.goalSummaryCountTips, ['${goalCount}']);
+    String summaryId = dataMap["summary_id"] ?? '';
+
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: 1.sw - 130.w,
+        minWidth: 1.sw - 130.w,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Color(0xFFDDDDDD), width: 1.w),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.w),
+            width: 1.sw - 130.w,
+            color: Color(0xFFE6F0FF),
+            child: Text(
+              title,
+              style: TextStyle(
+                  color: Color(0xFF006DFA),
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w600),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10.w),
+            child: Text(
+              dtlOverallTitle,
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+            ),
+          ),
+          SizedBox(
+            height: 5.w,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10.w, right: 6.w),
+            child: Text(
+              dtlOverallContent,
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 14.sp,
+              ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(
+            height: 16.w,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10.w),
+            child: Text(
+              goalSummaryTitle,
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+            ),
+          ),
+          SizedBox(
+            height: 5.w,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10.w, right: 10.w),
+            child: Text(
+              goalSummaryContent,
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 14.sp,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(
+            height: 16.w,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 10.w),
+            child: InkWell(
+              onTap: () {
+                if (widget.onTapSummary != null)
+                  widget.onTapSummary!(summaryId);
+              },
+              highlightColor: Colors.transparent,
+              radius: 0.0,
+              child: Container(
+                constraints: BoxConstraints(minHeight: 32.w, maxWidth: 104.w),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFF006DFA), width: 1.w),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Center(
+                  child: Text(
+                    UILocalizations.seeDetails,
+                    style: TextStyle(
+                        color: Color(0xFF006DFA),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildCommonItemView({

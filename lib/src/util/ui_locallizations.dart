@@ -83,6 +83,10 @@ class UILocalizations {
       "moveToCancel": "Slide your finger up to cancel sending",
       "releaseFingerSend": "Release your finger and cancel sending",
       "archived": 'Archived',
+      "overallSummary": 'Overall summary',
+      "goalSummary": 'Goal summary',
+      "goalSummaryCountTips": 'Include %s goals',
+      "noSummary": "No summary",
     },
     'zh': {
       'top': '置顶',
@@ -153,6 +157,10 @@ class UILocalizations {
       "moveToCancel": "手指上滑，取消发送",
       "releaseFingerSend": "松开手指，取消发送",
       "archived": '已归档',
+      "overallSummary": '整体总结',
+      "goalSummary": '目标总结',
+      "goalSummaryCountTips": '包含%s个目标',
+      "noSummary": "暂无总结",
     },
   };
 
@@ -296,4 +304,13 @@ class UILocalizations {
   static String get releaseFingerSend => _value(key: "releaseFingerSend");
 
   static String get archived => _value(key: "archived");
+
+  static String get overallSummary => _value(key: "overallSummary");
+
+  static String get goalSummary => _value(key: "goalSummary");
+
+  static String get goalSummaryCountTips => _value(key: "goalSummaryCountTips");
+
+  static String get noSummary => _value(key: "noSummary");
+  
 }
