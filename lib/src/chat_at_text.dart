@@ -32,6 +32,7 @@ class ChatAtText extends StatelessWidget {
   final TextSpan? faceReplySpan;
   final bool? isSender;
   final List<AtUserInfo>? atUserInfos;
+  final String? supplementaryInformationWhenPatternCutomType;
   // final TextAlign textAlign;
   ChatAtText({
     Key? key,
@@ -52,6 +53,7 @@ class ChatAtText extends StatelessWidget {
     this.hasReadList,
     this.isSender,
     this.atUserInfos,
+    this.supplementaryInformationWhenPatternCutomType,
   }) : super(key: key);
 
   static var _textStyle = TextStyle(
@@ -336,7 +338,7 @@ class ChatAtText extends StatelessWidget {
                   ? null
                   : (TapGestureRecognizer()
                     ..onTap = () => mapping.onTap!(
-                        _getUrl(value, mapping.type), mapping.type)),
+                        _getUrl(supplementaryInformationWhenPatternCutomType??value, mapping.type), mapping.type)),
             );
           }
         } else {

@@ -52,6 +52,7 @@ class ChatSingleLayout extends StatelessWidget {
   final bool? isSelfChat; // 自己和自己聊天
   final Widget? faceReplyView;
   final Widget? voiceUnreadView;
+  final bool showBorder;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -99,6 +100,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.isSelfChat,
     this.faceReplyView,
     this.voiceUnreadView,
+    this.showBorder = false,
   }) : super(key: key);
 
   @override
@@ -189,7 +191,7 @@ class ChatSingleLayout extends StatelessWidget {
                                         onTap: () => onItemClick?.call(),
                                         child: ChatBubble(
                                           showBorder:
-                                              messageType == MessageType.file,
+                                             showBorder || messageType == MessageType.file,
                                           constraints: BoxConstraints(
                                               minHeight: avatarSize),
                                           bubbleType: isReceivedMsg
