@@ -128,6 +128,17 @@ class ChatQuoteView extends StatelessWidget {
       uidString =
           '${CommonUtil.replaceAtMsgIdWithNickName(content: content, atUserNameMappingMap: allAtMap ?? {}, atUserInfo: message.atElem?.atUsersInfo)}';
     }
+    String chatAtText = "";
+    var quoteMessage = message.quoteElem?.quoteMessage;
+    if (quoteMessage != null &&
+        quoteMessage.ex != null &&
+        quoteMessage.ex!.isNotEmpty) {
+      Map<String, dynamic> exMap = json.decode(quoteMessage.ex!);
+      if (exMap.containsKey('chatAtText')) {
+        chatAtText = exMap['chatAtText'];
+      }
+    }
+    
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
@@ -146,7 +157,9 @@ class ChatQuoteView extends StatelessWidget {
             ),
             Flexible(
               child: ChatAtText(
-                text: ' ${UILocalizations.reply} $name：$uidString',
+                text: chatAtText.isNotEmpty
+                    ? chatAtText
+                    : ' ${UILocalizations.reply} $name：$uidString',
                 allAtMap: allAtMap ?? {},
                 textStyle: TextStyle(
                   fontSize: 13.sp,

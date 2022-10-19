@@ -241,6 +241,8 @@ class ChatItemView extends StatefulWidget {
   final Function(int index)? onClickVoice;
   final Widget? fileIcon;
   final OnTapRevokerCallback? onTapRevokerCallback;
+  final Color? backgroundColor;
+  final bool? isShowLongPressPopMenu;
 
   const ChatItemView({
     Key? key,
@@ -320,6 +322,8 @@ class ChatItemView extends StatefulWidget {
     this.onClickVoice,
     this.fileIcon,
     this.onTapRevokerCallback,
+    this.backgroundColor,
+    this.isShowLongPressPopMenu = true,
   }) : super(key: key);
 
   @override
@@ -405,7 +409,9 @@ class _ChatItemViewState extends State<ChatItemView> {
     // if (needHideMessage()) return Container();
     return FocusDetector(
       child: Container(
-        color: _checked ? Color(0xFFF9F9F9) : Colors.white,
+        color: _checked
+            ? Color(0xFFF9F9F9)
+            : (widget.backgroundColor ?? Colors.white),
         padding: widget.padding ??
             EdgeInsets.fromLTRB(
               widget.multiSelMode && !_isHintMsg ? 0 : 22.w,
@@ -1503,7 +1509,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         child: child,
         msgId: widget.message.clientMsgID!,
         index: widget.index,
-        menuBuilder: _menuBuilder,
+        menuBuilder: (widget.isShowLongPressPopMenu ?? true) ? _menuBuilder : () {
+          return Container();
+        },
         onItemClick: () {
           widget.onItemClick?.call(widget.message);
         },
