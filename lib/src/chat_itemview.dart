@@ -225,13 +225,19 @@ class ChatItemView extends StatefulWidget {
   final int? memberCount;
   final Function()? onTapReadView;
   final int? hasReadCount;
-  final Function(String emoji, int index, {bool? isResignReply})? onReplayWithFace;
+  final Function(String emoji, int index, {bool? isResignReply})?
+      onReplayWithFace;
   final Function(String uid)? onTapUser;
   final Function(int index)? onTapUnShowReplyUser;
   final bool isVoiceUnread;
   final bool groupArchived;
   final Function(String userId)? onTapDocOperator;
-  final Function({String? padUrl, String? code, bool? isFolder, int? type, String? title})? onTapDocUrl;
+  final Function(
+      {String? padUrl,
+      String? code,
+      bool? isFolder,
+      int? type,
+      String? title})? onTapDocUrl;
   final Function(int index)? onClickVoice;
   final Widget? fileIcon;
   final OnTapRevokerCallback? onTapRevokerCallback;
@@ -382,7 +388,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         type == MessageType.memberEnterNotification ||
         type == MessageType.memberQuitNotification ||
         type == MessageType.memberKickedNotification;
-    bool friendHandle = widget.message.contentType == MessageType.friendAddedNotification;
+    bool friendHandle =
+        widget.message.contentType == MessageType.friendAddedNotification;
     bool profile = widget.message.contentType == 1398;
     if ((isFullGroup && isHideType) || friendHandle || profile) return true;
     return false;
@@ -405,7 +412,9 @@ class _ChatItemViewState extends State<ChatItemView> {
     // if (needHideMessage()) return Container();
     return FocusDetector(
       child: Container(
-        color: _checked ? Color(0xFFF9F9F9) : (widget.backgroundColor ?? Colors.white),
+        color: _checked
+            ? Color(0xFFF9F9F9)
+            : (widget.backgroundColor ?? Colors.white),
         padding: widget.padding ??
             EdgeInsets.fromLTRB(
               widget.multiSelMode && !_isHintMsg ? 0 : 22.w,
@@ -480,7 +489,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     // bool show = didExceedMaxLines &&
     bool show = didExceedMaxLines(widget.message) &&
         widget.isExpanded == false &&
-        (widget.message.contentType == MessageType.text || widget.message.contentType == MessageType.quote);
+        (widget.message.contentType == MessageType.text ||
+            widget.message.contentType == MessageType.quote);
     Widget child = show
         ? ConstrainedBox(
             child: bubleView,
@@ -624,7 +634,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         fit: BoxFit.fitWidth,
       );
     } else {
-      final Uri fileUri = imageDirectory != null ? Uri.parse(imageDirectory! + uri.toString()) : uri;
+      final Uri fileUri = imageDirectory != null
+          ? Uri.parse(imageDirectory! + uri.toString())
+          : uri;
       if (fileUri.scheme == 'http' || fileUri.scheme == 'https') {
         return Image.network(
           uri.toString(),
@@ -644,7 +656,9 @@ class _ChatItemViewState extends State<ChatItemView> {
   Widget? _buildMarkDownWidget(String text) {
     markDownContent = replaceSpecialChar(text);
     Widget content = Container(
-      constraints: _isTableElement ? BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w) : BoxConstraints(maxWidth: 0.65.sw),
+      constraints: _isTableElement
+          ? BoxConstraints(maxWidth: 0.65.sw, maxHeight: 200.w)
+          : BoxConstraints(maxWidth: 0.65.sw),
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: MarkdownBody(
@@ -675,7 +689,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           },
           onTapLink: (String text, String? href, String title) {
             print(text);
-            widget.onTapMarkDown!(_isTableElement, href, content: markDownContent);
+            widget.onTapMarkDown!(_isTableElement, href,
+                content: markDownContent);
           },
         ),
       ),
@@ -689,7 +704,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 //     ?
                 GestureDetector(
               onTap: () {
-                widget.onTapMarkDown!(_isTableElement, null, content: markDownContent);
+                widget.onTapMarkDown!(_isTableElement, null,
+                    content: markDownContent);
               },
               child: content,
             )
@@ -747,11 +763,13 @@ class _ChatItemViewState extends State<ChatItemView> {
         child,
         GestureDetector(
           onTap: () {
-            widget.onTapMarkDown!(_isTableElement, null, content: markDownContent);
+            widget.onTapMarkDown!(_isTableElement, null,
+                content: markDownContent);
           },
           child: Padding(
             padding: EdgeInsets.only(right: 45.w),
-            child: ImageUtil.assetImage("msg_but_excel_full", width: 20.w, height: 20.w),
+            child: ImageUtil.assetImage("msg_but_excel_full",
+                width: 20.w, height: 20.w),
           ),
         ),
       ]);
@@ -775,7 +793,8 @@ class _ChatItemViewState extends State<ChatItemView> {
                 allAtMap: {},
                 textStyle: widget.textStyle,
                 patterns: widget.patterns,
-                hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadUserIDList,
+                hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                    ?.hasReadUserIDList,
                 isSender: widget.message.sendID == OpenIM.iMManager.uid,
                 atUserInfos: widget.message.atElem?.atUsersInfo,
               ),
@@ -793,7 +812,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
               patterns: widget.patterns,
-              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadUserIDList,
+              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                  ?.hasReadUserIDList,
               isSender: widget.message.sendID == OpenIM.iMManager.uid,
               atUserInfos: widget.message.atElem?.atUsersInfo,
             ),
@@ -837,7 +857,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               duration: sound?.duration,
               onClick: widget.onClickVoice,
               ex: widget.message.ex,
-              voiceUnreadView: widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
+              voiceUnreadView:
+                  widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
             ),
           );
         }
@@ -907,7 +928,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               textStyle: widget.textStyle,
               patterns: widget.patterns,
               maxLines: widget.isExpanded == true ? null : 10,
-              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadUserIDList,
+              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                  ?.hasReadUserIDList,
               isSender: widget.message.sendID == OpenIM.iMManager.uid,
               atUserInfos: widget.message.atElem?.atUsersInfo,
             ),
@@ -957,7 +979,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               onTap: () {
                 widget.onItemClick?.call(widget.message);
               },
-              onTapRevokerCallback: (uid) => widget.onTapRevokerCallback?.call(uid),
+              onTapRevokerCallback: (uid) =>
+                  widget.onTapRevokerCallback?.call(uid),
             ),
             isBubbleBg: true,
           );
@@ -969,14 +992,18 @@ class _ChatItemViewState extends State<ChatItemView> {
             _isHintMsg = true;
             var text;
             if (MessageType.revoke == widget.message.contentType) {
-              var who = _isFromMsg ? widget.message.senderNickname : UILocalizations.you;
+              var who = _isFromMsg
+                  ? widget.message.senderNickname
+                  : UILocalizations.you;
               text = '$who ${UILocalizations.revokeAMsg}';
-            } else if (MessageType.advancedRevoke == widget.message.contentType) {
+            } else if (MessageType.advancedRevoke ==
+                widget.message.contentType) {
               var advancedRevokedInfo;
               if (widget.message.ex!.length > 0) {
                 advancedRevokedInfo = json.decode(widget.message.ex!);
               } else if (widget.message.content!.length > 0) {
-                RevokedInfo revokedInfo = RevokedInfo.fromJson(json.decode(widget.message.content!));
+                RevokedInfo revokedInfo =
+                    RevokedInfo.fromJson(json.decode(widget.message.content!));
                 advancedRevokedInfo = {
                   "revoke_role": revokedInfo.revokerRole,
                   "revoke_user_name": revokedInfo.revokerNickname,
@@ -991,7 +1018,8 @@ class _ChatItemViewState extends State<ChatItemView> {
               var who = advancedRevokedInfo['revoke_user_name'];
               text = '$who ${UILocalizations.revokeAMsg}';
             } else if (MessageType.custom == widget.message.contentType) {
-              Map? map = SummaryUtil.isWorkSummary(widget.message.customElem?.data ?? '');
+              Map? map = SummaryUtil.isWorkSummary(
+                  widget.message.customElem?.data ?? '');
               if (map != null && map['data'] != null) {
                 Map data = map['data'];
                 // 工作总结
@@ -999,12 +1027,18 @@ class _ChatItemViewState extends State<ChatItemView> {
                   showBorder: true,
                   leftBubbleColor: Colors.white,
                   child: ChatAtText(
-                    text: ' @${data["im_user_id"]} ${SummaryUtil.workSummaryText(data['summary_type'])}',
+                    text:
+                        ' @${data["im_user_id"]} ${SummaryUtil.workSummaryText(data['summary_type'])}',
                     maxLines: 10,
                     allAtMap: {data['im_user_id']: data["user_name"]},
                     textStyle: widget.textStyle,
-                    atUserInfos: [AtUserInfo(atUserID: data['im_user_id'], groupNickname: data["user_name"])],
-                    supplementaryInformationWhenPatternCutomType: jsonEncode(map).toString(),
+                    atUserInfos: [
+                      AtUserInfo(
+                          atUserID: data['im_user_id'],
+                          groupNickname: data["user_name"])
+                    ],
+                    supplementaryInformationWhenPatternCutomType:
+                        jsonEncode(map).toString(),
                     patterns: widget.patterns,
                     isSender: false,
                   ),
@@ -1040,8 +1074,11 @@ class _ChatItemViewState extends State<ChatItemView> {
                 // enabled: false,
                 maxLines: 10,
                 overflow: TextOverflow.ellipsis,
-                textStyle: null != text ? widget.hintTextStyle ?? _hintTextStyle : widget.textStyle,
-                hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadUserIDList,
+                textStyle: null != text
+                    ? widget.hintTextStyle ?? _hintTextStyle
+                    : widget.textStyle,
+                hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                    ?.hasReadUserIDList,
                 atUserInfos: widget.message.atElem?.atUsersInfo,
               ),
             );
@@ -1107,7 +1144,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         });
         return sprintf(UILocalizations.addToGroup, [nickName1, nickName2]);
       } else if (type == "cloud_doc") {
-        return _buildCloudDocChildItem(opData, isSender: widget.message.sendID == OpenIM.iMManager.uid);
+        return _buildCloudDocChildItem(opData,
+            isSender: widget.message.sendID == OpenIM.iMManager.uid);
       } else if (type == "applet") {
       } else if (type == "webhook") {
         _isMarkDownFormat = isMarkDownFormat(opData["data"]);
@@ -1119,7 +1157,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         return opData["data"];
       } else if (type.startsWith('task_')) {
         if ("task_assistant" == type) {
-          TaskAssistantModel assistantModel = TaskAssistantModel.fromJson(opData);
+          TaskAssistantModel assistantModel =
+              TaskAssistantModel.fromJson(opData);
           return _buildCommonItemView(
             isBubbleBg: false,
             child: ChatItemTaskAssistantView(
@@ -1147,7 +1186,9 @@ class _ChatItemViewState extends State<ChatItemView> {
           ),
         );
       } else if (type == "folderMessage" || type == "cloud_excel") {
-        return _buildCloudDocChildItem(opData, isSender: widget.message.sendID == OpenIM.iMManager.uid, type: type);
+        return _buildCloudDocChildItem(opData,
+            isSender: widget.message.sendID == OpenIM.iMManager.uid,
+            type: type);
       } else if (type == "bi_data") {
         return _buildCommonItemView(
           isBubbleBg: true,
@@ -1157,7 +1198,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         String nickName1 = widget.message.senderNickname ?? '';
         return nickName1 + "发起了会议";
       } else if (type.startsWith('end_meeting')) {
-        int min = ((widget.message.sendTime! - opData["beginTime"]) / 1000 ~/ 60 + 1).ceil();
+        int min =
+            ((widget.message.sendTime! - opData["beginTime"]) / 1000 ~/ 60 + 1)
+                .ceil();
         return "会议已结束 时长$min分钟";
       } else if (type == 'report_week_assistant') {
         return "${opData["user_name"]}${SummaryUtil.workSummaryText(opData['summary_type'])}";
@@ -1179,7 +1222,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     js = js["data"]["bi_data"];
     String title = js["card_name"];
     String lastUpdateTime = "最后更新时间：${js["data_updated_at"]}";
-    String publisher = "发布人：${js["creator"]}（${js["push_day"] + js["push_time"]}推送）";
+    String publisher =
+        "发布人：${js["creator"]}（${js["push_day"] + js["push_time"]}推送）";
     // String per_push = "推送频率：${js["push_day"] + js["push_time"]}";
     String snap_url = "${js["card_screenshot_url"]}";
     return Container(
@@ -1190,7 +1234,10 @@ class _ChatItemViewState extends State<ChatItemView> {
         children: [
           Text(
             title,
-            style: TextStyle(color: Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600),
             maxLines: 10,
           ),
           SizedBox(
@@ -1206,7 +1253,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           ),
           GestureDetector(
             onTap: () {
-              if (widget.onTapMarkDownImg != null) widget.onTapMarkDownImg!(snap_url);
+              if (widget.onTapMarkDownImg != null)
+                widget.onTapMarkDownImg!(snap_url);
             },
             child: CachedNetworkImage(
               imageUrl: snap_url,
@@ -1244,7 +1292,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
-  Widget _buildCloudDocChildItem(Map<String, dynamic> map, {required bool isSender, String? type}) {
+  Widget _buildCloudDocChildItem(Map<String, dynamic> map,
+      {required bool isSender, String? type}) {
     CloudDocMessageModel model = CloudDocMessageModel.fromJson(map);
     Map params;
     if (model.params is Map) {
@@ -1252,16 +1301,21 @@ class _ChatItemViewState extends State<ChatItemView> {
     } else {
       params = json.decode(model.params!);
     }
-    String snapShot =
-        params.keys.contains("padSnapshot") && ((params['padSnapshot'] ?? '') as String).isNotEmpty ? params["padSnapshot"] : params["textSnapshot"];
+    String snapShot = params.keys.contains("padSnapshot") &&
+            ((params['padSnapshot'] ?? '') as String).isNotEmpty
+        ? params["padSnapshot"]
+        : params["textSnapshot"];
     String remark = params['remark'] ?? "";
-    int permission = model.permission?.permission ?? 1; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
+    int permission =
+        model.permission?.permission ?? 1; // 0: 不可见 1: 可读 2: 可编辑 3: 所有权限（可设置权限）
     int recvPermission = model.recieverPermission ?? 1;
-    int shareType = model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
+    int shareType =
+        model.permission?.padConfigShareType ?? 0; // 0: 不分享，1:链接分享 2：协作者
     String? permissionStr;
     Widget? permissionWidget;
 
-    String recieverDes = isSender ? widget.conversationName! : UILocalizations.you;
+    String recieverDes =
+        isSender ? widget.conversationName! : UILocalizations.you;
     if (recvPermission == 1) {
       permissionStr = recieverDes + UILocalizations.canRead;
     } else {
@@ -1392,7 +1446,10 @@ class _ChatItemViewState extends State<ChatItemView> {
                 ),
                 padding: EdgeInsets.all(10.w),
                 child: _buildContentView(
-                    snapShot: snapShot, permissionStr: permissionStr, permissionWidget: permissionWidget, isFolder: type == "folderMessage"),
+                    snapShot: snapShot,
+                    permissionStr: permissionStr,
+                    permissionWidget: permissionWidget,
+                    isFolder: type == "folderMessage"),
               ),
             ],
           ),
@@ -1401,7 +1458,11 @@ class _ChatItemViewState extends State<ChatItemView> {
     );
   }
 
-  Widget _buildContentView({bool? isFolder, required String snapShot, String? permissionStr, Widget? permissionWidget}) {
+  Widget _buildContentView(
+      {bool? isFolder,
+      required String snapShot,
+      String? permissionStr,
+      Widget? permissionWidget}) {
     if (isFolder == true) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1492,8 +1553,10 @@ class _ChatItemViewState extends State<ChatItemView> {
 
     return Container(
       constraints: BoxConstraints(
-        maxWidth: 1.sw - 130.w,
-        minWidth: 1.sw - 130.w,
+        maxWidth:
+            DeviceUtil.instance.isPadOrTablet ? .7.sw - 130.w : 1.sw - 130.w,
+        minWidth:
+            DeviceUtil.instance.isPadOrTablet ? .7.sw - 130.w : 1.sw - 130.w,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1506,7 +1569,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         children: [
           Container(
             padding: EdgeInsets.all(8.w),
-            width: 1.sw - 130.w,
+            width: DeviceUtil.instance.isPadOrTablet
+                ? .7.sw - 130.w
+                : 1.sw - 130.w,
             color: Color(0xFFE6F0FF),
             child: Text(
               title,
@@ -1675,21 +1740,32 @@ class _ChatItemViewState extends State<ChatItemView> {
         expandView: (bubleView) {
           return expandView(bubleView,
               text: replaceSpecialChar(widget.message.content ?? ""),
-              textStyle: widget.textStyle ?? TextStyle(color: Color(0xFF111111), fontSize: 16.sp, letterSpacing: .3),
+              textStyle: widget.textStyle ??
+                  TextStyle(
+                      color: Color(0xFF111111),
+                      fontSize: 16.sp,
+                      letterSpacing: .3),
               patterns: widget.patterns,
               allAtMap: widget.allAtMap,
-              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadUserIDList ?? [],
+              hasReadList: widget.message.attachedInfoElem?.groupHasReadInfo
+                      ?.hasReadUserIDList ??
+                  [],
               isSender: widget.message.sendID == OpenIM.iMManager.uid);
         },
-        enableMultiSel: widget.message.contentType != MessageType.revoke && widget.message.contentType != MessageType.advancedRevoke && !isHintMsg,
+        enableMultiSel: widget.message.contentType != MessageType.revoke &&
+            widget.message.contentType != MessageType.advancedRevoke &&
+            !isHintMsg,
         messageType: widget.message.contentType,
         resendMsg: widget.resendMsg,
-        groupHaveReadCount: widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadCount ?? 0,
+        groupHaveReadCount:
+            widget.message.attachedInfoElem?.groupHasReadInfo?.hasReadCount ??
+                0,
         groupMemberCount: widget.memberCount ?? 0,
         onTapReadView: widget.onTapReadView,
         isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
         faceReplyView: _buildFaceReplyView(),
-        voiceUnreadView: widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
+        voiceUnreadView:
+            widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
         showBorder: showBorder,
       );
 
@@ -1723,11 +1799,14 @@ class _ChatItemViewState extends State<ChatItemView> {
 
   Widget? _buildFaceReplyView() {
     ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
-    if (widget.message.ex != null && widget.message.contentType != MessageType.revoke && widget.message.contentType != MessageType.advancedRevoke) {
+    if (widget.message.ex != null &&
+        widget.message.contentType != MessageType.revoke &&
+        widget.message.contentType != MessageType.advancedRevoke) {
       try {
         var obj = json.decode(widget.message.ex ?? "");
         if (obj is Map) {
-          if (obj.keys.contains("quick_reply")) listModel = ChatFaceReplyListModel.fromJson(obj["quick_reply"]);
+          if (obj.keys.contains("quick_reply"))
+            listModel = ChatFaceReplyListModel.fromJson(obj["quick_reply"]);
         } else {
           listModel = ChatFaceReplyListModel.fromJson(obj);
         }
@@ -1740,19 +1819,24 @@ class _ChatItemViewState extends State<ChatItemView> {
         spacing: 6.w,
         runSpacing: 6.w,
         alignment: WrapAlignment.start,
-        children: listModel.dataList.map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e))).toList(),
+        children: listModel.dataList
+            .map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e)))
+            .toList(),
       ),
     );
   }
 
   bool didReplyWithThisEmoji(String emojiName) {
     if (widget.message.ex == null || widget.message.ex!.isEmpty) return false;
-    ChatFaceReplyListModel listModel = ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
+    ChatFaceReplyListModel listModel =
+        ChatFaceReplyListModel.fromString(widget.message.ex ?? "[]");
     if (listModel.dataList.length <= 0) return false;
-    int index = listModel.dataList.indexWhere((element) => element.emoji == emojiName);
+    int index =
+        listModel.dataList.indexWhere((element) => element.emoji == emojiName);
     if (index == -1) return false;
     ChatFaceReplyModel model = listModel.dataList.elementAt(index);
-    int user = model.user!.indexWhere((element) => element.id == OpenIM.iMManager.uid);
+    int user =
+        model.user!.indexWhere((element) => element.id == OpenIM.iMManager.uid);
     return user != -1;
   }
 
@@ -1794,7 +1878,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     ];
     String userStr = '';
     int showCount = 0;
-    List<User> userList = users.where((element) => element.id == OpenIM.iMManager.uid).toList();
+    List<User> userList =
+        users.where((element) => element.id == OpenIM.iMManager.uid).toList();
     if (userList.isNotEmpty) {
       User user = userList.first;
       users.remove(user);
@@ -1811,7 +1896,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp),
       )) {
         // 判断加上剩余显示多少人后缀，是否溢出
-        userStr = userStr.replaceRange(userStr.length - name.length, userStr.length, "");
+        userStr = userStr.replaceRange(
+            userStr.length - name.length, userStr.length, "");
         userStr += "+${users.length - showCount}人";
         if (CommonUtil.didExceedMaxLines(
           content: userStr,
@@ -1826,7 +1912,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           text: "+${users.length - showCount}人",
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              if (widget.onTapUnShowReplyUser != null) widget.onTapUnShowReplyUser!(index);
+              if (widget.onTapUnShowReplyUser != null)
+                widget.onTapUnShowReplyUser!(index);
             },
         ));
         break;
@@ -1844,7 +1931,9 @@ class _ChatItemViewState extends State<ChatItemView> {
       padding: EdgeInsets.symmetric(vertical: 3.w, horizontal: 6.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.w),
-        color: widget.message.sendID == OpenIM.iMManager.uid ? Color(0xFFAFD2FD) : Color(0xFFE4E4E4),
+        color: widget.message.sendID == OpenIM.iMManager.uid
+            ? Color(0xFFAFD2FD)
+            : Color(0xFFE4E4E4),
       ),
       child: RichText(
         maxLines: 1,
@@ -1882,7 +1971,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             ? null
             : (emojiName) {
                 if (widget.onReplayWithFace != null)
-                  widget.onReplayWithFace!(emojiName, widget.index, isResignReply: didReplyWithThisEmoji(emojiName));
+                  widget.onReplayWithFace!(emojiName, widget.index,
+                      isResignReply: didReplyWithThisEmoji(emojiName));
               },
         enableEmoji: !widget.groupArchived,
       );
@@ -1937,7 +2027,11 @@ class _ChatItemViewState extends State<ChatItemView> {
             textStyle: menuTextStyle,
             onTap: widget.onTapRevokeMenu),
         MenuInfo(
-            icon: ImageUtil.menuMemo(), text: UILocalizations.memo, enabled: _showMemoMenu, textStyle: menuTextStyle, onTap: widget.onTapMemoMenu),
+            icon: ImageUtil.menuMemo(),
+            text: UILocalizations.memo,
+            enabled: _showMemoMenu,
+            textStyle: menuTextStyle,
+            onTap: widget.onTapMemoMenu),
         MenuInfo(
           icon: ImageUtil.menuMultiChoice(),
           text: UILocalizations.multiChoice,
@@ -1973,7 +2067,9 @@ class _ChatItemViewState extends State<ChatItemView> {
           widget.message.contentType == MessageType.quote;
 
   bool get _showDelMenu =>
-      widget.enabledDelMenu ?? (widget.message.contentType != MessageType.revoke && widget.message.contentType != MessageType.advancedRevoke);
+      widget.enabledDelMenu ??
+      (widget.message.contentType != MessageType.revoke &&
+          widget.message.contentType != MessageType.advancedRevoke);
 
   bool get _showForwardMenu =>
       widget.enabledForwardMenu ??
@@ -2001,7 +2097,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         String data = widget.message.customElem?.data ?? "";
         Map map = json.decode(data);
         String type = map["type"];
-        return type == "cloud_doc" || type == "folderMessage" || type == "cloud_excel";
+        return type == "cloud_doc" ||
+            type == "folderMessage" ||
+            type == "cloud_excel";
       } catch (e) {
         return false;
       }
@@ -2065,5 +2163,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           !_isCloudDoc() &&
           !_isDocAssistant();
 
-  bool get _showTranslationMenu => widget.enabledTranslationMenu ?? widget.message.contentType == MessageType.text;
+  bool get _showTranslationMenu =>
+      widget.enabledTranslationMenu ??
+      widget.message.contentType == MessageType.text;
 }
