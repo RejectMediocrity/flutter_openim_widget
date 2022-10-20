@@ -1790,7 +1790,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       String data = widget.message.customElem?.data ?? "";
       Map map = json.decode(data);
       String type = map["type"];
-      if (type == "cloud_doc_assistant" || type == "task_assistant") {
+      if (type == "cloud_doc_assistant" || type == "task_assistant" || type == 'report_week_assistant') {
         return;
       }
     }
