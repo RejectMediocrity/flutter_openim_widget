@@ -36,8 +36,10 @@ class RevokeMessageHelper {
   bool canEdit(Message message) {
     String id = message.clientMsgID!;
     if (id.isEmpty) return false;
-    if (message.contentType == MessageType.advancedRevoke &&
-        message.ex!.length > 0) {
+    if (message.contentType == MessageType.advancedRevoke) {
+      if (message.ex == null || message.ex!.isEmpty) {
+        return false;
+      }
       var revokedInfoMap;
       if (message.ex!.length > 0) {
         revokedInfoMap = json.decode(message.ex!);
@@ -47,7 +49,8 @@ class RevokeMessageHelper {
         revokedInfoMap = {
           "revoke_role": revokedInfo.revokerRole,
           "revoke_user_name": revokedInfo.revokerNickname,
-          "revoke_user_id": revokedInfo.revokerID
+          "revoke_user_id": revokedInfo.revokerID,
+          "revoke_time": revokedInfo.revokeTime,
         };
       } else {
         revokedInfoMap = {
@@ -55,32 +58,39 @@ class RevokeMessageHelper {
           "revoke_user_id": "",
         };
       }
-      if (revokedInfoMap['revoke_user_id'] != OpenIM.iMManager.uid ||
-          message.sendID != OpenIM.iMManager.uid) {
+      if (revokedInfoMap['revoke_user_id'] != OpenIM.iMManager.uid) {
         return false;
+      } else {
+        if (message.sendID != OpenIM.iMManager.uid) {
+          return false;
+        } else {
+          int sendTime = revokedInfoMap['revoke_time'];
+          int type = revokedInfoMap['original_content_type'];
+          int du = DateTime.now().millisecondsSinceEpoch - sendTime;
+          return du < 120 * 1000 && type == MessageType.text;
+        }
       }
-      if (message.sendID != OpenIM.iMManager.uid) {
-        return false;
+    } else if (message.contentType == MessageType.revoke) {
+      List elements =
+          revokeInfos.where((element) => element["id"] == id).toList();
+      if (elements.isEmpty) {
+        /// 查找content为ID时的消息是否匹配
+        id = message.content!;
+        if (id.isEmpty) return false;
+        elements = revokeInfos.where((element) => element["id"] == id).toList();
       }
-    }
-    List elements =
-        revokeInfos.where((element) => element["id"] == id).toList();
-    if (elements.isEmpty) {
-      /// 查找content为ID时的消息是否匹配
-      id = message.content!;
-      if (id.isEmpty) return false;
-      elements = revokeInfos.where((element) => element["id"] == id).toList();
+
+      ///
+      if (elements.isEmpty) return false;
+      Map<String, dynamic> info = elements.first;
+      if (info.isNotEmpty) {
+        int sendTime = info['time'];
+        int type = info['type'];
+        int du = DateTime.now().millisecondsSinceEpoch - sendTime;
+        return du < 120 * 1000 && type == MessageType.text;
+      }
     }
 
-    ///
-    if (elements.isEmpty) return false;
-    Map<String, dynamic> info = elements.first;
-    if (info.isNotEmpty) {
-      int sendTime = info['time'];
-      int type = info['type'];
-      int du = DateTime.now().millisecondsSinceEpoch - sendTime;
-      return du < 120 * 1000 && type == MessageType.text;
-    }
     return false;
   }
 
