@@ -12,7 +12,7 @@ class SummaryUtil {
       return '在工作总结里回复了你 立即查看';
     } else {
       //默认是分享 summaryType == 'share'
-      return '分享了一份周报给你 立即查看';
+      return '向你分享了工作总结 立即查看';
     }
   }
 
