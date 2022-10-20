@@ -5,14 +5,14 @@ class SummaryUtil {
   /// 工作总结显示文案
   static String workSummaryText(String? summaryType) {
     if (summaryType == 'ref') {
-      return '引用了你的工作总结，立即查看';
+      return '引用了你的工作总结 立即查看';
     } else if (summaryType == 'self_reply') {
-      return '回复了你的工作总结，立即查看';
+      return '回复了你的工作总结 立即查看';
     } else if (summaryType == 'other_reply') {
-      return '在工作总结里回复了你，立即查看';
+      return '在工作总结里回复了你 立即查看';
     } else {
       //默认是分享 summaryType == 'share'
-      return '分享了一份周报给你，立即查看';
+      return '分享了一份周报给你 立即查看';
     }
   }
 
