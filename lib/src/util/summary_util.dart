@@ -5,7 +5,7 @@ class SummaryUtil {
   /// 工作总结显示文案
   static String workSummaryText(String? summaryType) {
     if (summaryType == 'ref') {
-      return '引用了你的工作总结 立即查看';
+      return '引用了你的工作总结，如未总结，请尽快完成';
     } else if (summaryType == 'self_reply') {
       return '回复了你的工作总结 立即查看';
     } else if (summaryType == 'other_reply') {
