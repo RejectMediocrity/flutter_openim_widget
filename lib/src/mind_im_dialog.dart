@@ -82,33 +82,35 @@ class MindIMDialog extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      if (onTapCancel != null) {
-                        onTapCancel?.call();
-                      } else {
-                        Navigator.of(context).pop(false);
-                      }
-                    },
-                    child: cancelWidget ??
-                        CupertinoDialogAction(
-                          child: Text(
-                            cancelText ?? "取消",
-                            style: ts_333333_16sp,
-                          ),
-                          onPressed: () {
+                tipType == TipType.NoneCancelBtn
+                    ? Container()
+                    : Expanded(
+                        flex: 1,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
                             if (onTapCancel != null) {
                               onTapCancel?.call();
                             } else {
                               Navigator.of(context).pop(false);
                             }
                           },
+                          child: cancelWidget ??
+                              CupertinoDialogAction(
+                                child: Text(
+                                  cancelText ?? "取消",
+                                  style: ts_333333_16sp,
+                                ),
+                                onPressed: () {
+                                  if (onTapCancel != null) {
+                                    onTapCancel?.call();
+                                  } else {
+                                    Navigator.of(context).pop(false);
+                                  }
+                                },
+                              ),
                         ),
-                  ),
-                ),
+                      ),
                 Container(
                   color: Color(0xFFE7E7E7),
                   height: 56.w,
@@ -192,4 +194,5 @@ enum TipType {
   Alert,
   Delete,
   Confirm,
+  NoneCancelBtn,
 }
