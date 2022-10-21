@@ -50,29 +50,33 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
       revokedOver2Min = true;
     }
     if (widget.message.contentType == MessageType.advancedRevoke) {
-      if (widget.message.ex!.length > 0) {
-        revokedInfoMap = json.decode(widget.message.ex!);
-      } else if (widget.message.content!.length > 0) {
-        RevokedInfo revokedInfo =
-            RevokedInfo.fromJson(json.decode(widget.message.content!));
-        revokedInfoMap = {
-          "revoke_role": revokedInfo.revokerRole,
-          "revoke_user_name": revokedInfo.revokerNickname,
-          "revoke_user_id": revokedInfo.revokerID
-        };
-      } else {
-        revokedInfoMap = {
-          "revoke_role": 0,
-        };
-      }
-      revokerRoleLevel = revokedInfoMap['revoke_role'];
-      if (revokerRoleLevel == 2) {
-        revokerInfoStr = sprintf(UILocalizations.revokedAMsgByOwner,
-            ['@${revokedInfoMap['revoke_user_name']}']);
-      } else if (revokerRoleLevel == 3) {
-        revokerInfoStr = sprintf(UILocalizations.revokedAMsgByManager,
-            ['@${revokedInfoMap['revoke_user_name']}']);
-      } else {
+      try {
+        if (widget.message.ex!.length > 0) {
+          revokedInfoMap = json.decode(widget.message.ex!);
+        } else if (widget.message.content!.length > 0) {
+          RevokedInfo revokedInfo =
+              RevokedInfo.fromJson(json.decode(widget.message.content!));
+          revokedInfoMap = {
+            "revoke_role": revokedInfo.revokerRole,
+            "revoke_user_name": revokedInfo.revokerNickname,
+            "revoke_user_id": revokedInfo.revokerID
+          };
+        } else {
+          revokedInfoMap = {
+            "revoke_role": 0,
+          };
+        }
+        revokerRoleLevel = revokedInfoMap['revoke_role'];
+        if (revokerRoleLevel == 2) {
+          revokerInfoStr = sprintf(UILocalizations.revokedAMsgByOwner,
+              ['@${revokedInfoMap['revoke_user_name']}']);
+        } else if (revokerRoleLevel == 3) {
+          revokerInfoStr = sprintf(UILocalizations.revokedAMsgByManager,
+              ['@${revokedInfoMap['revoke_user_name']}']);
+        } else {
+          revokerInfoStr = UILocalizations.revokedAMsg;
+        }
+      } catch (e) {
         revokerInfoStr = UILocalizations.revokedAMsg;
       }
     } else {
