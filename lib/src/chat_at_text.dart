@@ -292,7 +292,12 @@ class ChatAtText extends StatelessWidget {
             if (startPos > 0) {
               if (text.substring(startPos, startPos + matchText.length) ==
                       matchText ||
-                  (!CommonUtil.isDigit(
+                  (text
+                              .substring(startPos + matchText.length,
+                                  startPos + matchText.length + 1)
+                              .length >
+                          startPos + matchText.length + 1 &&
+                      !CommonUtil.isDigit(
                           s: text.substring(startPos - 1, startPos)) &&
                       !CommonUtil.isDigit(
                           s: text.substring(startPos + matchText.length,
