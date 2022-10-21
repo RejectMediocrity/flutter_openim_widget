@@ -45,10 +45,11 @@ class RevokeMessageHelper {
           RevokedInfo revokedInfo =
               RevokedInfo.fromJson(json.decode(message.content!));
           revokedInfoMap = {
+            "original_content_type": revokedInfo.sourceContentType,
             "revoke_role": revokedInfo.revokerRole,
             "revoke_user_name": revokedInfo.revokerNickname,
             "revoke_user_id": revokedInfo.revokerID,
-            "revoke_time": revokedInfo.revokeTime,
+            "revoke_time": revokedInfo.revokeTimeMillisecond,
           };
         } else {
           revokedInfoMap = {
@@ -56,9 +57,14 @@ class RevokeMessageHelper {
             "revoke_user_id": "",
           };
         }
+        // 撤回者不是自己不不允许重新编辑
         if (revokedInfoMap['revoke_user_id'] != OpenIM.iMManager.uid) {
           return false;
         } else {
+          // 撤回者是自己但不是自己发送的消息也不允许重新编辑
+          if (message.sendID != OpenIM.iMManager.uid) {
+            return false;
+          }
           int sendTime = revokedInfoMap['revoke_time'];
           int type = revokedInfoMap['original_content_type'];
           int du = DateTime.now().millisecondsSinceEpoch - sendTime;
