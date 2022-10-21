@@ -130,15 +130,15 @@ class ChatQuoteView extends StatelessWidget {
     }
     String chatAtText = "";
     var quoteMessage = message.quoteElem?.quoteMessage;
-    if (quoteMessage != null &&
-        quoteMessage.ex != null &&
-        quoteMessage.ex!.isNotEmpty) {
-      Map<String, dynamic> exMap = json.decode(quoteMessage.ex!);
-      if (exMap.containsKey('chatAtText')) {
-        chatAtText = exMap['chatAtText'];
-      }
+    if (quoteMessage != null && quoteMessage.ex?.isNotEmpty == true) {
+      try {
+        Map exMap = json.decode(quoteMessage.ex!);
+        if (exMap.containsKey('chatAtText')) {
+          chatAtText = exMap['chatAtText'];
+        }
+      } catch (e) {}
     }
-    
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTap,

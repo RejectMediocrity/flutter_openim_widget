@@ -290,11 +290,14 @@ class ChatAtText extends StatelessWidget {
             /// 增加优化 | 识别的电话号码规则，必须满足11位长度
             int startPos = text.indexOf(matchText);
             if (startPos > 0) {
-              if (!CommonUtil.isDigit(
-                      s: text.substring(startPos - 1, startPos)) &&
-                  !CommonUtil.isDigit(
-                      s: text.substring(startPos + matchText.length,
-                          startPos + matchText.length + 1))) {
+              if (text.substring(startPos, startPos + matchText.length) ==
+                      matchText ||
+                  ((text.length > startPos + matchText.length) &&
+                      !CommonUtil.isDigit(
+                          s: text.substring(startPos - 1, startPos)) &&
+                      !CommonUtil.isDigit(
+                          s: text.substring(startPos + matchText.length,
+                              startPos + matchText.length + 1)))) {
                 inlineSpan = TextSpan(
                   text: "$matchText",
                   style: mapping.style != null ? mapping.style : style,
@@ -311,9 +314,10 @@ class ChatAtText extends StatelessWidget {
                 return '';
               }
             } else {
-              if (text == matchText || !CommonUtil.isDigit(
-                  s: text.substring(startPos + matchText.length,
-                      startPos + matchText.length + 1))) {
+              if (text == matchText ||
+                  !CommonUtil.isDigit(
+                      s: text.substring(startPos + matchText.length,
+                          startPos + matchText.length + 1))) {
                 inlineSpan = TextSpan(
                   text: "$matchText",
                   style: mapping.style != null ? mapping.style : style,
@@ -338,7 +342,11 @@ class ChatAtText extends StatelessWidget {
                   ? null
                   : (TapGestureRecognizer()
                     ..onTap = () => mapping.onTap!(
-                        _getUrl(supplementaryInformationWhenPatternCutomType??value, mapping.type), mapping.type)),
+                        _getUrl(
+                            supplementaryInformationWhenPatternCutomType ??
+                                value,
+                            mapping.type),
+                        mapping.type)),
             );
           }
         } else {
