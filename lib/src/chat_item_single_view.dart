@@ -53,6 +53,7 @@ class ChatSingleLayout extends StatelessWidget {
   final Widget? faceReplyView;
   final Widget? voiceUnreadView;
   final bool showBorder;
+  final bool isSummaryShareMsg;
   const ChatSingleLayout({
     Key? key,
     required this.child,
@@ -101,6 +102,7 @@ class ChatSingleLayout extends StatelessWidget {
     this.faceReplyView,
     this.voiceUnreadView,
     this.showBorder = false,
+    this.isSummaryShareMsg = false,
   }) : super(key: key);
 
   @override
@@ -135,7 +137,8 @@ class ChatSingleLayout extends StatelessWidget {
                       enable: messageType != MessageType.revoke &&
                           messageType != MessageType.advancedRevoke &&
                           messageType != MessageType.voice &&
-                          !isHintMsg,
+                          !isHintMsg &&
+                          !isSummaryShareMsg,
                     ),
                   if (!showRadio)
 
@@ -190,8 +193,8 @@ class ChatSingleLayout extends StatelessWidget {
                                     ? GestureDetector(
                                         onTap: () => onItemClick?.call(),
                                         child: ChatBubble(
-                                          showBorder:
-                                             showBorder || messageType == MessageType.file,
+                                          showBorder: showBorder ||
+                                              messageType == MessageType.file,
                                           constraints: BoxConstraints(
                                               minHeight: avatarSize),
                                           bubbleType: isReceivedMsg

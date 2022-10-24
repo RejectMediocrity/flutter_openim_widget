@@ -87,6 +87,7 @@ class UILocalizations {
       "goalSummary": 'Goal summary',
       "goalSummaryCountTips": 'Include %s goals',
       "noSummary": "No summary",
+      "workSummary": "Work summary",
     },
     'zh': {
       'top': '置顶',
@@ -161,6 +162,7 @@ class UILocalizations {
       "goalSummary": '目标总结',
       "goalSummaryCountTips": '包含%s个目标',
       "noSummary": "暂无总结",
+      "workSummary": "工作总结",
     },
   };
 
@@ -312,5 +314,7 @@ class UILocalizations {
   static String get goalSummaryCountTips => _value(key: "goalSummaryCountTips");
 
   static String get noSummary => _value(key: "noSummary");
-  
+
+  static String get workSummary => _value(key: "workSummary");
+
 }

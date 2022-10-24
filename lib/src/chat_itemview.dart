@@ -1780,6 +1780,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         voiceUnreadView:
             widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
         showBorder: showBorder,
+        isSummaryShareMsg: SummaryUtil.isSummaryShare(widget.message),
       );
 
   Widget _buildVoiceUnread() {
@@ -2098,7 +2099,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           widget.message.contentType != MessageType.revoke &&
           widget.message.contentType != MessageType.advancedRevoke &&
           !_isCloudDoc() &&
-          !_isDocAssistant();
+          !_isDocAssistant() &&
+          !SummaryUtil.isSummaryShare(widget.message);
 
   bool get _showReplyMenu {
     return widget.enabledReplyMenu ??
@@ -2109,7 +2111,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             widget.message.contentType == MessageType.location ||
             widget.message.contentType == MessageType.quote ||
             widget.message.contentType == MessageType.voice ||
-            _isCloudDoc();
+            _isCloudDoc() ||
+            SummaryUtil.isSummaryShare(widget.message);
   }
 
   bool _isCloudDoc() {
@@ -2142,11 +2145,22 @@ class _ChatItemViewState extends State<ChatItemView> {
     return false;
   }
 
-  bool get _showRevokeMenu =>
-      widget.enabledRevokeMenu ??
-      widget.message.sendID == OpenIM.iMManager.uid &&
+  bool get _showRevokeMenu {
+    bool isShowRevokeMenu = false;
+    if (widget.enabledRevokeMenu != null) {
+      if (widget.enabledRevokeMenu == true &&
+          !SummaryUtil.isSummaryShare(widget.message)) {
+        isShowRevokeMenu = true;
+      }
+    } else {
+      isShowRevokeMenu = widget.message.sendID == OpenIM.iMManager.uid &&
           widget.message.contentType != MessageType.revoke &&
-          widget.message.contentType != MessageType.advancedRevoke;
+          widget.message.contentType != MessageType.advancedRevoke &&
+          !SummaryUtil.isSummaryShare(widget.message);
+    }
+
+    return isShowRevokeMenu;
+  }
 
   bool get _showMemoMenu {
     bool isCustomTypeNeedShow = false;
@@ -2182,7 +2196,8 @@ class _ChatItemViewState extends State<ChatItemView> {
           widget.message.contentType != MessageType.advancedRevoke &&
           widget.message.contentType != MessageType.voice &&
           !_isCloudDoc() &&
-          !_isDocAssistant();
+          !_isDocAssistant() &&
+          !SummaryUtil.isSummaryShare(widget.message);
 
   bool get _showTranslationMenu =>
       widget.enabledTranslationMenu ??

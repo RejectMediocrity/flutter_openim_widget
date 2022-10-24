@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_openim_widget/flutter_openim_widget.dart';
+
 class SummaryUtil {
 
   /// 工作总结显示文案
@@ -41,5 +43,19 @@ class SummaryUtil {
     } on Exception catch (e) {
       return null;
     }
+  }
+
+  static bool isSummaryShare(Message message) {
+    if (message.contentType == MessageType.custom) {
+      try {
+        String data = message.customElem?.data ?? "";
+        Map map = json.decode(data);
+        String type = map["type"];
+        return type == "summary_share";
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
   }
 }
