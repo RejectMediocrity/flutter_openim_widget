@@ -1724,7 +1724,9 @@ class _ChatItemViewState extends State<ChatItemView> {
         timeView: widget.timeStr == null ? null : _buildTimeView(),
         isBubbleBg: isBubbleBg,
         isHintMsg: isHintMsg,
-        quoteView: widget.message.contentType == MessageType.quote
+        quoteView: widget.message.contentType == MessageType.quote ||
+                (widget.message.contentType == MessageType.advancedRevoke &&
+                    widget.message.quoteElem != null)
             ? ChatQuoteView(
                 message: widget.message,
                 onTap: widget.onTapQuoteMsg,
@@ -1790,7 +1792,9 @@ class _ChatItemViewState extends State<ChatItemView> {
       String data = widget.message.customElem?.data ?? "";
       Map map = json.decode(data);
       String type = map["type"];
-      if (type == "cloud_doc_assistant" || type == "task_assistant" || type == 'report_week_assistant') {
+      if (type == "cloud_doc_assistant" ||
+          type == "task_assistant" ||
+          type == 'report_week_assistant') {
         return;
       }
     }

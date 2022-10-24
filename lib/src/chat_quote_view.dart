@@ -23,7 +23,9 @@ class ChatQuoteView extends StatelessWidget {
     var child;
     var name;
     var content;
-    if (message.contentType == MessageType.quote) {
+    if (message.contentType == MessageType.quote ||
+        (message.contentType == MessageType.advancedRevoke &&
+            message.quoteElem != null)) {
       var quoteMessage = message.quoteElem?.quoteMessage;
       if (null != quoteMessage) {
         name = quoteMessage.senderNickname;
