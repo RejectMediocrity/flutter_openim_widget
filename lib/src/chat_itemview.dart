@@ -1207,6 +1207,7 @@ class _ChatItemViewState extends State<ChatItemView> {
       } else if (type == 'summary_share') {
         return _buildCommonItemView(
           isBubbleBg: false,
+          isShowFaceReplyInContent: true,
           child: _buildSummaryItem(widget.message.content ?? ""),
         );
       }
@@ -1675,9 +1676,18 @@ class _ChatItemViewState extends State<ChatItemView> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10.w,
+          Padding(
+            padding: EdgeInsets.only(
+                left: 10.w,
+                top: 10.w,
+                right: 10.w,
+                bottom:
+                    getChatFaceReplyListModel().dataList.isEmpty ? 0.w : 10.w),
+            child: _buildFaceReplyView(),
           ),
+          // SizedBox(
+          //   height: 10.w,
+          // ),
         ],
       ),
     );
@@ -1688,6 +1698,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     bool isBubbleBg = true,
     bool isHintMsg = false,
     bool showBorder = false,
+    bool isShowFaceReplyInContent = false,
     Color? leftBubbleColor,
   }) =>
       ChatSingleLayout(
@@ -1765,7 +1776,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         groupMemberCount: widget.memberCount ?? 0,
         onTapReadView: widget.onTapReadView,
         isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
-        faceReplyView: _buildFaceReplyView(),
+        faceReplyView: isShowFaceReplyInContent ? null : _buildFaceReplyView(),
         voiceUnreadView:
             widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
         showBorder: showBorder,
@@ -1802,6 +1813,22 @@ class _ChatItemViewState extends State<ChatItemView> {
   }
 
   Widget? _buildFaceReplyView() {
+    ChatFaceReplyListModel listModel = getChatFaceReplyListModel();
+    if (listModel.dataList.length <= 0) return null;
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: .65.sw),
+      child: Wrap(
+        spacing: 6.w,
+        runSpacing: 6.w,
+        alignment: WrapAlignment.start,
+        children: listModel.dataList
+            .map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e)))
+            .toList(),
+      ),
+    );
+  }
+
+  ChatFaceReplyListModel getChatFaceReplyListModel() {
     ChatFaceReplyListModel listModel = ChatFaceReplyListModel(dataList: []);
     if (widget.message.ex != null &&
         widget.message.contentType != MessageType.revoke &&
@@ -1816,18 +1843,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         }
       } catch (e) {}
     }
-    if (listModel.dataList.length <= 0) return null;
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: .65.sw),
-      child: Wrap(
-        spacing: 6.w,
-        runSpacing: 6.w,
-        alignment: WrapAlignment.start,
-        children: listModel.dataList
-            .map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e)))
-            .toList(),
-      ),
-    );
+
+    return listModel;
   }
 
   bool didReplyWithThisEmoji(String emojiName) {
