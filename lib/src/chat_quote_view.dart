@@ -121,6 +121,8 @@ class ChatQuoteView extends StatelessWidget {
             CloudDocMessageModel model =
                 CloudDocMessageModel.fromJson(map["data"]);
             content = '[${model.permission?.title ?? ""}]';
+          } else if (type == "summary_share") {
+            content = '[${UILocalizations.workSummary}]';
           }
         }
       }
