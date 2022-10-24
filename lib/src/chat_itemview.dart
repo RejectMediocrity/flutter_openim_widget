@@ -2111,6 +2111,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             widget.message.contentType == MessageType.location ||
             widget.message.contentType == MessageType.quote ||
             widget.message.contentType == MessageType.voice ||
+            widget.message.contentType == MessageType.file ||
             _isCloudDoc() ||
             SummaryUtil.isSummaryShare(widget.message);
   }
