@@ -1726,7 +1726,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         isHintMsg: isHintMsg,
         quoteView: widget.message.contentType == MessageType.quote ||
                 (widget.message.contentType == MessageType.advancedRevoke &&
-                    widget.message.quoteElem != null)
+                    widget.message.quoteElem?.quoteMessage != null)
             ? ChatQuoteView(
                 message: widget.message,
                 onTap: widget.onTapQuoteMsg,
