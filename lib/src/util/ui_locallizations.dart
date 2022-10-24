@@ -130,7 +130,7 @@ class UILocalizations {
       "confirm": "确定",
       "you": "你",
       "revokeAMsg": "撤回了一条消息",
-      "revokedAMsg": "此消息已撤回",
+      "revokedAMsg": "消息已撤回",
       "revokedAMsgByOwner": "此消息已被群主 %s 撤回",
       "revokedAMsgByManager": "此消息已被群管理员 %s 撤回",
       "memoSaved": "已备忘",
@@ -316,5 +316,4 @@ class UILocalizations {
   static String get noSummary => _value(key: "noSummary");
 
   static String get workSummary => _value(key: "workSummary");
-
 }
