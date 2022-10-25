@@ -225,7 +225,7 @@ class ChatItemView extends StatefulWidget {
   final int? memberCount;
   final Function()? onTapReadView;
   final int? hasReadCount;
-  final Function(String emoji, int index, {bool? isResignReply})?
+  final Function(String emoji, int index, Message message, {bool? isResignReply})?
       onReplayWithFace;
   final Function(String uid)? onTapUser;
   final Function(int index)? onTapUnShowReplyUser;
@@ -1876,6 +1876,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                     widget.onReplayWithFace!(
                       replay.emoji!,
                       widget.index,
+                      widget.message,
                       isResignReply: didReplyWithThisEmoji(replay.emoji!),
                     );
                 },
@@ -1993,7 +1994,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             ? null
             : (emojiName) {
                 if (widget.onReplayWithFace != null)
-                  widget.onReplayWithFace!(emojiName, widget.index,
+                  widget.onReplayWithFace!(emojiName, widget.index, widget.message,
                       isResignReply: didReplyWithThisEmoji(emojiName));
               },
         enableEmoji: !widget.groupArchived,

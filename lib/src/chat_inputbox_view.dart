@@ -34,6 +34,8 @@ class ChatInputBoxView extends StatefulWidget {
     this.hideInputBox,
     this.selectedRecentlyAssetCount,
     this.onSubmittedAssets,
+    this.isOnlyNeedInputBox = false,
+    this.isNeedDisposeControllerAndFocusNodeAfterUse = true,
   }) : super(key: key);
   final Function() atAction;
   final Function()? picAction;
@@ -63,6 +65,8 @@ class ChatInputBoxView extends StatefulWidget {
   final Function(bool visible)? voiceViewState;
   final bool? hideInputBox;
   final Function()? onSubmittedAssets;
+  final bool isOnlyNeedInputBox;
+  final bool isNeedDisposeControllerAndFocusNodeAfterUse;
 
   @override
   _ChatInputBoxViewState createState() => _ChatInputBoxViewState();
@@ -100,14 +104,16 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
     widget.focusNode?.addListener(() {
       if (!mounted) return;
       if (widget.focusNode!.hasFocus) {
-        setState(() {
-          _emojiVisible = false;
-          widget.emojiViewState!(_emojiVisible);
-          _assetPickerVisible = false;
-          widget.assetPickerViewState!(_assetPickerVisible);
-          _voiceVisible = false;
-          widget.voiceViewState!(_voiceVisible);
-        });
+        if (!widget.isOnlyNeedInputBox) {
+          setState(() {
+            _emojiVisible = false;
+            widget.emojiViewState!(_emojiVisible);
+            _assetPickerVisible = false;
+            widget.assetPickerViewState!(_assetPickerVisible);
+            _voiceVisible = false;
+            widget.voiceViewState!(_voiceVisible);
+          });
+        }
       }
     });
 
@@ -137,7 +143,8 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   @override
   void dispose() {
     _controller.dispose();
-    if (!DeviceUtil.instance.isPadOrTablet) {
+    if (!DeviceUtil.instance.isPadOrTablet &&
+        widget.isNeedDisposeControllerAndFocusNodeAfterUse) {
       widget.controller?.dispose();
       widget.focusNode?.dispose();
     }
@@ -264,121 +271,134 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
   Row buildBottomBar() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _showOrHideAssetPickerView(true);
-              _emojiVisible = !_emojiVisible;
-              widget.emojiViewState!(_emojiVisible);
-              _voiceVisible = false;
-              widget.voiceViewState!(_voiceVisible);
-              if (_emojiVisible) {
-                unfocus();
-              } else {
-                focus();
-              }
-            });
-          },
-          child: ImageUtil.assetImage(
-            _emojiVisible ? "Inputbox_but_emoji_high" : "Inputbox_but_emoji",
-            width: 20,
-            height: 20,
-          ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        Visibility(
-          child: GestureDetector(
-            onTap: widget.atAction,
-            child: ImageUtil.assetImage(
-              "Inputbox_but_at",
-              width: 20,
-              height: 20,
-            ),
-          ),
-          visible: widget.isGroupChat == true,
-        ),
-        Visibility(
-          child: SizedBox(
-            width: 30,
-          ),
-          visible: widget.isGroupChat == true,
-        ),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _emojiVisible = false;
-              widget.emojiViewState!(_emojiVisible);
-              _assetPickerVisible = false;
-              widget.assetPickerViewState!(_assetPickerVisible);
-              _voiceVisible = !_voiceVisible;
-              widget.voiceViewState!(_voiceVisible);
-              if (_voiceVisible) {
-                unfocus();
-              } else {
-                focus();
-              }
-            });
-          },
-          child: ImageUtil.assetImage(
-              _voiceVisible
-                  ? "ic_inputbox_but_recording_selected"
-                  : "ic_inputbox_but_recording",
-              width: 20,
-              height: 20),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        GestureDetector(
-          onTap: () {
-            if (widget.picAction == null) {
-              _showOrHideAssetPickerView(false);
-            } else {
-              widget.picAction!();
-            }
-          },
-          child: ImageUtil.assetImage(
-            _assetPickerVisible
-                ? "Inputbox_but_pic_highlight"
-                : "Inputbox_but_pic",
-            width: 20,
-            height: 20,
-          ),
-        ),
-        Expanded(
-          child: Container(),
-        ),
-        GestureDetector(
-          onTap: () {
-            if (_assetPickerVisible &&
-                (widget.selectedRecentlyAssetCount ?? 0) > 0) {
-              if (null != widget.onSubmittedAssets) {
-                widget.onSubmittedAssets!();
-                return;
-              }
-            }
+      children: !widget.isOnlyNeedInputBox
+          ? [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showOrHideAssetPickerView(true);
+                    _emojiVisible = !_emojiVisible;
+                    widget.emojiViewState!(_emojiVisible);
+                    _voiceVisible = false;
+                    widget.voiceViewState!(_voiceVisible);
+                    if (_emojiVisible) {
+                      unfocus();
+                    } else {
+                      focus();
+                    }
+                  });
+                },
+                child: ImageUtil.assetImage(
+                  _emojiVisible
+                      ? "Inputbox_but_emoji_high"
+                      : "Inputbox_but_emoji",
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              Visibility(
+                child: GestureDetector(
+                  onTap: widget.atAction,
+                  child: ImageUtil.assetImage(
+                    "Inputbox_but_at",
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+                visible: widget.isGroupChat == true,
+              ),
+              Visibility(
+                child: SizedBox(
+                  width: 30,
+                ),
+                visible: widget.isGroupChat == true,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _emojiVisible = false;
+                    widget.emojiViewState!(_emojiVisible);
+                    _assetPickerVisible = false;
+                    widget.assetPickerViewState!(_assetPickerVisible);
+                    _voiceVisible = !_voiceVisible;
+                    widget.voiceViewState!(_voiceVisible);
+                    if (_voiceVisible) {
+                      unfocus();
+                    } else {
+                      focus();
+                    }
+                  });
+                },
+                child: ImageUtil.assetImage(
+                    _voiceVisible
+                        ? "ic_inputbox_but_recording_selected"
+                        : "ic_inputbox_but_recording",
+                    width: 20,
+                    height: 20),
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (widget.picAction == null) {
+                    _showOrHideAssetPickerView(false);
+                  } else {
+                    widget.picAction!();
+                  }
+                },
+                child: ImageUtil.assetImage(
+                  _assetPickerVisible
+                      ? "Inputbox_but_pic_highlight"
+                      : "Inputbox_but_pic",
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              buildSendBtn(),
+            ]
+          : [
+              Expanded(
+                child: Container(),
+              ),
+              buildSendBtn(),
+            ],
+    );
+  }
 
-            if (!_emojiVisible) focus();
-            if (null != widget.onSubmitted &&
-                null != widget.controller &&
-                widget.controller!.text.trim().isNotEmpty) {
-              widget.onSubmitted!(widget.controller!.text.toString());
-            }
-          },
-          child: ImageUtil.assetImage(
-            (widget.controller!.text.isNotEmpty &&
-                        widget.controller!.text.trim().isNotEmpty) ||
-                    (widget.selectedRecentlyAssetCount ?? 0) > 0
-                ? "Inputbox_but_send"
-                : "Inputbox_but_send_normal",
-            width: 20,
-            height: 20,
-          ),
-        ),
-      ],
+  Widget buildSendBtn() {
+    return GestureDetector(
+      onTap: () {
+        if (_assetPickerVisible &&
+            (widget.selectedRecentlyAssetCount ?? 0) > 0) {
+          if (null != widget.onSubmittedAssets) {
+            widget.onSubmittedAssets!();
+            return;
+          }
+        }
+
+        if (!_emojiVisible) focus();
+        if (null != widget.onSubmitted &&
+            null != widget.controller &&
+            widget.controller!.text.trim().isNotEmpty) {
+          widget.onSubmitted!(widget.controller!.text.toString());
+        }
+      },
+      child: ImageUtil.assetImage(
+        (widget.controller!.text.isNotEmpty &&
+                    widget.controller!.text.trim().isNotEmpty) ||
+                (widget.selectedRecentlyAssetCount ?? 0) > 0
+            ? "Inputbox_but_send"
+            : "Inputbox_but_send_normal",
+        width: 20,
+        height: 20,
+      ),
     );
   }
 
