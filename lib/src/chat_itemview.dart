@@ -243,7 +243,7 @@ class ChatItemView extends StatefulWidget {
   final OnTapRevokerCallback? onTapRevokerCallback;
   final Color? backgroundColor;
   final bool? isShowLongPressPopMenu;
-  final Function(String summaryId, String imUserID)? onTapSummary;
+  final Function(String summaryId, String imUserID, String summaryType)? onTapSummary;
 
   const ChatItemView({
     Key? key,
@@ -1653,7 +1653,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             child: InkWell(
               onTap: () {
                 if (widget.onTapSummary != null)
-                  widget.onTapSummary!(summaryId, message.sendID ?? '');
+                  widget.onTapSummary!(summaryId, message.sendID ?? '', '');
               },
               highlightColor: Colors.transparent,
               radius: 0.0,
