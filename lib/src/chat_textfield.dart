@@ -14,6 +14,7 @@ class ChatTextField extends StatelessWidget {
   final TextStyle? atMeStyle;
   final List<TextInputFormatter>? inputFormatters;
   final String? hintText;
+  final bool autofocus;
   const ChatTextField({
     Key? key,
     this.allAtMap = const {},
@@ -26,6 +27,7 @@ class ChatTextField extends StatelessWidget {
     this.atMeStyle,
     this.inputFormatters,
     this.hintText,
+    this.autofocus = false,
   }) : super(key: key);
 
   @override
@@ -45,7 +47,7 @@ class ChatTextField extends StatelessWidget {
       focusNode: focusNode,
       controller: controller,
       keyboardType: TextInputType.multiline,
-      autofocus: false,
+      autofocus: autofocus,
       minLines: 1,
       maxLines: 5,
       textInputAction: TextInputAction.newline,

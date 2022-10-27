@@ -27,6 +27,7 @@ class ChatInputBoxView extends StatefulWidget {
     this.multiMode = false,
     this.inputFormatters,
     this.hintText,
+    this.autofocus = false,
     this.isGroupChat = false,
     this.emojiViewState,
     this.assetPickerViewState,
@@ -58,6 +59,7 @@ class ChatInputBoxView extends StatefulWidget {
   final bool multiMode;
   final List<TextInputFormatter>? inputFormatters;
   final String? hintText;
+  final bool autofocus;
   final bool? isGroupChat;
   final Function(bool visible)? emojiViewState;
   final Function(bool visible)? assetPickerViewState;
@@ -419,6 +421,7 @@ class _ChatInputBoxViewState extends State<ChatInputBoxView>
             if (null != widget.onSubmitted) widget.onSubmitted!(value);
           },
           hintText: widget.hintText,
+          autofocus: widget.autofocus,
         ));
   }
 
