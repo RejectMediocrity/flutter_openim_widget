@@ -225,8 +225,8 @@ class ChatItemView extends StatefulWidget {
   final int? memberCount;
   final Function()? onTapReadView;
   final int? hasReadCount;
-  final Function(String emoji, int index, Message message, {bool? isResignReply})?
-      onReplayWithFace;
+  final Function(String emoji, int index, Message message,
+      {bool? isResignReply})? onReplayWithFace;
   final Function(String uid)? onTapUser;
   final Function(int index)? onTapUnShowReplyUser;
   final bool isVoiceUnread;
@@ -243,7 +243,7 @@ class ChatItemView extends StatefulWidget {
   final OnTapRevokerCallback? onTapRevokerCallback;
   final Color? backgroundColor;
   final bool? isShowLongPressPopMenu;
-  final Function(String summaryId)? onTapSummary;
+  final Function(String summaryId, String imUserID)? onTapSummary;
 
   const ChatItemView({
     Key? key,
@@ -1208,7 +1208,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         return _buildCommonItemView(
           isBubbleBg: false,
           isShowFaceReplyInContent: true,
-          child: _buildSummaryItem(widget.message.content ?? ""),
+          child: _buildSummaryItem(widget.message),
         );
       }
     } catch (e) {
@@ -1535,7 +1535,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     }
   }
 
-  Widget _buildSummaryItem(String content) {
+  Widget _buildSummaryItem(Message message) {
+    String content = message.content ?? "";
     Map dataMap = json.decode(content);
     dataMap = json.decode(dataMap["data"]);
     dataMap = dataMap["data"];
@@ -1652,7 +1653,7 @@ class _ChatItemViewState extends State<ChatItemView> {
             child: InkWell(
               onTap: () {
                 if (widget.onTapSummary != null)
-                  widget.onTapSummary!(summaryId);
+                  widget.onTapSummary!(summaryId, message.sendID ?? '');
               },
               highlightColor: Colors.transparent,
               radius: 0.0,
@@ -1994,7 +1995,8 @@ class _ChatItemViewState extends State<ChatItemView> {
             ? null
             : (emojiName) {
                 if (widget.onReplayWithFace != null)
-                  widget.onReplayWithFace!(emojiName, widget.index, widget.message,
+                  widget.onReplayWithFace!(
+                      emojiName, widget.index, widget.message,
                       isResignReply: didReplyWithThisEmoji(emojiName));
               },
         enableEmoji: !widget.groupArchived,
