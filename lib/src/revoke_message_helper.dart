@@ -68,7 +68,10 @@ class RevokeMessageHelper {
           int sendTime = revokedInfoMap['revoke_time'];
           int type = revokedInfoMap['original_content_type'];
           int du = DateTime.now().millisecondsSinceEpoch - sendTime;
-          return du < 120 * 1000 && type == MessageType.text;
+          return du < 120 * 1000 &&
+              (type == MessageType.text ||
+                  type == MessageType.at_text ||
+                  type == MessageType.quote);
         }
       } else if (message.contentType == MessageType.revoke) {
         List elements =
@@ -88,7 +91,10 @@ class RevokeMessageHelper {
           int sendTime = info['time'];
           int type = info['type'];
           int du = DateTime.now().millisecondsSinceEpoch - sendTime;
-          return du < 120 * 1000 && type == MessageType.text;
+          return du < 120 * 1000 &&
+              (type == MessageType.text ||
+                  type == MessageType.at_text ||
+                  type == MessageType.quote);
         }
       }
       return false;
@@ -130,7 +136,14 @@ class RevokeMessageHelper {
     if (elements.isEmpty) return null;
     Map<String, dynamic> info = elements.first;
     if (info.isNotEmpty) {
-      return info['content'];
+      String content = info['content'];
+      try {
+        Map cMap = json.decode(content);
+        String text = cMap['text'];
+        return text;
+      } catch (e) {
+        return content;
+      }
     }
     return null;
   }
