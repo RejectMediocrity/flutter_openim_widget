@@ -243,7 +243,8 @@ class ChatItemView extends StatefulWidget {
   final OnTapRevokerCallback? onTapRevokerCallback;
   final Color? backgroundColor;
   final bool? isShowLongPressPopMenu;
-  final Function(String summaryId, String imUserID, String summaryType)? onTapSummary;
+  final Function(String summaryId, String imUserID, String summaryType)?
+      onTapSummary;
 
   const ChatItemView({
     Key? key,
@@ -1684,7 +1685,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 right: 10.w,
                 bottom:
                     getChatFaceReplyListModel().dataList.isEmpty ? 0.w : 10.w),
-            child: _buildFaceReplyView(),
+            child: _buildFaceReplyView(faceReplyItemBgColor: Color(0xFFF2F2F2)),
           ),
           // SizedBox(
           //   height: 10.w,
@@ -1814,7 +1815,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     widget.onTapLeftAvatar?.call();
   }
 
-  Widget? _buildFaceReplyView() {
+  Widget? _buildFaceReplyView({Color? faceReplyItemBgColor}) {
     ChatFaceReplyListModel listModel = getChatFaceReplyListModel();
     if (listModel.dataList.length <= 0) return null;
     return ConstrainedBox(
@@ -1824,7 +1825,8 @@ class _ChatItemViewState extends State<ChatItemView> {
         runSpacing: 6.w,
         alignment: WrapAlignment.start,
         children: listModel.dataList
-            .map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e)))
+            .map((e) => _buildFaceReplyCell(e, listModel.dataList.indexOf(e),
+                backgroundColor: faceReplyItemBgColor))
             .toList(),
       ),
     );
@@ -1863,7 +1865,8 @@ class _ChatItemViewState extends State<ChatItemView> {
     return user != -1;
   }
 
-  Widget _buildFaceReplyCell(ChatFaceReplyModel replay, int index) {
+  Widget _buildFaceReplyCell(ChatFaceReplyModel replay, int index,
+      {Color? backgroundColor}) {
     String? emoji = emojiFaces[replay.emoji];
     List<User> users = replay.user!;
     List<InlineSpan> children = [
@@ -1955,9 +1958,10 @@ class _ChatItemViewState extends State<ChatItemView> {
       padding: EdgeInsets.symmetric(vertical: 3.w, horizontal: 6.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.w),
-        color: widget.message.sendID == OpenIM.iMManager.uid
-            ? Color(0xFFAFD2FD)
-            : Color(0xFFE4E4E4),
+        color: backgroundColor ??
+            (widget.message.sendID == OpenIM.iMManager.uid
+                ? Color(0xFFAFD2FD)
+                : Color(0xFFE4E4E4)),
       ),
       child: RichText(
         maxLines: 1,
