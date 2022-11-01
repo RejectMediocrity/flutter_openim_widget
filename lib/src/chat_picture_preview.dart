@@ -22,8 +22,10 @@ class PicInfo {
   int width;
   int height;
   final String? clientMsgId;
+  final bool visibleDownloadBtn; //下载按钮是否可见
 
   PicInfo({
+    this.visibleDownloadBtn = true,
     this.clientMsgId,
     this.url,
     this.file,
@@ -434,15 +436,18 @@ class _ChatPicturePreviewState extends State<ChatPicturePreview> {
             SizedBox(
               width: 16.w,
             ),
-            GestureDetector(
-              onTap: onDownload,
-              child: ImageUtil.assetImage(
-                "preview_but_download_background",
-                width: 32.w,
-                height: 32.w,
-                fit: BoxFit.fill,
+              GestureDetector(
+                onTap: onDownload,
+                child: Visibility(
+                  visible: info.visibleDownloadBtn,
+                  child: ImageUtil.assetImage(
+                    "preview_but_download_background",
+                    width: 32.w,
+                    height: 32.w,
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
-            ),
             SizedBox(
               width: 16.w,
             ),
