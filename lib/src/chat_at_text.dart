@@ -11,6 +11,7 @@ enum ChatTextModel { match, normal }
 
 class ChatAtText extends StatelessWidget {
   String text;
+  final Message? linkSoureMessage;
   final TextStyle? textStyle;
   final InlineSpan? prefixSpan;
 
@@ -36,6 +37,7 @@ class ChatAtText extends StatelessWidget {
   // final TextAlign textAlign;
   ChatAtText({
     Key? key,
+    this.linkSoureMessage,
     required this.text,
     this.allAtMap = const <String, String>{},
     this.prefixSpan,
@@ -215,7 +217,7 @@ class ChatAtText extends StatelessWidget {
                 alignment: PlaceholderAlignment.middle,
                 child: GestureDetector(
                   onTap: () => mapping.onTap!(
-                      _getUrl(value, mapping.type), mapping.type),
+                      _getUrl(value, mapping.type), mapping.type, linkSoureMessage),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +307,7 @@ class ChatAtText extends StatelessWidget {
                       ? null
                       : (TapGestureRecognizer()
                         ..onTap = () => mapping.onTap!(
-                            _getUrl(value, mapping.type), mapping.type)),
+                            _getUrl(value, mapping.type), mapping.type, linkSoureMessage)),
                 );
               } else {
                 text = CommonUtil.breakWord(text);
@@ -325,7 +327,7 @@ class ChatAtText extends StatelessWidget {
                       ? null
                       : (TapGestureRecognizer()
                         ..onTap = () => mapping.onTap!(
-                            _getUrl(value, mapping.type), mapping.type)),
+                            _getUrl(value, mapping.type), mapping.type, linkSoureMessage)),
                 );
               } else {
                 text = CommonUtil.breakWord(text);
@@ -346,7 +348,7 @@ class ChatAtText extends StatelessWidget {
                             supplementaryInformationWhenPatternCutomType ??
                                 value,
                             mapping.type),
-                        mapping.type)),
+                        mapping.type, linkSoureMessage)),
             );
           }
         } else {
@@ -393,7 +395,7 @@ class MatchPattern {
 
   TextStyle? style;
 
-  Function(String link, PatternType? type)? onTap;
+  Function(String link, PatternType? type, Message? message)? onTap;
 
   MatchPattern({required this.type, this.pattern, this.style, this.onTap});
 }
