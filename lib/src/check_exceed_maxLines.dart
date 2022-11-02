@@ -5,6 +5,7 @@ import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 
 class CheckExceedMaxLines {
   static bool didExceedMaxLines({
+    Message? message,
     required String text,
     TextStyle? textStyle,
     List<MatchPattern>? patterns,
@@ -71,7 +72,7 @@ class CheckExceedMaxLines {
                 alignment: PlaceholderAlignment.middle,
                 child: GestureDetector(
                   onTap: () =>
-                      mapping.onTap!(getUrl(value, mapping.type), mapping.type),
+                      mapping.onTap!(getUrl(value, mapping.type), mapping.type, message),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +148,7 @@ class CheckExceedMaxLines {
                   ? null
                   : (TapGestureRecognizer()
                     ..onTap = () => mapping.onTap!(
-                        getUrl(value, mapping.type), mapping.type)),
+                        getUrl(value, mapping.type), mapping.type, message)),
             );
           }
         } else {

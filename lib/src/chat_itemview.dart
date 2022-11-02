@@ -383,6 +383,11 @@ class _ChatItemViewState extends State<ChatItemView> {
     super.dispose();
   }
 
+  Message? get linkSoureMessage =>
+      (widget.groupArchived || widget.isShowLongPressPopMenu == false
+          ? null
+          : widget.message);
+
   bool needHideMessage() {
     int type = widget.message.contentType ?? 0;
     bool isHideType = type == MessageType.memberInvitedNotification ||
@@ -789,6 +794,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           } else {
             child = _buildCommonItemView(
               child: ChatAtText(
+                linkSoureMessage: linkSoureMessage,
                 text: replaceSpecialChar(widget.message.content!),
                 maxLines: widget.isExpanded == true ? null : 10,
                 allAtMap: {},
@@ -809,6 +815,7 @@ class _ChatItemViewState extends State<ChatItemView> {
           var text = map['text'];
           child = _buildCommonItemView(
             child: ChatAtText(
+              linkSoureMessage: linkSoureMessage,
               text: replaceSpecialChar(text),
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
@@ -924,6 +931,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         {
           child = _buildCommonItemView(
             child: ChatAtText(
+              linkSoureMessage: linkSoureMessage,
               text: replaceSpecialChar(widget.message.quoteElem?.text ?? ''),
               allAtMap: widget.allAtMap,
               textStyle: widget.textStyle,
@@ -1028,6 +1036,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                   showBorder: true,
                   leftBubbleColor: Colors.white,
                   child: ChatAtText(
+                    linkSoureMessage: linkSoureMessage,
                     text:
                         ' @${data["im_user_id"]} ${SummaryUtil.workSummaryText(data['summary_type'])}',
                     maxLines: 10,
@@ -1069,6 +1078,7 @@ class _ChatItemViewState extends State<ChatItemView> {
               isBubbleBg: null == text ? true : false,
               isHintMsg: null == text ? false : true,
               child: ChatAtText(
+                linkSoureMessage: linkSoureMessage,
                 text: text ?? UILocalizations.unsupportedMessage,
                 allAtMap: {},
                 textAlign: TextAlign.center,
@@ -1741,6 +1751,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 (widget.message.contentType == MessageType.advancedRevoke &&
                     widget.message.quoteElem?.quoteMessage != null)
             ? ChatQuoteView(
+                needLinkSoureMessage: linkSoureMessage != null,
                 message: widget.message,
                 onTap: widget.onTapQuoteMsg,
                 allAtMap: widget.allAtMap,

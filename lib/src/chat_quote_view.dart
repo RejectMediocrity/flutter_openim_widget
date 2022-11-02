@@ -9,6 +9,7 @@ class ChatQuoteView extends StatelessWidget {
   ChatQuoteView(
       {Key? key,
       required this.message,
+      this.needLinkSoureMessage = true,
       this.onTap,
       this.allAtMap,
       this.patterns})
@@ -18,6 +19,7 @@ class ChatQuoteView extends StatelessWidget {
   final _decoder = JsonDecoder();
   final Map<String, String>? allAtMap;
   final List<MatchPattern>? patterns;
+  final bool needLinkSoureMessage;
   @override
   Widget build(BuildContext context) {
     var child;
@@ -161,6 +163,7 @@ class ChatQuoteView extends StatelessWidget {
             ),
             Flexible(
               child: ChatAtText(
+                linkSoureMessage: needLinkSoureMessage ? message : null,
                 text: chatAtText.isNotEmpty
                     ? chatAtText
                     : ' ${UILocalizations.reply} $name：$uidString',

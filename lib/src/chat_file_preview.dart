@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ChatFilePreview extends StatefulWidget {
   const ChatFilePreview({
@@ -95,7 +94,6 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
                         setState(() {
                           _begin = true;
                         });
-                        // _launchInBrowser(Uri.parse(widget.url ?? ""));
                       },
                       child: Container(
                         width: 150.w,
@@ -153,14 +151,6 @@ class _ChatFilePreviewState extends State<ChatFilePreview> {
     );
   }
 
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw 'Could not launch $url';
-    }
-  }
 }
 
 /*
