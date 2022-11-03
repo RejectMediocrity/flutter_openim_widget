@@ -42,9 +42,11 @@ class _ChatRevokeViewState extends State<ChatRevokeView> {
           Duration(
             seconds: duration,
           ), () {
-        setState(() {
-          this.revokedOver2Min = true;
-        });
+            if(mounted){
+              setState(() {
+                this.revokedOver2Min = true;
+              });
+            }
       });
     } else {
       revokedOver2Min = true;
