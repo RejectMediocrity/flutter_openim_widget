@@ -1035,6 +1035,7 @@ class _ChatItemViewState extends State<ChatItemView> {
                 return _buildCommonItemView(
                   showBorder: true,
                   leftBubbleColor: Colors.white,
+                  faceReplyItemBgColor: Color(0xFFF2F2F2),
                   child: ChatAtText(
                     linkSoureMessage: linkSoureMessage,
                     text:
@@ -1712,6 +1713,7 @@ class _ChatItemViewState extends State<ChatItemView> {
     bool showBorder = false,
     bool isShowFaceReplyInContent = false,
     Color? leftBubbleColor,
+    Color? faceReplyItemBgColor,
   }) =>
       ChatSingleLayout(
         child: child,
@@ -1789,7 +1791,7 @@ class _ChatItemViewState extends State<ChatItemView> {
         groupMemberCount: widget.memberCount ?? 0,
         onTapReadView: widget.onTapReadView,
         isSelfChat: widget.message.recvID == OpenIM.iMManager.uid,
-        faceReplyView: isShowFaceReplyInContent ? null : _buildFaceReplyView(),
+        faceReplyView: isShowFaceReplyInContent ? null : _buildFaceReplyView(faceReplyItemBgColor:faceReplyItemBgColor),
         voiceUnreadView:
             widget.isVoiceUnread == true ? _buildVoiceUnread() : null,
         showBorder: showBorder,
