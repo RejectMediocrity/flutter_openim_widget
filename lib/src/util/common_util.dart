@@ -58,6 +58,8 @@ class CommonUtil {
     required String targetPath,
     required int minWidth,
     required int minHeight,
+    int? quality,
+    int? sampleSize,
   }) async {
     if (null == file) return null;
     var path = file.path;
@@ -77,8 +79,8 @@ class CommonUtil {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       targetPath,
-      quality: 70,
-      inSampleSize: 2,
+      quality: quality ?? 70,
+      inSampleSize: sampleSize ?? 2,
       minWidth: minWidth,
       minHeight: minHeight,
       format: format,
